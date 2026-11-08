@@ -28,6 +28,65 @@ def r4(x):
     return None if x is None else round(float(x), 4)
 
 
+def nd(x, d):
+    return f"{x:.{d}f}".replace(".", ",")
+
+
+def pc(x, d=1):
+    s = f"{abs(x) * 100:.{d}f}".replace(".", ",")
+    return ("+" if x > 0 else "−" if x < 0 else "") + s + " %"
+
+
+def findings(m: dict, ch: dict, ra: dict, doc: dict) -> list[str]:
+    """Funn i klartekst, regnet ut på nytt hver søndag."""
+    out = []
+    M = m["models"]
+    own, mk = M.get("pxg"), M.get("mkt_avg")
+    if own and mk:
+        b = own.get("bet") or {}
+        out.append(f"Egen modell mot markedet: log loss {nd(own['logloss'], 3)} mot {nd(mk['logloss'], 3)} (lavere er bedre). "
+                   f"Spilt mot NT-lignende odds gir den {pc(b.get('roi') or 0)} ROI. Markedet vet mer enn kampstatistikken.")
+    r = ch.get("bet_rule")
+    if r:
+        rb = M[r["model"]]["bet"]
+        out.append(f"Spillregelen (NT mot skarp pris, edge minst {r['edge_min'] * 100:.0f} %) ga {r['n']} bets i backtesten, "
+                   f"slo sluttoddsen med {pc(r['clv'])} i snitt og ga {pc(r['roi'])} ROI. $100 ble ${rb.get('kelly_final', 0):.0f} med ¼ Kelly.")
+    se = ra.get("staking") or {}
+    if se:
+        best_final = max(se, key=lambda k: se[k]["final"])
+        chosen = ch.get("staking")
+        txt = f"Innsatslab: {se[chosen]['label']} er valgt (${se[chosen]['final']:.0f}, maks fall {se[chosen]['max_dd'] * 100:.0f} %)."
+        if best_final != chosen:
+            txt += (f" {se[best_final]['label']} endte høyere (${se[best_final]['final']:.0f}), men falt opptil "
+                    f"{se[best_final]['max_dd'] * 100:.0f} % underveis, over grensen på 25 %.")
+        if "trapp" in se:
+            txt += f" Innsats etter edge-trapp ga ${se['trapp']['final']:.0f}: den satser for mye på høye odds. Kelly tar hensyn til både edge og odds."
+        out.append(txt)
+    lg = doc.get("league_rows") or []
+    if lg:
+        best, worst = lg[0], lg[-1]
+        txt = f"Ligaer: sterkest i {best['name']} ({pc(best['clv'])} CLV), svakest i {worst['name']} ({pc(worst['clv'])})."
+        if ch.get("leagues_dropped"):
+            txt += " Tatt ut av regelen: " + ", ".join(LEAGUES.get(x, x) for x in ch["leagues_dropped"]) + "."
+        out.append(txt)
+    by = ra.get("by_year") or {}
+    if len(by) >= 3:
+        ys = sorted(by)
+        last2 = [by[y] for y in ys[-2:]]
+        if all(v["clv"] < 0.005 for v in last2):
+            out.append(f"Varsel: fordelen har krympet. CLV var {pc(by[ys[-2]]['clv'])} i {ys[-2]} og {pc(by[ys[-1]]['clv'])} i {ys[-1]}, "
+                       "mot over 2 % tidligere. Det kan bety at bookmakerne har blitt raskere, men delvis også målingen: fra høsten 2026 mangler "
+                       "Pinnacle i datakilden, og Betfair brukes som skarp pris. Live-CLV de neste månedene avgjør.")
+    ou = M.get("ou:mkt_sharp", {}).get("bet") or {}
+    bt, br = M.get("btts:btts_lr"), M.get("btts:basisrate")
+    if ou.get("n") is not None:
+        txt = f"Over/under 2,5 mot skarp pris: {ou['n']} bets, CLV {pc(ou.get('clv') or 0)}. For få til å stole på (krav 150), så O/U spilles ikke ennå."
+        if bt and br:
+            txt += f" BTTS-modellen slår bare basisraten marginalt (log loss {nd(bt['logloss'], 4)} mot {nd(br['logloss'], 4)})."
+        out.append(txt)
+    return out
+
+
 def main():
     m = json.loads((ROOT / "out" / "metrics.json").read_text())
     tu = json.loads((ROOT / "out" / "tuning.json").read_text()) if (ROOT / "out" / "tuning.json").exists() else {}
@@ -74,6 +133,7 @@ def main():
         "tuning": {"params": tu.get("params"), "gain": r4(tu.get("gain")), "changed": tu.get("changed")},
         "nt_proxy": {"book": "Bet365", "factor": m["config"].get("nt_odds_factor"), "nt_vs_sharp": 0.955, "b365_vs_sharp": 0.956, "n_checked": 22},
     }
+    doc["findings"] = findings(m, ch, ra, doc)
     (ROOT / "out" / "dashboard.json").write_text(json.dumps(doc, ensure_ascii=False))
     print(f"dashboard.json: {len(json.dumps(doc)) // 1024} kB")
 
