@@ -14,14 +14,22 @@ from data import LEAGUES  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 
 NAME = {"mkt_sharp": "Skarp markedspris", "stack_sharp_lr": "Stacking: skarp + snitt + egne", "stack_lr": "Stacking: snitt + egne",
-        "stack_lgbm": "LightGBM-stacking", "own_lr": "Egne modeller samlet", "pxg": "Dixon-Coles på xG-proxy",
+        "stack_lgbm": "LightGBM-stacking", "stack_rf": "Random forest", "stack_mlp": "Nevralt nettverk", "own_lr": "Egne modeller samlet", "pxg": "Dixon-Coles på xG-proxy",
         "goals": "Dixon-Coles på mål", "elo_lr": "Elo", "mkt_avg": "Snittodds (referanse)",
         "ou:mkt_sharp": "O/U 2,5: skarp pris", "ou:ou_stack_lr": "O/U 2,5: stacking", "ou:pxg": "O/U 2,5: xG-proxy",
         "ou:goals": "O/U 2,5: mål", "btts:btts_lr": "BTTS: modell", "btts:basisrate": "BTTS: basisrate"}
 DESC = {"mkt_sharp": "Pinnacle, ellers Betfair, uten margin", "stack_sharp_lr": "Logistisk regresjon på markeder, Dixon-Coles og Elo",
         "stack_lr": "Som over, uten skarp pris", "stack_lgbm": "Gradient boosting på de samme feature-ene",
+        "stack_rf": "150 beslutningstrær som stemmer, på markeder og egne modeller",
+        "stack_mlp": "To lag nevroner (16 og 8), på markeder og egne modeller",
         "own_lr": "Bare egne modeller, ingen odds", "pxg": "Lagstyrke fra skudd på mål og mål", "goals": "Klassisk lagstyrke fra mål",
         "elo_lr": "Rating med målmargin", "mkt_avg": "Snitt av bookmakere uten margin"}
+
+
+FAMILY = {"mkt_sharp": "Marked", "mkt_avg": "Marked", "goals": "Poisson-regresjon", "pxg": "Poisson-regresjon", "elo_lr": "Logistisk regresjon",
+          "own_lr": "Logistisk regresjon", "stack_lr": "Logistisk regresjon", "stack_sharp_lr": "Logistisk regresjon",
+          "stack_lgbm": "Boosting", "stack_rf": "Random forest", "stack_mlp": "Nevralt nettverk",
+          "ou_stack_lr": "Logistisk regresjon", "ou_own_lr": "Logistisk regresjon", "btts_lr": "Logistisk regresjon", "basisrate": "Basisrate"}
 
 
 def r4(x):
@@ -109,10 +117,10 @@ def main():
         rows.append({"id": k, "name": label, "desc": DESC.get(base, ""), "market": v["market"], "logloss": r4(v["logloss"]),
                      "vs_mkt": r4(v.get("logloss_vs_mkt")), "n": b.get("n"), "roi": r4(b.get("roi")), "roi_lo": r4(b.get("roi_lo")),
                      "roi_hi": r4(b.get("roi_hi")), "clv": r4(b.get("clv")), "kelly_final": b.get("kelly_final"),
-                     "champion": k == ch["prob_model"], "bet_rule": rule.get("model") == k})
+                     "champion": k == ch["prob_model"], "bet_rule": rule.get("model") == k, "family": FAMILY.get(base, "")})
     # Utfordrere: alle varianter av spillregel (modell x edge-terskel), rangert på samlet CLV
     challengers = []
-    for k in ("mkt_sharp", "stack_sharp_lr", "stack_lr", "pxg", "ou:mkt_sharp"):
+    for k in ("mkt_sharp", "stack_sharp_lr", "stack_lr", "stack_rf", "stack_mlp", "pxg", "ou:mkt_sharp"):
         for t, b in (m["models"].get(k, {}).get("bet_by_edge") or {}).items():
             if not b.get("n"):
                 continue
@@ -137,7 +145,7 @@ def main():
         "calibration": {k: m["models"][k]["calibration"] for k in ("stack_sharp_lr", "pxg") if "calibration" in m["models"].get(k, {})},
         "edges": {k: {t: {"n": b["n"], "clv": r4(b["clv"]), "roi": r4(b["roi"]), "kelly_final": b.get("kelly_final")}
                       for t, b in m["models"][k]["bet_by_edge"].items()}
-                  for k in ("mkt_sharp", "stack_sharp_lr", "stack_lr", "pxg", "ou:mkt_sharp") if k in m["models"]},
+                  for k in ("mkt_sharp", "stack_sharp_lr", "stack_lr", "stack_rf", "stack_mlp", "pxg", "ou:mkt_sharp") if k in m["models"]},
         "tuning": {"params": tu.get("params"), "gain": r4(tu.get("gain")), "changed": tu.get("changed")},
         "nt_proxy": {"book": "Bet365", "factor": m["config"].get("nt_odds_factor"), "nt_vs_sharp": 0.955, "b365_vs_sharp": 0.956, "n_checked": 22},
     }

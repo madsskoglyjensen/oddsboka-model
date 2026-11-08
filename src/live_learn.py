@@ -164,9 +164,69 @@ def model_a(df: pd.DataFrame, n_matches: int) -> dict:
             auc = cross_val_score(lr, X, y, cv=5, scoring="roc_auc").mean()
             lr.fit(X, y)
             coefs = sorted(zip(X.columns, lr.coef_[0]), key=lambda t: -abs(t[1]))[:8]
+            # Beslutningstre: lesbare regler for når NT er treg
+            from sklearn.tree import DecisionTreeClassifier
+            Xt = X.copy()
+            tree = DecisionTreeClassifier(max_depth=3, min_samples_leaf=max(15, len(y) // 30), random_state=7).fit(Xt, y)
+            rules = tree_rules(tree, list(Xt.columns))
+            res["tree_rules"] = rules
             res.update({"auc_cv": round(float(auc), 3), "top_features": [[c, round(float(v), 3)] for c, v in coefs],
                         "verdict": "Modellen finner mønster i når NT er treg." if auc > 0.6 else "Ingen tydelig mønster ennå: NT-treghet ser tilfeldig ut."})
     return res
+
+
+def _feat_text(name: str, thr: float, left: bool) -> str:
+    if name.startswith("league_"):
+        return ("ikke " if left else "") + name[7:]
+    if name.startswith("k_"):
+        lab = {"h": "hjemmeseier", "d": "uavgjort", "a": "borteseier"}.get(name[2:], name[2:])
+        return ("ikke " if left else "") + lab
+    if name == "logodds":
+        o = float(np.exp(thr))
+        return f"skarp odds {'≤' if left else '>'} {o:.2f}".replace(".", ",")
+    if name == "hours":
+        return f"{'≤' if left else '>'} {thr:.0f} timer før avspark"
+    if name == "weekday":
+        return f"ukedag {'≤' if left else '>'} {thr:.0f} (0 = mandag)"
+    return f"{name} {'≤' if left else '>'} {thr:.2f}"
+
+
+def tree_rules(tree, names: list[str]) -> list[dict]:
+    """Hvert blad i treet som en regel i klartekst, med andel utfall der NT lå over spillgrensen."""
+    t = tree.tree_
+    out = []
+    unit = {"logodds": ("skarp odds", np.exp, 2), "hours": ("timer før avspark", float, 0), "weekday": ("ukedag (0 = man)", float, 0)}
+
+    def text(cats, bounds):
+        parts = list(cats)
+        for f, (lo, hi) in bounds.items():
+            lab, fn, d = unit.get(f, (f, float, 2))
+            fmt = lambda x: f"{fn(x):.{d}f}".replace(".", ",")
+            if lo is not None and hi is not None:
+                parts.append(f"{lab} {fmt(lo)}–{fmt(hi)}")
+            elif lo is not None:
+                parts.append(f"{lab} over {fmt(lo)}")
+            else:
+                parts.append(f"{lab} til {fmt(hi)}")
+        return " · ".join(parts) or "alle"
+
+    def walk(node, cats, bounds):
+        if t.children_left[node] == -1:
+            v = t.value[node][0]
+            share = float(v[1] / v.sum()) if v.sum() else 0.0
+            out.append({"rule": text(cats, bounds), "share": round(share, 3), "n": int(t.n_node_samples[node])})
+            return
+        f, thr = names[t.feature[node]], float(t.threshold[node])
+        if f.startswith(("league_", "k_")):
+            walk(t.children_left[node], cats + [_feat_text(f, thr, True)], bounds)
+            walk(t.children_right[node], cats + [_feat_text(f, thr, False)], bounds)
+        else:
+            lo, hi = bounds.get(f, (None, None))
+            walk(t.children_left[node], cats, {**bounds, f: (lo, thr)})
+            walk(t.children_right[node], cats, {**bounds, f: (thr, hi)})
+
+    walk(0, [], {})
+    return sorted(out, key=lambda r: -r["share"])
 
 
 def model_b(df: pd.DataFrame) -> dict:

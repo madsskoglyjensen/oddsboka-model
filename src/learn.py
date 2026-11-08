@@ -96,6 +96,19 @@ def make_lgb(n_class):
                               objective="multiclass" if n_class > 2 else "binary", verbose=-1)
 
 
+def make_rf():
+    from sklearn.ensemble import RandomForestClassifier
+    return RandomForestClassifier(n_estimators=150, max_depth=8, min_samples_leaf=150, max_features="sqrt", n_jobs=-1, random_state=7)
+
+
+def make_mlp():
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+    return make_pipeline(StandardScaler(), MLPClassifier(hidden_layer_sizes=(16, 8), alpha=0.01, early_stopping=True,
+                                                         validation_fraction=0.15, max_iter=400, random_state=7))
+
+
 def model_specs() -> dict:
     specs = {
         "stack_lr": ("1x2", lambda d: feats_1x2(d, True), make_lr),
@@ -105,6 +118,8 @@ def model_specs() -> dict:
         "ou_stack_lr": ("ou", lambda d: feats_ou(d, True), make_lr),
         "ou_own_lr": ("ou", lambda d: feats_ou(d, False), make_lr),
         "btts_lr": ("btts", feats_btts, make_lr),
+        "stack_rf": ("1x2", lambda d: feats_1x2(d, True, True), make_rf),
+        "stack_mlp": ("1x2", lambda d: feats_1x2(d, True, True), make_mlp),
     }
     if lgb is not None:
         specs["stack_lgbm"] = ("1x2", lambda d: feats_1x2(d, True), lambda: make_lgb(3))
@@ -344,7 +359,7 @@ def holdout_test(ev: pd.DataFrame, nt: float, n_test: int = 3) -> dict:
     tr_s, te_s = seasons[:-n_test], seasons[-n_test:]
     tr, te = ev["season"].isin(tr_s).to_numpy(), ev["season"].isin(te_s).to_numpy()
     cands = []
-    for nm in ("mkt_sharp", "stack_sharp_lr", "stack_lr", "stack_lgbm", "own_lr", "pxg", "goals", "elo_lr"):
+    for nm in ("mkt_sharp", "stack_sharp_lr", "stack_lr", "stack_lgbm", "stack_rf", "stack_mlp", "own_lr", "pxg", "goals", "elo_lr"):
         if f"{nm}_h" not in ev and nm not in ("mkt_sharp", "pxg", "goals"):
             continue
         P = probs(ev, nm)
@@ -383,7 +398,8 @@ def evaluate(df: pd.DataFrame, first_test="1819") -> dict:
     seasons = sorted(ev["season"].unique())
     nt, emin = CFG["nt_odds_factor"], CFG["edge_min"]
     out = {"n_matches": int(len(ev)), "seasons": seasons, "first_test": first_test, "models": {}}
-    names = ["mkt_avg", "mkt_sharp", "goals", "pxg", "elo_lr", "own_lr", "stack_lr", "stack_sharp_lr"] + (["stack_lgbm"] if "stack_lgbm_h" in ev else [])
+    names = ["mkt_avg", "mkt_sharp", "goals", "pxg", "elo_lr", "own_lr", "stack_lr", "stack_sharp_lr"] + \
+        [n for n in ("stack_lgbm", "stack_rf", "stack_mlp") if f"{n}_h" in ev]
     ref = probs(ev, "mkt_avg")
     for nm in names + ["mkt_sharpc"]:
         P = probs(ev, nm)
