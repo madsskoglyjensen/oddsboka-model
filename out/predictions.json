@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-08T18:43:40+01:00",
- "model_version": "2.0",
+ "generated": "2026-11-08T18:52:56+01:00",
+ "model_version": "2.1",
  "prob_model": "stack_lr",
  "bet_rule": {
   "model": "mkt_sharp",
@@ -35,7 +35,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.4221,
+     "p": 0.4245,
      "p_rule": 0.4169,
      "nt_min_odds": 2.45,
      "avg_odds": 2.25,
@@ -43,7 +43,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2653,
+     "p": 0.2639,
      "p_rule": 0.2682,
      "nt_min_odds": 3.8,
      "avg_odds": 3.52,
@@ -51,7 +51,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3126,
+     "p": 0.3116,
      "p_rule": 0.315,
      "nt_min_odds": 3.24,
      "avg_odds": 2.97,
@@ -59,20 +59,20 @@
     }
    },
    "over25": {
-    "p_model": 0.5609,
+    "p_model": 0.5639,
     "p_market": 0.5572,
     "avg_over": 1.71,
     "avg_under": 2.06
    },
    "btts": {
-    "p_model": 0.5184
+    "p_model": 0.523
    },
    "own_model": {
-    "p_h": 0.4522,
-    "p_d": 0.2726,
-    "p_a": 0.2753,
-    "xg_home": 1.3916,
-    "xg_away": 1.0237
+    "p_h": 0.4423,
+    "p_d": 0.2648,
+    "p_a": 0.2929,
+    "xg_home": 1.3982,
+    "xg_away": 1.0843
    }
   },
   {
@@ -85,7 +85,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.5285,
+     "p": 0.5276,
      "p_rule": 0.5277,
      "nt_min_odds": 1.93,
      "avg_odds": 1.79,
@@ -93,7 +93,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.241,
+     "p": 0.2404,
      "p_rule": 0.2274,
      "nt_min_odds": 4.49,
      "avg_odds": 3.84,
@@ -101,7 +101,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.2305,
+     "p": 0.232,
      "p_rule": 0.2449,
      "nt_min_odds": 4.16,
      "avg_odds": 3.73,
@@ -109,20 +109,20 @@
     }
    },
    "over25": {
-    "p_model": 0.6276,
+    "p_model": 0.6299,
     "p_market": 0.6225,
     "avg_over": 1.52,
     "avg_under": 2.37
    },
    "btts": {
-    "p_model": 0.5611
+    "p_model": 0.5583
    },
    "own_model": {
-    "p_h": 0.4848,
-    "p_d": 0.247,
-    "p_a": 0.2682,
-    "xg_home": 1.7205,
-    "xg_away": 1.2271
+    "p_h": 0.5063,
+    "p_d": 0.2417,
+    "p_a": 0.2519,
+    "xg_home": 1.7668,
+    "xg_away": 1.1849
    }
   },
   {
@@ -135,7 +135,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.4656,
+     "p": 0.4633,
      "p_rule": 0.4585,
      "nt_min_odds": 2.22,
      "avg_odds": 2.02,
@@ -143,7 +143,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2516,
+     "p": 0.2518,
      "p_rule": 0.2407,
      "nt_min_odds": 4.24,
      "avg_odds": 3.73,
@@ -151,7 +151,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.2828,
+     "p": 0.2848,
      "p_rule": 0.3009,
      "nt_min_odds": 3.39,
      "avg_odds": 3.07,
@@ -159,20 +159,20 @@
     }
    },
    "over25": {
-    "p_model": 0.6768,
+    "p_model": 0.6803,
     "p_market": 0.6526,
     "avg_over": 1.42,
     "avg_under": 2.65
    },
    "btts": {
-    "p_model": 0.5747
+    "p_model": 0.5749
    },
    "own_model": {
-    "p_h": 0.4198,
-    "p_d": 0.243,
-    "p_a": 0.3373,
-    "xg_home": 1.6874,
-    "xg_away": 1.4945
+    "p_h": 0.4418,
+    "p_d": 0.2399,
+    "p_a": 0.3183,
+    "xg_home": 1.7342,
+    "xg_away": 1.4451
    }
   },
   {
@@ -185,7 +185,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.3912,
+     "p": 0.3898,
      "p_rule": 0.4031,
      "nt_min_odds": 2.53,
      "avg_odds": 2.3,
@@ -193,7 +193,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2714,
+     "p": 0.2704,
      "p_rule": 0.2571,
      "nt_min_odds": 3.97,
      "avg_odds": 3.5,
@@ -201,7 +201,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3374,
+     "p": 0.3398,
      "p_rule": 0.3398,
      "nt_min_odds": 3.0,
      "avg_odds": 2.69,
@@ -209,20 +209,20 @@
     }
    },
    "over25": {
-    "p_model": 0.5951,
+    "p_model": 0.5961,
     "p_market": 0.4315,
     "avg_over": 1.6,
     "avg_under": 2.2
    },
    "btts": {
-    "p_model": 0.5558
+    "p_model": 0.5545
    },
    "own_model": {
-    "p_h": 0.4204,
-    "p_d": 0.2577,
-    "p_a": 0.322,
-    "xg_home": 1.5445,
-    "xg_away": 1.3248
+    "p_h": 0.4615,
+    "p_d": 0.251,
+    "p_a": 0.2875,
+    "xg_home": 1.6406,
+    "xg_away": 1.2492
    }
   },
   {
@@ -235,7 +235,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.2808,
+     "p": 0.2812,
      "p_rule": 0.2821,
      "nt_min_odds": 3.62,
      "avg_odds": 3.2,
@@ -243,7 +243,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2509,
+     "p": 0.248,
      "p_rule": 0.2565,
      "nt_min_odds": 3.98,
      "avg_odds": 3.64,
@@ -251,7 +251,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.4684,
+     "p": 0.4708,
      "p_rule": 0.4614,
      "nt_min_odds": 2.21,
      "avg_odds": 2.07,
@@ -259,20 +259,20 @@
     }
    },
    "over25": {
-    "p_model": 0.5891,
+    "p_model": 0.5906,
     "p_market": 0.5764,
     "avg_over": 1.62,
     "avg_under": 2.2
    },
    "btts": {
-    "p_model": 0.5667
+    "p_model": 0.5678
    },
    "own_model": {
-    "p_h": 0.3801,
-    "p_d": 0.2526,
-    "p_a": 0.3674,
-    "xg_home": 1.4746,
-    "xg_away": 1.4461
+    "p_h": 0.3868,
+    "p_d": 0.2535,
+    "p_a": 0.3597,
+    "xg_home": 1.4929,
+    "xg_away": 1.4321
    }
   },
   {
@@ -285,7 +285,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.494,
+     "p": 0.4949,
      "p_rule": 0.5038,
      "nt_min_odds": 2.02,
      "avg_odds": 1.9,
@@ -293,7 +293,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2488,
+     "p": 0.2478,
      "p_rule": 0.2481,
      "nt_min_odds": 4.11,
      "avg_odds": 3.82,
@@ -301,7 +301,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.2572,
+     "p": 0.2573,
      "p_rule": 0.2481,
      "nt_min_odds": 4.11,
      "avg_odds": 3.59,
@@ -309,20 +309,20 @@
     }
    },
    "over25": {
-    "p_model": 0.6079,
+    "p_model": 0.6089,
     "p_market": 0.6087,
     "avg_over": 1.57,
     "avg_under": 2.3
    },
    "btts": {
-    "p_model": 0.5712
+    "p_model": 0.5682
    },
    "own_model": {
-    "p_h": 0.5016,
-    "p_d": 0.2489,
-    "p_a": 0.2495,
-    "xg_home": 1.796,
-    "xg_away": 1.2143
+    "p_h": 0.5139,
+    "p_d": 0.247,
+    "p_a": 0.2392,
+    "xg_home": 1.8036,
+    "xg_away": 1.1716
    }
   },
   {
@@ -335,7 +335,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.1566,
+     "p": 0.156,
      "p_rule": 0.168,
      "nt_min_odds": 6.07,
      "avg_odds": 5.15,
@@ -343,7 +343,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.1978,
+     "p": 0.1959,
      "p_rule": 0.2202,
      "nt_min_odds": 4.63,
      "avg_odds": 4.27,
@@ -351,7 +351,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.6456,
+     "p": 0.648,
      "p_rule": 0.6118,
      "nt_min_odds": 1.67,
      "avg_odds": 1.57,
@@ -359,20 +359,20 @@
     }
    },
    "over25": {
-    "p_model": 0.6239,
+    "p_model": 0.6262,
     "p_market": 0.6139,
     "avg_over": 1.54,
     "avg_under": 2.38
    },
    "btts": {
-    "p_model": 0.5643
+    "p_model": 0.5624
    },
    "own_model": {
-    "p_h": 0.2519,
-    "p_d": 0.2549,
-    "p_a": 0.4932,
-    "xg_home": 1.1828,
-    "xg_away": 1.7308
+    "p_h": 0.254,
+    "p_d": 0.2554,
+    "p_a": 0.4907,
+    "xg_home": 1.1737,
+    "xg_away": 1.7084
    }
   },
   {
@@ -385,7 +385,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.248,
+     "p": 0.2439,
      "p_rule": 0.236,
      "nt_min_odds": 4.32,
      "avg_odds": 3.72,
@@ -393,7 +393,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2528,
+     "p": 0.2514,
      "p_rule": 0.2608,
      "nt_min_odds": 3.91,
      "avg_odds": 3.69,
@@ -401,7 +401,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.4993,
+     "p": 0.5047,
      "p_rule": 0.5032,
      "nt_min_odds": 2.03,
      "avg_odds": 1.9,
@@ -409,20 +409,20 @@
     }
    },
    "over25": {
-    "p_model": 0.5624,
+    "p_model": 0.5569,
     "p_market": 0.56,
     "avg_over": 1.67,
     "avg_under": 2.12
    },
    "btts": {
-    "p_model": 0.5951
+    "p_model": 0.6067
    },
    "own_model": {
-    "p_h": 0.2342,
-    "p_d": 0.2303,
-    "p_a": 0.5355,
-    "xg_home": 1.2882,
-    "xg_away": 2.018
+    "p_h": 0.2709,
+    "p_d": 0.2367,
+    "p_a": 0.4925,
+    "xg_home": 1.3831,
+    "xg_away": 1.9142
    }
   },
   {
@@ -435,7 +435,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.2394,
+     "p": 0.2393,
      "p_rule": 0.2476,
      "nt_min_odds": 4.12,
      "avg_odds": 3.68,
@@ -443,7 +443,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.253,
+     "p": 0.2525,
      "p_rule": 0.2572,
      "nt_min_odds": 3.97,
      "avg_odds": 3.6,
@@ -451,7 +451,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.5075,
+     "p": 0.5082,
      "p_rule": 0.4952,
      "nt_min_odds": 2.06,
      "avg_odds": 1.93,
@@ -459,20 +459,20 @@
     }
    },
    "over25": {
-    "p_model": 0.5331,
+    "p_model": 0.5312,
     "p_market": 0.534,
     "avg_over": 1.77,
     "avg_under": 1.97
    },
    "btts": {
-    "p_model": 0.5544
+    "p_model": 0.5621
    },
    "own_model": {
-    "p_h": 0.2887,
-    "p_d": 0.2704,
-    "p_a": 0.4409,
-    "xg_home": 1.2088,
-    "xg_away": 1.5432
+    "p_h": 0.3002,
+    "p_d": 0.266,
+    "p_a": 0.4338,
+    "xg_home": 1.2607,
+    "xg_away": 1.557
    }
   },
   {
@@ -485,7 +485,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.4586,
+     "p": 0.4555,
      "p_rule": 0.4451,
      "nt_min_odds": 2.29,
      "avg_odds": 2.11,
@@ -493,7 +493,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2601,
+     "p": 0.2602,
      "p_rule": 0.26,
      "nt_min_odds": 3.92,
      "avg_odds": 3.62,
@@ -501,7 +501,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.2813,
+     "p": 0.2843,
      "p_rule": 0.2949,
      "nt_min_odds": 3.46,
      "avg_odds": 3.11,
@@ -509,20 +509,20 @@
     }
    },
    "over25": {
-    "p_model": 0.6069,
+    "p_model": 0.6093,
     "p_market": 0.5799,
     "avg_over": 1.58,
     "avg_under": 2.28
    },
    "btts": {
-    "p_model": 0.5594
+    "p_model": 0.5634
    },
    "own_model": {
-    "p_h": 0.3575,
-    "p_d": 0.2632,
-    "p_a": 0.3793,
-    "xg_home": 1.3759,
-    "xg_away": 1.4241
+    "p_h": 0.3673,
+    "p_d": 0.2637,
+    "p_a": 0.369,
+    "xg_home": 1.4158,
+    "xg_away": 1.4196
    }
   },
   {
@@ -535,7 +535,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.1905,
+     "p": 0.1903,
      "p_rule": 0.1951,
      "nt_min_odds": 5.23,
      "avg_odds": 4.45,
@@ -543,7 +543,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2574,
+     "p": 0.2572,
      "p_rule": 0.2727,
      "nt_min_odds": 3.74,
      "avg_odds": 3.49,
@@ -551,7 +551,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.5521,
+     "p": 0.5525,
      "p_rule": 0.5322,
      "nt_min_odds": 1.92,
      "avg_odds": 1.8,
@@ -559,20 +559,20 @@
     }
    },
    "over25": {
-    "p_model": 0.4542,
+    "p_model": 0.4543,
     "p_market": 0.4523,
     "avg_over": 2.05,
     "avg_under": 1.72
    },
    "btts": {
-    "p_model": 0.5216
+    "p_model": 0.5158
    },
    "own_model": {
-    "p_h": 0.2536,
-    "p_d": 0.2656,
-    "p_a": 0.4808,
-    "xg_home": 0.9923,
-    "xg_away": 1.4705
+    "p_h": 0.2635,
+    "p_d": 0.2633,
+    "p_a": 0.4732,
+    "xg_home": 1.0027,
+    "xg_away": 1.4421
    }
   },
   {
@@ -585,7 +585,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.3014,
+     "p": 0.2954,
      "p_rule": 0.284,
      "nt_min_odds": 3.59,
      "avg_odds": 3.22,
@@ -593,7 +593,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2536,
+     "p": 0.2579,
      "p_rule": 0.2516,
      "nt_min_odds": 4.05,
      "avg_odds": 3.74,
@@ -601,7 +601,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.445,
+     "p": 0.4466,
      "p_rule": 0.4644,
      "nt_min_odds": 2.2,
      "avg_odds": 2.06,
@@ -609,20 +609,20 @@
     }
    },
    "over25": {
-    "p_model": 0.617,
+    "p_model": 0.6114,
     "p_market": 0.6154,
     "avg_over": 1.54,
     "avg_under": 2.38
    },
    "btts": {
-    "p_model": 0.5819
+    "p_model": 0.6042
    },
    "own_model": {
-    "p_h": 0.2043,
-    "p_d": 0.2061,
-    "p_a": 0.5897,
-    "xg_home": 1.1937,
-    "xg_away": 2.1436
+    "p_h": 0.2499,
+    "p_d": 0.2084,
+    "p_a": 0.5417,
+    "xg_home": 1.375,
+    "xg_away": 2.0971
    }
   },
   {
@@ -635,7 +635,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.3243,
+     "p": 0.3261,
      "p_rule": 0.3196,
      "nt_min_odds": 3.19,
      "avg_odds": 2.84,
@@ -643,7 +643,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2886,
+     "p": 0.2878,
      "p_rule": 0.2942,
      "nt_min_odds": 3.47,
      "avg_odds": 3.14,
@@ -651,7 +651,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3871,
+     "p": 0.3861,
      "p_rule": 0.3862,
      "nt_min_odds": 2.64,
      "avg_odds": 2.36,
@@ -659,20 +659,20 @@
     }
    },
    "over25": {
-    "p_model": 0.4572,
+    "p_model": 0.4593,
     "p_market": 0.5487,
     "avg_over": 2.04,
     "avg_under": 1.7
    },
    "btts": {
-    "p_model": 0.5034
+    "p_model": 0.5051
    },
    "own_model": {
-    "p_h": 0.3003,
-    "p_d": 0.3234,
-    "p_a": 0.3763,
-    "xg_home": 1.0086,
-    "xg_away": 1.1589
+    "p_h": 0.3048,
+    "p_d": 0.3197,
+    "p_a": 0.3755,
+    "xg_home": 1.0347,
+    "xg_away": 1.1754
    }
   },
   {
@@ -685,7 +685,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.2317,
+     "p": 0.228,
      "p_rule": 0.2432,
      "nt_min_odds": 4.19,
      "avg_odds": 3.85,
@@ -693,7 +693,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2213,
+     "p": 0.22,
      "p_rule": 0.2374,
      "nt_min_odds": 4.3,
      "avg_odds": 4.03,
@@ -701,7 +701,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.547,
+     "p": 0.552,
      "p_rule": 0.5194,
      "nt_min_odds": 1.96,
      "avg_odds": 1.78,
@@ -709,20 +709,20 @@
     }
    },
    "over25": {
-    "p_model": 0.6938,
+    "p_model": 0.6951,
     "p_market": 0.6726,
     "avg_over": 1.39,
     "avg_under": 2.85
    },
    "btts": {
-    "p_model": 0.5874
+    "p_model": 0.5967
    },
    "own_model": {
-    "p_h": 0.2625,
-    "p_d": 0.2348,
-    "p_a": 0.5027,
-    "xg_home": 1.3438,
-    "xg_away": 1.918
+    "p_h": 0.2975,
+    "p_d": 0.2376,
+    "p_a": 0.4649,
+    "xg_home": 1.4344,
+    "xg_away": 1.8322
    }
   },
   {
@@ -735,7 +735,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.5892,
+     "p": 0.585,
      "p_rule": 0.5617,
      "nt_min_odds": 1.82,
      "avg_odds": 1.66,
@@ -743,7 +743,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2256,
+     "p": 0.2268,
      "p_rule": 0.2312,
      "nt_min_odds": 4.41,
      "avg_odds": 4.09,
@@ -751,7 +751,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.1852,
+     "p": 0.1883,
      "p_rule": 0.2071,
      "nt_min_odds": 4.92,
      "avg_odds": 4.5,
@@ -759,20 +759,20 @@
     }
    },
    "over25": {
-    "p_model": 0.6221,
+    "p_model": 0.6197,
     "p_market": 0.6102,
     "avg_over": 1.55,
     "avg_under": 2.35
    },
    "btts": {
-    "p_model": 0.5436
+    "p_model": 0.5664
    },
    "own_model": {
-    "p_h": 0.4748,
-    "p_d": 0.2534,
-    "p_a": 0.2718,
-    "xg_home": 1.6061,
-    "xg_away": 1.1576
+    "p_h": 0.4838,
+    "p_d": 0.2426,
+    "p_a": 0.2737,
+    "xg_home": 1.7366,
+    "xg_away": 1.2551
    }
   },
   {
@@ -785,7 +785,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.2618,
+     "p": 0.2602,
      "p_rule": 0.2642,
      "nt_min_odds": 3.86,
      "avg_odds": 3.38,
@@ -793,7 +793,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2544,
+     "p": 0.2522,
      "p_rule": 0.2642,
      "nt_min_odds": 3.86,
      "avg_odds": 3.61,
@@ -801,7 +801,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.4838,
+     "p": 0.4876,
      "p_rule": 0.4717,
      "nt_min_odds": 2.16,
      "avg_odds": 2.0,
@@ -809,20 +809,20 @@
     }
    },
    "over25": {
-    "p_model": 0.5692,
+    "p_model": 0.5733,
     "p_market": 0.5455,
     "avg_over": 1.69,
     "avg_under": 2.08
    },
    "btts": {
-    "p_model": 0.5201
+    "p_model": 0.523
    },
    "own_model": {
-    "p_h": 0.2837,
-    "p_d": 0.2794,
-    "p_a": 0.4369,
-    "xg_home": 1.0703,
-    "xg_away": 1.3911
+    "p_h": 0.3029,
+    "p_d": 0.2818,
+    "p_a": 0.4153,
+    "xg_home": 1.1295,
+    "xg_away": 1.3657
    }
   },
   {
@@ -835,7 +835,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.341,
+     "p": 0.3412,
      "p_rule": 0.3432,
      "nt_min_odds": 2.97,
      "avg_odds": 2.74,
@@ -843,7 +843,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2732,
+     "p": 0.2718,
      "p_rule": 0.2765,
      "nt_min_odds": 3.69,
      "avg_odds": 3.43,
@@ -851,7 +851,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3858,
+     "p": 0.387,
      "p_rule": 0.3804,
      "nt_min_odds": 2.68,
      "avg_odds": 2.41,
@@ -859,20 +859,20 @@
     }
    },
    "over25": {
-    "p_model": 0.5093,
+    "p_model": 0.5085,
     "p_market": 0.5051,
     "avg_over": 1.83,
     "avg_under": 1.9
    },
    "btts": {
-    "p_model": 0.5723
+    "p_model": 0.5679
    },
    "own_model": {
-    "p_h": 0.3391,
-    "p_d": 0.2562,
-    "p_a": 0.4047,
-    "xg_home": 1.3856,
-    "xg_away": 1.5333
+    "p_h": 0.3429,
+    "p_d": 0.263,
+    "p_a": 0.3941,
+    "xg_home": 1.3629,
+    "xg_away": 1.4765
    }
   },
   {
@@ -885,7 +885,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.3362,
+     "p": 0.3381,
      "p_rule": 0.3298,
      "nt_min_odds": 3.09,
      "avg_odds": 2.78,
@@ -893,7 +893,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2874,
+     "p": 0.2846,
      "p_rule": 0.2954,
      "nt_min_odds": 3.45,
      "avg_odds": 3.26,
@@ -901,7 +901,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3764,
+     "p": 0.3773,
      "p_rule": 0.3748,
      "nt_min_odds": 2.72,
      "avg_odds": 2.47,
@@ -909,20 +909,20 @@
     }
    },
    "over25": {
-    "p_model": 0.4759,
+    "p_model": 0.479,
     "p_market": 0.4731,
     "avg_over": 1.97,
     "avg_under": 1.77
    },
    "btts": {
-    "p_model": 0.5205
+    "p_model": 0.5147
    },
    "own_model": {
-    "p_h": 0.3473,
-    "p_d": 0.2909,
-    "p_a": 0.3618,
-    "xg_home": 1.1651,
-    "xg_away": 1.1949
+    "p_h": 0.3477,
+    "p_d": 0.2954,
+    "p_a": 0.3569,
+    "xg_home": 1.1581,
+    "xg_away": 1.1769
    }
   },
   {
@@ -935,7 +935,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.2156,
+     "p": 0.2132,
      "p_rule": 0.2143,
      "nt_min_odds": 4.76,
      "avg_odds": 4.25,
@@ -943,7 +943,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2263,
+     "p": 0.2231,
      "p_rule": 0.2191,
      "nt_min_odds": 4.66,
      "avg_odds": 3.99,
@@ -951,7 +951,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.5582,
+     "p": 0.5637,
      "p_rule": 0.5666,
      "nt_min_odds": 1.8,
      "avg_odds": 1.71,
@@ -959,20 +959,20 @@
     }
    },
    "over25": {
-    "p_model": 0.6004,
+    "p_model": 0.6007,
     "p_market": 0.5975,
     "avg_over": 1.57,
     "avg_under": 2.28
    },
    "btts": {
-    "p_model": 0.5891
+    "p_model": 0.5874
    },
    "own_model": {
-    "p_h": 0.2394,
-    "p_d": 0.2284,
-    "p_a": 0.5322,
-    "xg_home": 1.2536,
-    "xg_away": 1.9519
+    "p_h": 0.2672,
+    "p_d": 0.2419,
+    "p_a": 0.4909,
+    "xg_home": 1.2846,
+    "xg_away": 1.8052
    }
   },
   {
@@ -985,7 +985,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.3743,
+     "p": 0.3758,
      "p_rule": 0.3873,
      "nt_min_odds": 2.63,
      "avg_odds": 2.38,
@@ -993,7 +993,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2905,
+     "p": 0.2897,
      "p_rule": 0.2887,
      "nt_min_odds": 3.53,
      "avg_odds": 3.17,
@@ -1001,7 +1001,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3352,
+     "p": 0.3344,
      "p_rule": 0.324,
      "nt_min_odds": 3.15,
      "avg_odds": 2.79,
@@ -1009,20 +1009,20 @@
     }
    },
    "over25": {
-    "p_model": 0.4949,
+    "p_model": 0.499,
     "p_market": 0.4896,
     "avg_over": 1.9,
     "avg_under": 1.81
    },
    "btts": {
-    "p_model": 0.5035
+    "p_model": 0.4998
    },
    "own_model": {
-    "p_h": 0.4202,
-    "p_d": 0.3163,
-    "p_a": 0.2636,
-    "xg_home": 1.2589,
-    "xg_away": 0.9461
+    "p_h": 0.4249,
+    "p_d": 0.3154,
+    "p_a": 0.2597,
+    "xg_home": 1.2672,
+    "xg_away": 0.937
    }
   },
   {
@@ -1035,7 +1035,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.6528,
+     "p": 0.651,
      "p_rule": 0.6603,
      "nt_min_odds": 1.54,
      "avg_odds": 1.49,
@@ -1043,7 +1043,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.208,
+     "p": 0.2085,
      "p_rule": 0.2021,
      "nt_min_odds": 5.05,
      "avg_odds": 4.39,
@@ -1051,7 +1051,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.1392,
+     "p": 0.1405,
      "p_rule": 0.1376,
      "nt_min_odds": 7.41,
      "avg_odds": 5.89,
@@ -1059,20 +1059,20 @@
     }
    },
    "over25": {
-    "p_model": 0.5998,
+    "p_model": 0.5982,
     "p_market": 0.5897,
     "avg_over": 1.59,
     "avg_under": 2.26
    },
    "btts": {
-    "p_model": 0.5438
+    "p_model": 0.5466
    },
    "own_model": {
-    "p_h": 0.5495,
-    "p_d": 0.2462,
-    "p_a": 0.2043,
-    "xg_home": 1.7836,
-    "xg_away": 1.0048
+    "p_h": 0.5727,
+    "p_d": 0.2349,
+    "p_a": 0.1924,
+    "xg_home": 1.8722,
+    "xg_away": 0.9983
    }
   },
   {
@@ -1085,7 +1085,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.4431,
+     "p": 0.4434,
      "p_rule": 0.4424,
      "nt_min_odds": 2.31,
      "avg_odds": 2.13,
@@ -1093,7 +1093,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2559,
+     "p": 0.2544,
      "p_rule": 0.2574,
      "nt_min_odds": 3.96,
      "avg_odds": 3.68,
@@ -1101,7 +1101,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.301,
+     "p": 0.3023,
      "p_rule": 0.3003,
      "nt_min_odds": 3.4,
      "avg_odds": 3.07,
@@ -1109,20 +1109,20 @@
     }
    },
    "over25": {
-    "p_model": 0.618,
+    "p_model": 0.6194,
     "p_market": 0.6024,
     "avg_over": 1.55,
     "avg_under": 2.34
    },
    "btts": {
-    "p_model": 0.5728
+    "p_model": 0.5756
    },
    "own_model": {
-    "p_h": 0.4486,
-    "p_d": 0.2562,
-    "p_a": 0.2952,
-    "xg_home": 1.6811,
-    "xg_away": 1.3301
+    "p_h": 0.4571,
+    "p_d": 0.2532,
+    "p_a": 0.2896,
+    "xg_home": 1.7038,
+    "xg_away": 1.3195
    }
   },
   {
@@ -1135,7 +1135,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.5099,
+     "p": 0.5086,
      "p_rule": 0.5128,
      "nt_min_odds": 1.99,
      "avg_odds": 1.86,
@@ -1143,7 +1143,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2368,
+     "p": 0.238,
      "p_rule": 0.2302,
      "nt_min_odds": 4.43,
      "avg_odds": 4.01,
@@ -1151,7 +1151,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.2533,
+     "p": 0.2534,
      "p_rule": 0.2571,
      "nt_min_odds": 3.97,
      "avg_odds": 3.58,
@@ -1159,20 +1159,20 @@
     }
    },
    "over25": {
-    "p_model": 0.6627,
+    "p_model": 0.6659,
     "p_market": 0.6529,
     "avg_over": 1.46,
     "avg_under": 2.61
    },
    "btts": {
-    "p_model": 0.559
+    "p_model": 0.564
    },
    "own_model": {
-    "p_h": 0.4871,
-    "p_d": 0.2433,
-    "p_a": 0.2696,
-    "xg_home": 1.6815,
-    "xg_away": 1.1918
+    "p_h": 0.4606,
+    "p_d": 0.2421,
+    "p_a": 0.2973,
+    "xg_home": 1.6235,
+    "xg_away": 1.2569
    }
   },
   {
@@ -1185,7 +1185,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.5162,
+     "p": 0.5175,
      "p_rule": 0.5085,
      "nt_min_odds": 2.01,
      "avg_odds": 1.86,
@@ -1193,7 +1193,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2688,
+     "p": 0.2675,
      "p_rule": 0.2609,
      "nt_min_odds": 3.91,
      "avg_odds": 3.56,
@@ -1209,20 +1209,20 @@
     }
    },
    "over25": {
-    "p_model": 0.4962,
+    "p_model": 0.4966,
     "p_market": 0.4911,
     "avg_over": 1.87,
     "avg_under": 1.85
    },
    "btts": {
-    "p_model": 0.5518
+    "p_model": 0.5424
    },
    "own_model": {
-    "p_h": 0.5206,
-    "p_d": 0.2424,
-    "p_a": 0.237,
-    "xg_home": 1.7392,
-    "xg_away": 1.0995
+    "p_h": 0.5042,
+    "p_d": 0.2517,
+    "p_a": 0.2441,
+    "xg_home": 1.6517,
+    "xg_away": 1.0768
    }
   },
   {
@@ -1235,7 +1235,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.692,
+     "p": 0.6928,
      "p_rule": 0.6732,
      "nt_min_odds": 1.52,
      "avg_odds": 1.42,
@@ -1243,7 +1243,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.1989,
+     "p": 0.1964,
      "p_rule": 0.2062,
      "nt_min_odds": 4.95,
      "avg_odds": 4.41,
@@ -1251,7 +1251,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.1091,
+     "p": 0.1108,
      "p_rule": 0.1207,
      "nt_min_odds": 8.45,
      "avg_odds": 7.1,
@@ -1259,20 +1259,20 @@
     }
    },
    "over25": {
-    "p_model": 0.5442,
+    "p_model": 0.5499,
     "p_market": 0.5404,
     "avg_over": 1.75,
     "avg_under": 1.99
    },
    "btts": {
-    "p_model": 0.4864
+    "p_model": 0.4769
    },
    "own_model": {
-    "p_h": 0.5938,
-    "p_d": 0.2475,
-    "p_a": 0.1588,
-    "xg_home": 1.6543,
-    "xg_away": 0.7259
+    "p_h": 0.5884,
+    "p_d": 0.2522,
+    "p_a": 0.1594,
+    "xg_home": 1.6253,
+    "xg_away": 0.7169
    }
   },
   {
@@ -1285,7 +1285,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.6038,
+     "p": 0.6106,
      "p_rule": 0.5959,
      "nt_min_odds": 1.71,
      "avg_odds": 1.59,
@@ -1293,7 +1293,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2192,
+     "p": 0.2148,
      "p_rule": 0.2163,
      "nt_min_odds": 4.71,
      "avg_odds": 4.33,
@@ -1301,7 +1301,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.177,
+     "p": 0.1746,
      "p_rule": 0.1878,
      "nt_min_odds": 5.43,
      "avg_odds": 4.81,
@@ -1309,20 +1309,20 @@
     }
    },
    "over25": {
-    "p_model": 0.6775,
+    "p_model": 0.6808,
     "p_market": 0.6514,
     "avg_over": 1.47,
     "avg_under": 2.59
    },
    "btts": {
-    "p_model": 0.459
+    "p_model": 0.4897
    },
    "own_model": {
-    "p_h": 0.5935,
-    "p_d": 0.2573,
-    "p_a": 0.1492,
-    "xg_home": 1.6375,
-    "xg_away": 0.6959
+    "p_h": 0.571,
+    "p_d": 0.2512,
+    "p_a": 0.1778,
+    "xg_home": 1.6957,
+    "xg_away": 0.8393
    }
   },
   {
@@ -1335,7 +1335,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.3317,
+     "p": 0.3279,
      "p_rule": 0.3048,
      "nt_min_odds": 3.35,
      "avg_odds": 2.81,
@@ -1343,7 +1343,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2991,
+     "p": 0.2966,
      "p_rule": 0.3048,
      "nt_min_odds": 3.35,
      "avg_odds": 3.2,
@@ -1351,7 +1351,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3693,
+     "p": 0.3756,
      "p_rule": 0.3903,
      "nt_min_odds": 2.61,
      "avg_odds": 2.37,
@@ -1359,20 +1359,20 @@
     }
    },
    "over25": {
-    "p_model": 0.4785,
+    "p_model": 0.4783,
     "p_market": 0.4789,
     "avg_over": 1.92,
     "avg_under": 1.79
    },
    "btts": {
-    "p_model": 0.5715
+    "p_model": 0.5639
    },
    "own_model": {
-    "p_h": 0.2584,
-    "p_d": 0.2656,
-    "p_a": 0.4759,
-    "xg_home": 1.2011,
-    "xg_away": 1.6924
+    "p_h": 0.3002,
+    "p_d": 0.2793,
+    "p_a": 0.4205,
+    "xg_home": 1.248,
+    "xg_away": 1.5125
    }
   },
   {
@@ -1385,7 +1385,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.4254,
+     "p": 0.4245,
      "p_rule": 0.4275,
      "nt_min_odds": 2.39,
      "avg_odds": 2.17,
@@ -1393,7 +1393,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2504,
+     "p": 0.25,
      "p_rule": 0.2419,
      "nt_min_odds": 4.22,
      "avg_odds": 3.79,
@@ -1401,7 +1401,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3243,
+     "p": 0.3255,
      "p_rule": 0.3306,
      "nt_min_odds": 3.09,
      "avg_odds": 2.89,
@@ -1409,20 +1409,20 @@
     }
    },
    "over25": {
-    "p_model": 0.6584,
+    "p_model": 0.6565,
     "p_market": 0.6497,
     "avg_over": 1.46,
     "avg_under": 2.6
    },
    "btts": {
-    "p_model": 0.591
+    "p_model": 0.6039
    },
    "own_model": {
-    "p_h": 0.4607,
-    "p_d": 0.2377,
-    "p_a": 0.3016,
-    "xg_home": 1.8042,
-    "xg_away": 1.4281
+    "p_h": 0.4764,
+    "p_d": 0.2342,
+    "p_a": 0.2894,
+    "xg_home": 1.8858,
+    "xg_away": 1.4373
    }
   },
   {
@@ -1435,7 +1435,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.2719,
+     "p": 0.2713,
      "p_rule": 0.272,
      "nt_min_odds": 3.75,
      "avg_odds": 3.36,
@@ -1443,7 +1443,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2667,
+     "p": 0.2698,
      "p_rule": 0.2683,
      "nt_min_odds": 3.8,
      "avg_odds": 3.53,
@@ -1451,7 +1451,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.4615,
+     "p": 0.4589,
      "p_rule": 0.4597,
      "nt_min_odds": 2.22,
      "avg_odds": 2.06,
@@ -1459,20 +1459,20 @@
     }
    },
    "over25": {
-    "p_model": 0.5455,
+    "p_model": 0.5474,
     "p_market": 0.5316,
     "avg_over": 1.75,
     "avg_under": 2.01
    },
    "btts": {
-    "p_model": 0.529
+    "p_model": 0.5273
    },
    "own_model": {
-    "p_h": 0.2472,
-    "p_d": 0.2586,
-    "p_a": 0.4942,
-    "xg_home": 1.0089,
-    "xg_away": 1.5376
+    "p_h": 0.2478,
+    "p_d": 0.2512,
+    "p_a": 0.501,
+    "xg_home": 1.018,
+    "xg_away": 1.5634
    }
   },
   {
@@ -1485,7 +1485,7 @@
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.2346,
+     "p": 0.2342,
      "p_rule": 0.2547,
      "nt_min_odds": 4.01,
      "avg_odds": 3.61,
@@ -1493,7 +1493,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2107,
+     "p": 0.2101,
      "p_rule": 0.2113,
      "nt_min_odds": 4.83,
      "avg_odds": 4.21,
@@ -1501,7 +1501,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.5547,
+     "p": 0.5557,
      "p_rule": 0.534,
      "nt_min_odds": 1.91,
      "avg_odds": 1.81,
@@ -1509,20 +1509,20 @@
     }
    },
    "over25": {
-    "p_model": 0.7433,
+    "p_model": 0.7451,
     "p_market": 0.7273,
     "avg_over": 1.31,
     "avg_under": 3.33
    },
    "btts": {
-    "p_model": 0.6
+    "p_model": 0.6093
    },
    "own_model": {
-    "p_h": 0.3397,
-    "p_d": 0.2359,
-    "p_a": 0.4243,
-    "xg_home": 1.5286,
-    "xg_away": 1.7285
+    "p_h": 0.3346,
+    "p_d": 0.2349,
+    "p_a": 0.4305,
+    "xg_home": 1.5357,
+    "xg_away": 1.7638
    }
   }
  ]

@@ -1,7 +1,7 @@
 {
   "version": "2.1",
-  "xi": 0.0019,
-  "shrink": 0.5,
+  "xi": 0.003,
+  "shrink": 2.0,
   "pxg_alpha": 0.7,
   "elo_k": 20.0,
   "elo_hfa": 60.0,
