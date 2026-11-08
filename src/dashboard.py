@@ -65,7 +65,7 @@ def findings(m: dict, ch: dict, ra: dict, doc: dict) -> list[str]:
                    f"slo sluttoddsen med {pc(r['clv'])} i snitt og ga {pc(r['roi'])} ROI. $100 ble ${rb.get('kelly_final', 0):.0f} med ¼ Kelly.")
     se = ra.get("staking") or {}
     if se:
-        best_final = max(se, key=lambda k: se[k]["final"])
+        best_final = max((k for k in se if k != "martingale"), key=lambda k: se[k]["final"])
         chosen = ch.get("staking")
         txt = f"Innsatslab: {se[chosen]['label']} er valgt (${se[chosen]['final']:.0f}, maks fall {se[chosen]['max_dd'] * 100:.0f} %)."
         if best_final != chosen:
@@ -76,6 +76,10 @@ def findings(m: dict, ch: dict, ra: dict, doc: dict) -> list[str]:
                     "de største edgene ligger oftest på høye odds, der prisforskjellen oftere er støy enn ekte verdi.")
         if "trapp" in se:
             txt += f" Innsats etter edge-trapp ga ${se['trapp']['final']:.0f}: den satser for mye på høye odds. Kelly tar hensyn til både edge og odds."
+        mg = se.get("martingale")
+        if mg:
+            txt += (f" Moro-strategien martingale ($1, doble etter tap) " + (f"gikk konkurs {mg['bust']} etter {mg.get('worst_streak', 0)} tap på rad."
+                    if mg.get("bust") else f"endte på ${mg['final']:.0f}, men falt {mg['max_dd'] * 100:.0f} % underveis (verste tapsrekke {mg.get('worst_streak', 0)})."))
         out.append(txt)
     lg = doc.get("league_rows") or []
     if lg:

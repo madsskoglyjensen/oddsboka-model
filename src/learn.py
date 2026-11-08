@@ -270,7 +270,10 @@ STAKING = {
     "kelly_conf": "Tillitsvektet Kelly: andel = edge × 10 (2 % gir 0,2, 5 % gir 0,5, maks 1)",
     "big_edge": "Bare store edges: ½ Kelly når edge ≥ 5 %, ellers ingenting",
     "odds_band": "Odds-bånd: ½ Kelly bare på odds 1,5–3,5",
+    "martingale": "Martingale: $1, doble etter hvert tap, tilbake til $1 etter gevinst",
 }
+# Moro-strategier som vises i innsatslaben, men aldri kan velges til å styre.
+FUN = {"martingale"}
 
 
 # Samme regler som maskinlesbar oppskrift, slik at morgenkjøringen kan følge den som er valgt.
@@ -287,6 +290,7 @@ STAKING_SPEC = {
     "kelly_conf": {"kelly_mult_per_edge": 10, "kelly_mult_max": 1.0},
     "big_edge": {"kelly_mult": [[0.05, 0.5]]},
     "odds_band": {"kelly_mult": [[0.0, 0.5]], "odds_min": 1.5, "odds_max": 3.5},
+    "martingale": {"martingale_base": 1.0},
 }
 
 
@@ -312,9 +316,42 @@ def stake_frac(scheme: str, p: float, o: float, edge: float) -> float:
     raise ValueError(scheme)
 
 
+def run_martingale(rows: pd.DataFrame, base: float = 1.0) -> dict:
+    """Martingale: fast kronebeløp som dobles etter hvert tap og nullstilles etter gevinst. Ingen tak.
+    Bets tas i rekkefølge. Er innsatsen større enn bankrollen, settes resten inn; går den til null, er det slutt."""
+    bank, peak, mdd, path, logs, streak, worst, bust = 100.0, 100.0, 0.0, [], [], 0, 0, None
+    r = rows.sort_values("date", kind="stable")
+    for d, g in r.groupby(r["date"].dt.normalize(), sort=True):
+        before = bank
+        for o, w in zip(g["odds"].to_numpy(), g["win"].to_numpy()):
+            if bank <= 0.01:
+                break
+            st = min(bank, base * 2 ** streak)
+            if w == 1:
+                bank += st * (o - 1)
+                streak = 0
+            else:
+                bank -= st
+                streak += 1
+                worst = max(worst, streak)
+        if bank <= 0.01 and bust is None:
+            bank, bust = 0.0, d.strftime("%Y-%m-%d")
+        logs.append(np.log(bank / before) if bank > 0 and before > 0 else -10)
+        peak = max(peak, bank)
+        mdd = max(mdd, 1 - bank / peak if peak else 1)
+        path.append((d, bank))
+    s = pd.Series({d: b for d, b in path})
+    wk = s.resample("W").last().dropna() if len(s) else s
+    return {"final": round(bank, 2), "max_dd": round(mdd, 4), "n": int(len(rows)), "days": len(path),
+            "growth_per_day": float(np.mean(logs)) if logs else 0.0, "bust": bust, "worst_streak": int(worst),
+            "path": [[d.strftime("%Y-%m-%d"), round(float(v), 2)] for d, v in wk.items()]}
+
+
 def run_bankroll(rows: pd.DataFrame, scheme: str) -> dict:
     """Bankroll fra $100. Alle dagens bets plasseres mot bankrollen ved dagens start (som i morgenkjøringen).
     Tak: 5 % per bet; overstiger dagens sum 10 %, skaleres alle dagens innsatser ned proporsjonalt."""
+    if scheme == "martingale":
+        return run_martingale(rows)
     bank, peak, mdd, logs, path = 100.0, 100.0, 0.0, [], []
     for d, g in rows.groupby(rows["date"].dt.normalize(), sort=True):
         f = np.array([min(stake_frac(scheme, p, o, e), CFG["max_stake"]) for p, o, e in zip(g["p"], g["odds"], g["edge"])])
@@ -376,7 +413,7 @@ def holdout_test(ev: pd.DataFrame, nt: float, n_test: int = 3) -> dict:
     ok = np.isfinite(P).all(1)
     rows_tr = simulate(ev[ok & tr], P[ok & tr], "1x2", t, nt, ret_rows=True)["_rows"]
     st_tr = staking_experiments(rows_tr)
-    okst = {k: v for k, v in st_tr.items() if v["max_dd"] < 0.25}
+    okst = {k: v for k, v in st_tr.items() if v["max_dd"] < 0.25 and k not in FUN}
     sk = max(okst, key=lambda k: okst[k]["growth_per_day"]) if okst else "kelly_25"
     rte = simulate(ev[ok & te], P[ok & te], "1x2", t, nt, ret_rows=True)
     st_te = staking_experiments(rte["_rows"]) if rte["n"] else {}
@@ -475,7 +512,7 @@ def choose_champion(met: dict) -> dict:
     ra = met.get("rule", {}).get(best["model"]) if best else None
     if ra:
         # Innsatsregel: høyest vekst per dag (log) med maks drawdown under 25 %
-        ok = {k: v for k, v in ra["staking"].items() if v["max_dd"] < 0.25}
+        ok = {k: v for k, v in ra["staking"].items() if v["max_dd"] < 0.25 and k not in FUN}
         if ok:
             staking = max(ok, key=lambda k: ok[k]["growth_per_day"])
         # Ligafilter: behold ligaer med positiv CLV, eller for få bets til å dømme (< 30)
