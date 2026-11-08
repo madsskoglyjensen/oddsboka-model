@@ -129,7 +129,10 @@ def load_fixtures() -> pd.DataFrame:
 if __name__ == "__main__":
     if "--no-download" not in sys.argv:
         download()
-    m = load_matches()
+    from validate import clean, write_report
+    m, rep = clean(load_matches())
+    write_report(rep)
+    print("Datasjekk:", {k: v for k, v in rep["checks"].items() if v})
     m.to_csv(ROOT / "data" / "matches.csv", index=False)
     print(f"{len(m)} kamper, {m['date'].min().date()} til {m['date'].max().date()}")
     print(m.groupby("season").size().to_string())

@@ -313,6 +313,46 @@ def rule_breakdown(rows: pd.DataFrame) -> dict:
     return {"by_league": by, "by_year": by_year}
 
 
+def holdout_test(ev: pd.DataFrame, nt: float, n_test: int = 3) -> dict:
+    """Ærlig test: velg spillregel (modell + edge) og innsats bare på eldre sesonger,
+    og mål resultatet på de siste n_test sesongene som valget aldri har sett."""
+    seasons = sorted(ev["season"].unique())
+    tr_s, te_s = seasons[:-n_test], seasons[-n_test:]
+    tr, te = ev["season"].isin(tr_s).to_numpy(), ev["season"].isin(te_s).to_numpy()
+    cands = []
+    for nm in ("mkt_sharp", "stack_sharp_lr", "stack_lr", "stack_lgbm", "own_lr", "pxg", "goals", "elo_lr"):
+        if f"{nm}_h" not in ev and nm not in ("mkt_sharp", "pxg", "goals"):
+            continue
+        P = probs(ev, nm)
+        ok = np.isfinite(P).all(1)
+        for t in (0.0, 0.02, 0.04, 0.06, 0.08, 0.10):
+            r = simulate(ev[ok & tr], P[ok & tr], "1x2", t, nt)
+            if r["n"] >= 100 and (r["clv"] or 0) > 0:
+                cands.append((r["clv"] * r["n"], nm, t, r))
+    if not cands:
+        return {"train": [tr_s[0], tr_s[-1]], "test": [te_s[0], te_s[-1]], "chosen": None}
+    cands.sort(key=lambda x: -x[0])
+    _, nm, t, rtr = cands[0]
+    P = probs(ev, nm)
+    ok = np.isfinite(P).all(1)
+    rows_tr = simulate(ev[ok & tr], P[ok & tr], "1x2", t, nt, ret_rows=True)["_rows"]
+    st_tr = staking_experiments(rows_tr)
+    okst = {k: v for k, v in st_tr.items() if v["max_dd"] < 0.25}
+    sk = max(okst, key=lambda k: okst[k]["growth_per_day"]) if okst else "kelly_25"
+    rte = simulate(ev[ok & te], P[ok & te], "1x2", t, nt, ret_rows=True)
+    st_te = staking_experiments(rte["_rows"]) if rte["n"] else {}
+    keep = lambda r: {k: r.get(k) for k in ("n", "roi", "clv", "roi_lo", "roi_hi", "hit", "avg_odds")}
+    return {
+        "train": [tr_s[0], tr_s[-1]], "test": [te_s[0], te_s[-1]],
+        "chosen": {"model": nm, "edge_min": t, "staking": sk},
+        "train_result": {**keep(rtr), "final": st_tr.get(sk, {}).get("final")},
+        "test_result": {**keep(rte), "final": st_te.get(sk, {}).get("final"),
+                        "final_kelly_25": st_te.get("kelly_25", {}).get("final"),
+                        "max_dd": st_te.get(sk, {}).get("max_dd"),
+                        "path": st_te.get(sk, {}).get("path")},
+    }
+
+
 def evaluate(df: pd.DataFrame, first_test="1819") -> dict:
     ev = df[(df["season"] >= first_test)].dropna(subset=["stack_lr_h", "mkt_avg_h", "goals_p_h", "pxg_p_h"])
     y = y_1x2(ev)
@@ -347,6 +387,7 @@ def evaluate(df: pd.DataFrame, first_test="1819") -> dict:
         rr = simulate(ev[ok], P[ok], "1x2", emin, nt, ret_rows=True)["_rows"]
         if len(rr):
             out["rule"][nm] = {**rule_breakdown(rr), "staking": staking_experiments(rr)}
+    out["holdout"] = holdout_test(ev, nt)
     # Over/under 2,5
     evo = ev.dropna(subset=["mkt_avg_o25", "ou_stack_lr_p"])
     yo = ((evo["hg"] + evo["ag"]) > 2.5).astype(int).to_numpy()
@@ -405,6 +446,27 @@ def choose_champion(met: dict) -> dict:
             "leagues": leagues, "leagues_dropped": dropped}
 
 
+def log_experiment(met: dict) -> None:
+    """Én rad per læringsrunde i out/experiments.json, så utviklingen over tid kan følges."""
+    f = ROOT / "out" / "experiments.json"
+    hist = json.loads(f.read_text()) if f.exists() else []
+    tu = json.loads((ROOT / "out" / "tuning.json").read_text()) if (ROOT / "out" / "tuning.json").exists() else {}
+    ch, ho, M = met["champion"], met.get("holdout") or {}, met["models"]
+    rule = ch.get("bet_rule") or {}
+    row = {
+        "date": pd.Timestamp.now(tz="Europe/Oslo").strftime("%Y-%m-%d"), "version": CFG.get("version"), "n_matches": met["n_matches"],
+        "params": {k: CFG.get(k) for k in ("xi", "shrink", "pxg_alpha")}, "tuning_changed": tu.get("changed"),
+        "own_logloss_gap": round(M["pxg"]["logloss_vs_mkt"], 5) if "pxg" in M else None,
+        "prob_model": ch.get("prob_model"), "rule_model": rule.get("model"), "rule_edge": rule.get("edge_min"),
+        "rule_clv": round(rule["clv"], 5) if rule.get("clv") is not None else None, "rule_n": rule.get("n"),
+        "holdout_clv": round(ho["test_result"]["clv"], 5) if ho.get("test_result") and ho["test_result"].get("clv") is not None else None,
+        "holdout_n": (ho.get("test_result") or {}).get("n"),
+        "staking": ch.get("staking"), "leagues": ch.get("leagues"),
+    }
+    hist = [h for h in hist if h["date"] != row["date"]] + [row]
+    f.write_text(json.dumps(hist, indent=1))
+
+
 def main():
     df = pd.read_csv(ROOT / "out" / "base_preds.csv", parse_dates=["date"])
     df["season"] = df["season"].astype(str).str.zfill(4)
@@ -416,6 +478,7 @@ def main():
     with open(ROOT / "out" / "models.pkl", "wb") as fh:
         pickle.dump(fit_final(df), fh)
     (ROOT / "out" / "champion.json").write_text(json.dumps(met["champion"], indent=1))
+    log_experiment(met)
     met["config"] = CFG
     met["generated"] = pd.Timestamp.now(tz="Europe/Oslo").isoformat(timespec="seconds")
     (ROOT / "out" / "metrics.json").write_text(json.dumps(met, indent=1, default=float))

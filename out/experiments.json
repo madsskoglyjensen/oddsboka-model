@@ -1,0 +1,33 @@
+[
+ {
+  "date": "2026-11-08",
+  "version": "2.1",
+  "n_matches": 29371,
+  "params": {
+   "xi": 0.003,
+   "shrink": 2.0,
+   "pxg_alpha": 0.7
+  },
+  "tuning_changed": true,
+  "own_logloss_gap": 0.01564,
+  "prob_model": "stack_lr",
+  "rule_model": "mkt_sharp",
+  "rule_edge": 0.02,
+  "rule_clv": 0.02135,
+  "rule_n": 1136,
+  "holdout_clv": 0.0076,
+  "holdout_n": 161,
+  "staking": "kelly_33",
+  "leagues": [
+   "D1",
+   "D2",
+   "E0",
+   "E1",
+   "E2",
+   "F1",
+   "I1",
+   "I2",
+   "SP1"
+  ]
+ }
+]

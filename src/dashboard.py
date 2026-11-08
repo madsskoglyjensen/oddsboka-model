@@ -28,6 +28,10 @@ def r4(x):
     return None if x is None else round(float(x), 4)
 
 
+def fs(s):
+    return "20" + s[:2] + "/" + s[2:]
+
+
 def nd(x, d):
     return f"{x:.{d}f}".replace(".", ",")
 
@@ -137,7 +141,21 @@ def main():
         "tuning": {"params": tu.get("params"), "gain": r4(tu.get("gain")), "changed": tu.get("changed")},
         "nt_proxy": {"book": "Bet365", "factor": m["config"].get("nt_odds_factor"), "nt_vs_sharp": 0.955, "b365_vs_sharp": 0.956, "n_checked": 22},
     }
+    ho = m.get("holdout") or {}
+    doc["holdout"] = ho
+    ex = ROOT / "out" / "experiments.json"
+    doc["experiments"] = json.loads(ex.read_text())[-52:] if ex.exists() else []
+    dq = ROOT / "out" / "data_quality.json"
+    doc["data_quality"] = json.loads(dq.read_text()) if dq.exists() else None
+    doc["tuning"]["method"] = tu.get("method", "koordinatsøk")
+    doc["tuning"]["n_trials"] = tu.get("n_trials")
     doc["findings"] = findings(m, ch, ra, doc)
+    if ho.get("test_result") and ho["test_result"].get("clv") is not None:
+        tr, te = ho["train_result"], ho["test_result"]
+        doc["findings"].insert(2, f"Ærlig test: regelen ble valgt på {fs(ho['train'][0])}–{fs(ho['train'][1])} (CLV {pc(tr['clv'])}). "
+                                  f"På de urørte sesongene {fs(ho['test'][0])}–{fs(ho['test'][1])} ble CLV {pc(te['clv'])} over {te['n']} bets, "
+                                  f"og ROI {pc(te['roi'])} (usikkerhet {pc(te['roi_lo'], 0)} til {pc(te['roi_hi'], 0)}). "
+                                  "Forskjellen viser hvor mye backtesten overdriver.")
     (ROOT / "out" / "dashboard.json").write_text(json.dumps(doc, ensure_ascii=False))
     print(f"dashboard.json: {len(json.dumps(doc)) // 1024} kB")
 

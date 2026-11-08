@@ -1,0 +1,117 @@
+{
+ "generated": "2026-11-08T20:49:49+01:00",
+ "n_logged": 0,
+ "n_done": 0,
+ "race": [
+  {
+   "id": "r_k25",
+   "name": "Regel 2 % · ¼ Kelly",
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  },
+  {
+   "id": "r_band",
+   "name": "Regel 2 % · odds-bånd ½ Kelly",
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  },
+  {
+   "id": "r_k50",
+   "name": "Regel 2 % · ½ Kelly",
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  },
+  {
+   "id": "r_k100",
+   "name": "Regel 2 % · full Kelly",
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  },
+  {
+   "id": "r_edge",
+   "name": "Regel 2 % · mer på store edges",
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  },
+  {
+   "id": "r_flat",
+   "name": "Regel 2 % · flat 1 %",
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  },
+  {
+   "id": "r_big",
+   "name": "Bare edge ≥ 6 % · ½ Kelly",
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  },
+  {
+   "id": "m_model",
+   "name": "Sannsynlighetsmodellen ≥ 4 % · ¼ Kelly",
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  },
+  {
+   "id": "m_own",
+   "name": "Egen modell (xG) ≥ 4 % · ¼ Kelly",
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  },
+  {
+   "id": "ou",
+   "name": "Over/under 2,5 mot skarp pris ≥ 2 %",
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  }
+ ],
+ "nt_lag": {
+  "status": "venter",
+  "n_matches": 0,
+  "need": 150
+ },
+ "closing_line": {
+  "status": "venter",
+  "n_matches": 0,
+  "need": 150
+ }
+}

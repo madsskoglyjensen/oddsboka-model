@@ -1,11 +1,14 @@
-"""Ukentlig tuning av grunnmodellens parametere (koordinatsøk), evaluert walk-forward på de siste sesongene.
+"""Ukentlig tuning av grunnmodellens parametere med Optuna (bayesiansk søk), evaluert walk-forward.
 
-Endrer config.json bare hvis forbedringen i log loss er større enn støyterskelen.
+Søket starter fra gjeldende parametere og prøver nye kombinasjoner innenfor et tidsbudsjett.
+config.json endres bare hvis forbedringen i log loss er større enn støyterskelen.
 """
 from __future__ import annotations
 
 import json
+import os
 import sys
+import time
 from pathlib import Path
 
 import numpy as np
@@ -15,8 +18,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 from base import base_features  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-GRID = {"xi": [0.0010, 0.0019, 0.0030, 0.0045], "shrink": [0.5, 2.0, 5.0, 10.0], "pxg_alpha": [0.2, 0.35, 0.5, 0.7]}
 MIN_GAIN = 0.0005  # log loss; mindre enn dette regnes som støy
+SPACE = {"xi": (0.0005, 0.006, True), "shrink": (0.1, 15.0, True), "pxg_alpha": (0.1, 0.9, False)}
 
 
 def score(m: pd.DataFrame, targets: pd.DataFrame, cfg: dict) -> float:
@@ -32,31 +35,38 @@ def score(m: pd.DataFrame, targets: pd.DataFrame, cfg: dict) -> float:
 
 
 def main(seasons_back: int = 3):
+    import optuna
+    optuna.logging.set_verbosity(optuna.logging.WARNING)
+    minutes = float(os.environ.get("TUNE_MINUTES", "8"))
+    max_trials = int(os.environ.get("TUNE_TRIALS", "40"))
     cfg = json.loads((ROOT / "config.json").read_text())
     m = pd.read_csv(ROOT / "data" / "matches.csv", parse_dates=["date"])
     m["season"] = m["season"].astype(str).str.zfill(4)
     test = sorted(m["season"].unique())[-seasons_back - 1:-1]  # siste hele sesonger
     targets = m[m["season"].isin(test)]
+    t0 = time.time()
     base = score(m, targets, cfg)
-    log = {"start": base, "tested": [], "seasons": test}
-    best, best_cfg = base, dict(cfg)
-    for key, vals in GRID.items():
-        for v in vals:
-            if v == best_cfg[key]:
-                continue
-            c = dict(best_cfg, **{key: v})
-            s = score(m, targets, c)
-            log["tested"].append({key: v, "logloss": s})
-            print(f"{key}={v}: {s:.4f} (beste {best:.4f})", flush=True)
-            if s < best:
-                best, best_cfg = s, c
+
+    def objective(trial):
+        c = dict(cfg)
+        for k, (lo, hi, logscale) in SPACE.items():
+            c[k] = trial.suggest_float(k, lo, hi, log=logscale)
+        return score(m, targets, c)
+
+    study = optuna.create_study(direction="minimize", sampler=optuna.samplers.TPESampler(seed=int(time.time()) % 10000))
+    study.enqueue_trial({k: cfg[k] for k in SPACE})
+    study.optimize(objective, n_trials=max_trials, timeout=minutes * 60)
+    best = study.best_value
+    params = {k: round(v, 5) for k, v in study.best_params.items()}
     changed = base - best > MIN_GAIN
-    log.update({"best": best, "gain": base - best, "changed": changed,
-                "params": {k: best_cfg[k] for k in GRID}})
     if changed:
-        (ROOT / "config.json").write_text(json.dumps(best_cfg, indent=2))
+        cfg.update(params)
+        (ROOT / "config.json").write_text(json.dumps(cfg, indent=2))
+    log = {"method": "optuna", "seasons": test, "start": base, "best": best, "gain": base - best, "changed": changed,
+           "params": {k: cfg[k] for k in SPACE}, "n_trials": len(study.trials), "seconds": round(time.time() - t0),
+           "tested": [{**{k: round(v, 5) for k, v in t.params.items()}, "logloss": t.value} for t in study.trials if t.value is not None]}
     (ROOT / "out" / "tuning.json").write_text(json.dumps(log, indent=1))
-    print("Endret:" if changed else "Ingen endring:", log["params"], f"gevinst {base - best:.4f}")
+    print(("Endret: " if changed else "Ingen endring: ") + str(log["params"]) + f" gevinst {base - best:.4f}, {len(study.trials)} forsøk")
 
 
 if __name__ == "__main__":

@@ -31,8 +31,9 @@ def r4(x):
 def main():
     if "--no-download" not in sys.argv:
         data.download()
-    m = data.load_matches()
-    fx = data.load_fixtures()
+    from validate import clean
+    m, _ = clean(data.load_matches())
+    fx, _ = clean(data.load_fixtures())
     today = pd.Timestamp.now(tz="Europe/Oslo").tz_localize(None).normalize()
     fx = fx[fx["date"] >= today].reset_index(drop=True)
     champ = json.loads((ROOT / "out" / "champion.json").read_text())

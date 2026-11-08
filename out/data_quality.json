@@ -1,0 +1,16 @@
+{
+ "rows_in": 40477,
+ "checks": {
+  "dubletter fjernet": 0,
+  "umulige resultater fjernet": 0,
+  "avg: oddssett satt til tomt": 1,
+  "max: oddssett satt til tomt": 18,
+  "b365: oddssett satt til tomt": 4,
+  "sharp: oddssett satt til tomt": 59,
+  "avgc: oddssett satt til tomt": 5,
+  "sharpc: oddssett satt til tomt": 11,
+  "Bet365 avviker over 35 % fra skarp pris: satt til tomt": 23
+ },
+ "rows_out": 40477,
+ "generated": "2026-11-08T20:39:39+01:00"
+}
