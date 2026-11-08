@@ -61,7 +61,9 @@ jobs:
           python src/dashboard.py
       - name: Daglige prediksjoner
         if: steps.gate.outputs.go == '1'
-        run: python src/predict.py --no-download
+        run: |
+          python src/predict.py --no-download
+          python src/viz.py
       - name: Lagre resultater
         if: steps.gate.outputs.go == '1'
         run: |

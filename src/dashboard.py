@@ -134,7 +134,7 @@ def main():
                 "in_rule": lg in (ch.get("leagues") or [])} for lg, v in (ra.get("by_league") or {}).items()]
     leagues.sort(key=lambda x: -(x["clv"] or 0))
     doc = {
-        "generated": m["generated"], "version": m["config"].get("version"), "n_matches": m["n_matches"], "seasons": m["seasons"],
+        "generated": m["generated"], "trained": m["generated"], "version": m["config"].get("version"), "n_matches": m["n_matches"], "seasons": m["seasons"],
         "first_test": m["first_test"], "prob_model": ch["prob_model"], "bet_rule": rule, "staking": ch.get("staking"),
         "staking_label": ch.get("staking_label"), "leagues_in_rule": ch.get("leagues"), "rows": rows,
         "challengers": challengers[:14], "league_rows": leagues, "by_year": ra.get("by_year"),

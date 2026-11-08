@@ -40,3 +40,10 @@ Hver søndag trenes alt på nytt med alle nye kamper, parametere tunes, og to va
 ## Ærlig testing
 
 Hver søndag velges spillregel og innsats også bare på eldre sesonger, og testes på de tre siste sesongene som valget aldri har sett (`holdout` i `out/metrics.json`). Forskjellen mellom «trent» og «urørt» viser hvor mye backtesten overdriver. Hver læringsrunde logges i `out/experiments.json`.
+
+## ML-lab (src/viz.py)
+
+Kjøres hver morgen etter `predict.py`. Henter innmaten fra de ekte trente modellene og flettes inn i `out/dashboard.json` (feltet `viz`):
+vektene i logistisk regresjon, de øverste nivåene i et tre fra random forest og hvordan alle trærne stemmer per kamp,
+hvordan LightGBM bygger sannsynligheten tre for tre, alle vektene i det nevrale nettet (dashboardet regner fremoverpasset selv),
+Elo-kurver for topplagene og feature-viktighet (permutasjon per feature-gruppe, beregnes på søndager).

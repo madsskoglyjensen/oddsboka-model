@@ -57,7 +57,7 @@ def main():
             for t, p in fits.items():
                 lh, la = p.rates(r["home"], r["away"])
                 d.update({f"{t}_{k}": v for k, v in markets_from_matrix(score_matrix(lh, la, p.rho)).items()})
-                d[f"{t}_lh"], d[f"{t}_la"] = lh, la
+                d[f"{t}_lh"], d[f"{t}_la"], d[f"{t}_rho"] = lh, la, p.rho
             d["n_home"] = fits["goals"].n_games.get(r["home"], 0)
             d["n_away"] = fits["goals"].n_games.get(r["away"], 0)
             eh, ea = elo.get((lg, r["home"]), 1450.0), elo.get((lg, r["away"]), 1450.0)
@@ -123,7 +123,35 @@ def main():
            "note": "p = beste kalibrerte modell. Spill et utfall bare hvis NT-odds >= nt_min_odds.",
            "fixtures": rows}
     (ROOT / "out" / "predictions.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
+    write_viz_fixtures(df, specs, fitted)
     print(f"{len(rows)} kommende kamper skrevet. Spillregel: {rule_model} med edge >= {edge:.0%}")
+
+
+def write_viz_fixtures(df: pd.DataFrame, specs: dict, fitted: dict) -> None:
+    """Rådata for ML-laben i dashboardet: feature-vektorer og modellsannsynligheter per kommende kamp."""
+    fx = []
+    df = df.sort_values(["date", "time", "league"]).reset_index(drop=True)
+    XS = {name: specs[name][1](df).astype(float) for name in ("stack_lr", "stack_sharp_lr")}
+    for i, r in df.iterrows():
+        row = {"league": data.LEAGUES[r["league"]], "date": r["date"].strftime("%Y-%m-%d"), "time": r.get("time"),
+               "home": r["home"], "away": r["away"], "x": {}, "p": {}}
+        for t in ("goals", "pxg"):
+            row[t] = {"lh": r4(r[f"{t}_lh"]), "la": r4(r[f"{t}_la"]), "rho": r4(r[f"{t}_rho"])}
+        for name in ("stack_lr", "stack_sharp_lr"):
+            X = XS[name][i]
+            row["x"][name] = [r4(v) for v in X] if np.isfinite(X).all() else None
+        for name in ("stack_lr", "stack_sharp_lr", "stack_lgbm", "stack_rf", "stack_mlp", "elo_lr", "own_lr"):
+            v = [r.get(f"{name}_{k}") for k in OUT3]
+            row["p"][name] = [r4(x) for x in v] if all(x is not None and np.isfinite(x) for x in v) else None
+        for name in ("goals", "pxg"):
+            row["p"][name] = [r4(r[f"{name}_p_{k}"]) for k in OUT3]
+        for name in ("mkt_sharp", "mkt_avg"):
+            v = [r.get(f"{name}_{k}") for k in OUT3]
+            row["p"][name] = [r4(x) for x in v] if all(x is not None and np.isfinite(x) for x in v) else None
+        row["odds"] = {"avg": [r4(r[f"avg_{k}"]) for k in OUT3], "sharp": [r4(r[f"sharp_{k}"]) for k in OUT3]}
+        row["elo_diff"] = r4(r["elo_diff"])
+        fx.append(row)
+    (ROOT / "out" / "viz_fixtures.json").write_text(json.dumps(fx, ensure_ascii=False))
 
 
 if __name__ == "__main__":
