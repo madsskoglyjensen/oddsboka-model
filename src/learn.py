@@ -173,7 +173,7 @@ def p_over(df, name):
 
 
 # ---------- betting ----------
-def simulate(df: pd.DataFrame, P: np.ndarray, kind: str, edge_min: float, nt: float) -> dict:
+def simulate(df: pd.DataFrame, P: np.ndarray, kind: str, edge_min: float, nt: float, ret_rows: bool = False) -> dict:
     """Flat 1 enhet per bet der edge > edge_min, mot NT-proxy-odds (snittodds * nt). CLV mot skarp sluttodds."""
     if kind == "1x2":
         # NT-proxy: Bet365 (lå likt med NT mot skarp pris i nov 2026), ellers snittodds
@@ -204,28 +204,83 @@ def simulate(df: pd.DataFrame, P: np.ndarray, kind: str, edge_min: float, nt: fl
         rng = np.random.default_rng(7)
         bs = rng.choice(pnl, (2000, n)).mean(1)
         res["roi_lo"], res["roi_hi"] = float(np.quantile(bs, 0.05)), float(np.quantile(bs, 0.95))
-    # Kelly-bankroll gjennom tiden
+    # Kelly-bankroll gjennom tiden (¼ Kelly, samme regler som Oddsboka)
     p_sel = P[np.arange(len(df)), best][sel]
     dates = df["date"].to_numpy()[sel]
-    bank, path = 100.0, []
-    f = CFG["kelly_fraction"] * np.clip((p_sel * o_sel - 1) / (o_sel - 1), 0, None)
-    f = np.minimum(f, CFG["max_stake"])
-    day_used: dict = {}
-    for d, fi, oi, wi in zip(dates, f, o_sel, w_sel):
-        dk = str(d)[:10]
-        room = CFG["max_day"] - day_used.get(dk, 0)
-        fi = max(min(fi, room), 0)
-        day_used[dk] = day_used.get(dk, 0) + fi
-        stake = bank * fi
-        bank += stake * (oi - 1) if wi == 1 else -stake
-        path.append((dk, round(bank, 2)))
-    res["kelly_final"] = round(bank, 2)
-    if path:
-        s = pd.Series({d: b for d, b in path})
-        s.index = pd.to_datetime(s.index)
-        wk = s.resample("W").last().dropna()
-        res["kelly_path"] = [[d.strftime("%Y-%m-%d"), float(v)] for d, v in wk.items()]
+    rows = pd.DataFrame({"date": pd.to_datetime(dates), "p": p_sel, "odds": o_sel, "win": w_sel, "edge": e[sel]})
+    if n:
+        kb = run_bankroll(rows, "kelly_25")
+        res["kelly_final"], res["kelly_path"], res["max_dd"] = kb["final"], kb["path"], kb["max_dd"]
+    else:
+        res["kelly_final"] = 100.0
+    if ret_rows:
+        res["_rows"] = pd.DataFrame({"date": pd.to_datetime(dates), "league": df["league"].to_numpy()[sel], "p": p_sel,
+                                     "odds": o_sel, "win": w_sel, "edge": e[sel], "clv": clv})
     return res
+
+
+STAKING = {
+    "flat_1": "Flat 1 % av bankroll",
+    "trapp": "Trapp: 1 % ved 2–4 % edge, 2 % ved 4–6 %, 3 % over 6 %",
+    "prop": "Proporsjonal: innsats = edge × 30 % (4 % edge gir 1,2 %)",
+    "kelly_25": "¼ Kelly",
+    "kelly_50": "½ Kelly",
+}
+
+
+def stake_frac(scheme: str, p: float, o: float, edge: float) -> float:
+    k = max((p * o - 1) / (o - 1), 0.0)
+    if scheme == "flat_1":
+        return 0.01
+    if scheme == "trapp":
+        return 0.01 if edge < 0.04 else 0.02 if edge < 0.06 else 0.03
+    if scheme == "prop":
+        return 0.3 * edge
+    if scheme == "kelly_25":
+        return 0.25 * k
+    if scheme == "kelly_50":
+        return 0.5 * k
+    raise ValueError(scheme)
+
+
+def run_bankroll(rows: pd.DataFrame, scheme: str) -> dict:
+    """Bankroll fra $100. Alle dagens bets plasseres mot bankrollen ved dagens start (som i morgenkjøringen).
+    Tak: 5 % per bet; overstiger dagens sum 10 %, skaleres alle dagens innsatser ned proporsjonalt."""
+    bank, peak, mdd, logs, path = 100.0, 100.0, 0.0, [], []
+    for d, g in rows.groupby(rows["date"].dt.normalize(), sort=True):
+        f = np.array([min(stake_frac(scheme, p, o, e), CFG["max_stake"]) for p, o, e in zip(g["p"], g["odds"], g["edge"])])
+        tot = f.sum()
+        if tot > CFG["max_day"]:
+            f *= CFG["max_day"] / tot
+        ret = float(np.sum(f * np.where(g["win"].to_numpy() == 1, g["odds"].to_numpy() - 1, -1.0)))
+        before = bank
+        bank = bank * (1 + ret)
+        logs.append(np.log(bank / before) if bank > 0 else -10)
+        peak = max(peak, bank)
+        mdd = max(mdd, 1 - bank / peak)
+        path.append((d, bank))
+    s = pd.Series({d: b for d, b in path})
+    wk = s.resample("W").last().dropna() if len(s) else s
+    return {"final": round(bank, 2), "max_dd": round(mdd, 4), "n": int(len(rows)), "days": len(path),
+            "growth_per_day": float(np.mean(logs)) if logs else 0.0,
+            "path": [[d.strftime("%Y-%m-%d"), round(float(v), 2)] for d, v in wk.items()]}
+
+
+def staking_experiments(rows: pd.DataFrame) -> dict:
+    """Samme bets, ulike innsatsregler."""
+    return {sc: {"label": label, **run_bankroll(rows, sc)} for sc, label in STAKING.items()}
+
+
+def rule_breakdown(rows: pd.DataFrame) -> dict:
+    by = {}
+    for lg, g in rows.groupby("league"):
+        pnl = np.where(g["win"] == 1, g["odds"] - 1, -1.0)
+        by[lg] = {"n": int(len(g)), "roi": float(pnl.mean()), "clv": float(np.nanmean(g["clv"]))}
+    by_year = {}
+    for y, g in rows.groupby(rows["date"].dt.year):
+        pnl = np.where(g["win"] == 1, g["odds"] - 1, -1.0)
+        by_year[str(y)] = {"n": int(len(g)), "roi": float(pnl.mean()), "clv": float(np.nanmean(g["clv"]))}
+    return {"by_league": by, "by_year": by_year}
 
 
 def evaluate(df: pd.DataFrame, first_test="1819") -> dict:
@@ -254,6 +309,14 @@ def evaluate(df: pd.DataFrame, first_test="1819") -> dict:
             r["calibration"] = [[float(pp[bins == b].mean()), float(yy[bins == b].mean()), int((bins == b).sum())]
                                 for b in range(10) if (bins == b).sum() > 30]
         out["models"][nm] = r
+    # Spillregel-analyse: per liga, per år og innsatseksperimenter (for alle modeller med bets)
+    out["rule"] = {}
+    for nm in ("mkt_sharp", "stack_sharp_lr"):
+        P = probs(ev, nm)
+        ok = np.isfinite(P).all(1)
+        rr = simulate(ev[ok], P[ok], "1x2", emin, nt, ret_rows=True)["_rows"]
+        if len(rr):
+            out["rule"][nm] = {**rule_breakdown(rr), "staking": staking_experiments(rr)}
     # Over/under 2,5
     evo = ev.dropna(subset=["mkt_avg_o25", "ou_stack_lr_p"])
     yo = ((evo["hg"] + evo["ag"]) > 2.5).astype(int).to_numpy()
@@ -296,8 +359,19 @@ def choose_champion(met: dict) -> dict:
                 rules.append({"model": k, "edge_min": float(t), "clv": b["clv"], "n": b["n"], "roi": b["roi"],
                               "value": b["clv"] * b["n"]})
     rules.sort(key=lambda r: -r["value"])
-    return {"prob_model": prob, "logloss_last3": score, "bet_rule": rules[0] if rules else None,
-            "alternatives": rules[1:5], "bet": bool(rules)}
+    best = rules[0] if rules else None
+    staking, leagues, dropped = "kelly_25", None, []
+    ra = met.get("rule", {}).get(best["model"]) if best else None
+    if ra:
+        # Innsatsregel: høyest vekst per dag (log) med maks drawdown under 25 %
+        ok = {k: v for k, v in ra["staking"].items() if v["max_dd"] < 0.25}
+        if ok:
+            staking = max(ok, key=lambda k: ok[k]["growth_per_day"])
+        # Ligafilter: behold ligaer med positiv CLV, eller for få bets til å dømme (< 30)
+        leagues = sorted(lg for lg, v in ra["by_league"].items() if v["clv"] > 0 or v["n"] < 30)
+        dropped = sorted(lg for lg, v in ra["by_league"].items() if lg not in leagues)
+    return {"prob_model": prob, "logloss_last3": score, "bet_rule": best, "alternatives": rules[1:5], "bet": bool(rules),
+            "staking": staking, "staking_label": STAKING[staking], "leagues": leagues, "leagues_dropped": dropped}
 
 
 def main():

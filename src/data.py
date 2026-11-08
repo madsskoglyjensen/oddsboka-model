@@ -16,7 +16,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "data" / "raw"
-LEAGUES = {"E0": "Premier League", "SP1": "La Liga", "I1": "Serie A", "D1": "Bundesliga", "F1": "Ligue 1"}
+LEAGUES = {"E0": "Premier League", "SP1": "La Liga", "I1": "Serie A", "D1": "Bundesliga", "F1": "Ligue 1",
+           "E1": "Championship", "E2": "League One", "D2": "2. Bundesliga", "I2": "Serie B"}
 FIRST_SEASON = 2015  # 2015/16
 
 

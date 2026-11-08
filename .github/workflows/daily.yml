@@ -1,9 +1,11 @@
 name: oddsboka-model
 
+# GitHub-cron går i UTC. To tidspunkter per jobb dekker både vinter- og sommertid;
+# vakta under sørger for at bare den riktige kjøres (ca. 07:45 / 06:20 norsk tid).
 on:
   schedule:
-    - cron: "10 7 * * *"   # hver dag ~08:10 norsk vintertid: nye resultater + prediksjoner
-    - cron: "20 5 * * 0"   # søndag ~06:20: ukentlig læring (tuning, retrening, valg av mester)
+    - cron: "45 5,6 * * *"  # daglig: ca. 07:45 norsk tid
+    - cron: "20 4,5 * * 0"  # søndag: ca. 06:20 norsk tid, ukentlig læring
   workflow_dispatch:
     inputs:
       learn:
@@ -20,25 +22,49 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+
+      - name: Vakt (riktig tid, ikke kjørt i dag)
+        id: gate
+        run: |
+          NOW=$(TZ=Europe/Oslo date +%H%M); TODAY=$(TZ=Europe/Oslo date +%Y-%m-%d)
+          gen() { python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('generated','')[:10])" "$1" 2>/dev/null || true; }
+          GO=0; LEARN=0
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            GO=1; [ "${{ inputs.learn }}" = "true" ] && LEARN=1
+          elif [ "${{ github.event.schedule }}" = "20 4,5 * * 0" ]; then
+            if [ "$NOW" -ge 0600 ] && [ "$(gen out/metrics.json)" != "$TODAY" ]; then GO=1; LEARN=1; fi
+          else
+            if [ "$NOW" -ge 0730 ] && [ "$(gen out/predictions.json)" != "$TODAY" ]; then GO=1; fi
+          fi
+          echo "go=$GO" >> "$GITHUB_OUTPUT"; echo "learn=$LEARN" >> "$GITHUB_OUTPUT"
+          echo "Oslo $NOW, go=$GO, learn=$LEARN"
+
       - uses: actions/setup-python@v5
+        if: steps.gate.outputs.go == '1'
         with:
           python-version: "3.13"
           cache: pip
-      - run: pip install -r requirements.txt
+      - name: Installer
+        if: steps.gate.outputs.go == '1'
+        run: pip install -r requirements.txt
       - name: Data
+        if: steps.gate.outputs.go == '1'
         run: python src/data.py
       - name: Ukentlig læring
-        if: github.event.schedule == '20 5 * * 0' || inputs.learn
+        if: steps.gate.outputs.learn == '1'
         run: |
           python src/tune.py
           python src/base.py
           python src/learn.py
+          python src/dashboard.py
       - name: Daglige prediksjoner
+        if: steps.gate.outputs.go == '1'
         run: python src/predict.py --no-download
       - name: Lagre resultater
+        if: steps.gate.outputs.go == '1'
         run: |
           git config user.name "oddsboka-bot"
           git config user.email "oddsboka-bot@users.noreply.github.com"
-          git add out/predictions.json out/metrics.json out/champion.json out/models.pkl out/tuning.json config.json
-          git diff --cached --quiet || git commit -m "Oddsboka: oppdatering $(date -u +%Y-%m-%d)"
+          git add out/*.json out/models.pkl config.json
+          git diff --cached --quiet || git commit -m "Oddsboka: oppdatering $(TZ=Europe/Oslo date +%Y-%m-%d)"
           git push

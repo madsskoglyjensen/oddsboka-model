@@ -1,6 +1,6 @@
 # Oddsboka-modellen
 
-Statistisk modell bak [Oddsboka](https://claude.ai/artifact/B5QpUXS568brJm3bcUh715): paper trading på fotball (topp 5-ligaene), fiktiv bankroll på $100. Ingen ekte penger.
+Statistisk modell bak [Oddsboka](https://claude.ai/artifact/B5QpUXS568brJm3bcUh715): paper trading på fotball (topp 5-ligaene + Championship, League One, 2. Bundesliga og Serie B), fiktiv bankroll på $100. Ingen ekte penger.
 
 ## Slik henger det sammen
 
@@ -10,7 +10,8 @@ Statistisk modell bak [Oddsboka](https://claude.ai/artifact/B5QpUXS568brJm3bcUh7
 | `src/predict.py` | daglig | Refit lagstyrker til i dag, skriver `out/predictions.json` med sannsynligheter og `nt_min_odds` |
 | `src/tune.py` | søndag | Koordinatsøk på modellparametere (tidsvekt, krymping, xG-vekt), endrer bare ved reell forbedring |
 | `src/base.py` | søndag | Walk-forward: grunnmodellene for hver kamp, trent bare på data før kampuka |
-| `src/learn.py` | søndag | Stacking-modeller, evaluering sesong for sesong, betting-simulering, valg av mester og spillregel |
+| `src/learn.py` | søndag | Stacking-modeller, evaluering sesong for sesong, betting-simulering, innsatseksperimenter, ligafilter, valg av mester og spillregel |
+| `src/dashboard.py` | søndag | Skriver `out/dashboard.json` som morgenkjøringen legger inn i dashboardet |
 
 Morgenkjøringen i Claude leser `out/predictions.json`, henter NT-odds og låser bets i dashboardet.
 
@@ -26,6 +27,8 @@ Morgenkjøringen i Claude leser `out/predictions.json`, henter NT-odds og låser
 Hver søndag trenes alt på nytt med alle nye kamper, parametere tunes, og to valg tas på data:
 1. Sannsynlighetsmester = lavest log loss siste tre sesonger.
 2. Spillregel = modell + edge-terskel med størst samlet CLV mot skarp sluttodds (krav: CLV > 0, minst 150 bets).
+3. Innsatsregel = den av flat, trapp, proporsjonal, ¼ Kelly og ½ Kelly som vokser raskest med maks drawdown under 25 %.
+4. Ligafilter = ligaer der regelen har positiv CLV (eller for få bets til å dømme).
 
 ## Viktige forbehold
 

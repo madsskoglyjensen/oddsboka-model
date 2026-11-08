@@ -98,13 +98,14 @@ def main():
         p_model = [r.get(c) for c in pcols(prob_model)]
         p_rule = [r.get(c) for c in pcols(rule_model)] if rule_model else [np.nan] * 3
         outcomes = {}
+        allowed = champ.get("leagues") is None or r["league"] in champ["leagues"]
         for k, pm, pr in zip(OUT3, p_model, p_rule):
-            ok = pr is not None and np.isfinite(pr) and pr > 0
+            ok = allowed and pr is not None and np.isfinite(pr) and pr > 0
             outcomes[k] = {"label": LABEL[k], "p": r4(pm), "p_rule": r4(pr),
                            "nt_min_odds": round((1 + edge) / pr, 2) if ok else None,
                            "avg_odds": r4(r[f"avg_{k}"]), "sharp_odds": r4(r[f"sharp_{k}"])}
         rows.append({
-            "league": data.LEAGUES[r["league"]], "date": r["date"].strftime("%Y-%m-%d"), "time": r.get("time"),
+            "league": data.LEAGUES[r["league"]], "league_in_rule": bool(allowed), "date": r["date"].strftime("%Y-%m-%d"), "time": r.get("time"),
             "home": r["home"], "away": r["away"],
             "outcomes": outcomes,
             "over25": {"p_model": r4(r.get("ou_stack_lr_p")), "p_market": r4(r.get("mkt_sharp_o25")),
@@ -115,6 +116,8 @@ def main():
         })
     out = {"generated": pd.Timestamp.now(tz="Europe/Oslo").isoformat(timespec="seconds"),
            "model_version": CFG["version"], "prob_model": prob_model, "bet_rule": rule,
+           "staking": champ.get("staking", "kelly_25"), "staking_label": champ.get("staking_label", "¼ Kelly"),
+           "leagues_in_rule": [data.LEAGUES[l] for l in (champ.get("leagues") or [])],
            "note": "p = beste kalibrerte modell. Spill et utfall bare hvis NT-odds >= nt_min_odds.",
            "fixtures": rows}
     (ROOT / "out" / "predictions.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
