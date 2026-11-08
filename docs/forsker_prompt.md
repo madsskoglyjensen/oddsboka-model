@@ -11,12 +11,13 @@ KILDER
 STEG
 1. Klon repoet til en arbeidsmappe og installer avhengighetene: pip install -r requirements.txt (legg til --break-system-packages hvis nødvendig).
 2. Les hele matches-samlingen fra databasen (bruk out_dir for å lagre dokumentene som filer). Lag én JSON-liste med dokumentenes data og lagre den som data/matches_live.json i den klonede mappen.
-3. Kjør: python src/live_learn.py data/matches_live.json. Skriv out/live_learning.json til model/live i databasen (set med file_path, pin if_version hvis dokumentet finnes).
+3. Kjør: python src/live_learn.py data/matches_live.json. Skriv out/live_learning.json til model/live i databasen (set med file_path, pin if_version hvis dokumentet finnes). Fila inneholder også selection (live-valget), som morgenkjøringen følger når status er "aktiv".
 4. Les out/metrics.json (champion, holdout, rule), out/experiments.json (utvikling over tid), out/tuning.json, out/data_quality.json, og fra databasen: bets fra siste 7 dager og reports.
 5. Tenk som en kvantitativ analytiker. Svar på:
    - Holder edgen live? Sammenlign live-CLV med backtest og den urørte testen.
    - Hvilke strategier i live-kappløpet leder, og er forskjellene større enn tilfeldigheter (få bets = vær forsiktig)?
    - Hva sier NT-treghet og sluttodds-modellen (eller hvor mye data mangler før de kan si noe)?
+   - Live-valget (selection i live_learning.json): venter, beholder eller aktiv? Si hvor mange live-bets som mangler, eller hvilken strategi som tok over og hvorfor. Valget gjøres av koden, ikke av deg.
    - Hva endret søndagens læring, og er endringen stabil eller støy (se experiments.json over flere uker)?
    - Hva er den svakeste antakelsen i systemet akkurat nå?
    - NT-kalibrering (nt_calibration i live_learning.json): hvilke ligaer har nok målinger, og hvor ligger NT mot skarp pris? Er minst én liga «klar», skal forslaget være å aktivere den i backtesten (SJ har sagt ja til dette 8. nov). Skriv da filens innhold i proposal.change, så den kan legges i repoet som out/nt_calibration.json.

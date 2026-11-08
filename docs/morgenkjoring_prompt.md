@@ -15,7 +15,8 @@ FASTE REGLER
 - All tekst i databasen på norsk bokmål. Tidssone Europe/Oslo. Logg start og slutt.
 
 STEG 0: LES TILSTANDEN
-Les config/active, siste bankroll_history, alle bets og coupons med status "open", og model/backtest (bare feltet generated).
+Les config/active, siste bankroll_history, alle bets og coupons med status "open", model/backtest (bare feltet generated) og model/live (bare feltet selection).
+LIVE-VALG: Er model/live.selection.status "aktiv", har live-kappløpet tatt over fra backtesten (forskeren regner det ut hver søndag, SJ har godkjent det). Bruk da selection.edge_min i stedet for bet_rule.edge_min og selection.staking_spec i stedet for predictions.staking_spec, sett staking_rule = selection.id, og skriv "live-valg: " + selection.name i run_log. Alle andre statuser: følg predictions.json som vanlig.
 
 STEG 1: OPPGJØR AV DET NATTEN IKKE TOK
 For hvert bet med status "open" og avspark mer enn 2,5 timer siden: finn sluttresultat (FotMob eller Sofascore, kampen må være markert ferdig). Legg til status ("won", "lost" eller "void"), result (f.eks. "2–1"), settled_at, closing_nt_odds (NT rett før avspark hvis mulig), closing_sharp_odds (Pinnacle, ellers Betfair Exchange, sluttodds for alle tre utfall fra OddsPortal e.l.) og clv = odds × p_sharp_close − 1, der p_sharp_close er sluttprisens sannsynlighet uten margin for utfallet vi spilte. Finnes ikke skarp sluttodds: bruk markedssnitt og skriv kilden i closing_source. Kuponger og kombo: "won" hvis alle ben vant, "lost" hvis ett tapte, "void"-ben teller som odds 1; skriv pnl og settled_at. Usikkert resultat: la stå åpen og noter i data_gaps.
@@ -42,14 +43,14 @@ For hver kamp:
    - Kamper i predictions.json: p_model = outcomes.k.p. own_p_raw = p_model.
    - Europacup: own_p_raw = p_sharp (ingen egen modell for cup ennå).
    Nyhetssjekk: bare vesentlige, verifiserte nyheter som kom etter at modellfila ble laget (bekreftet startoppstilling, nøkkelspiller ute). Da kan own_p justeres maks ±0,03 med adj_reason. Ellers own_p = own_p_raw. Aldri juster på form, H2H eller magefølelse.
-4. Minsteodds per utfall: nt_min_odds = (1 + bet_rule.edge_min) / p_sharp hvis skarp pris ble funnet, ellers outcomes.k.nt_min_odds fra fila (europacup uten skarp pris: ingen minsteodds).
+4. Minsteodds per utfall: nt_min_odds = (1 + edge_min) / p_sharp hvis skarp pris ble funnet, der edge_min er selection.edge_min ved aktivt live-valg og ellers bet_rule.edge_min. Uten skarp pris: outcomes.k.nt_min_odds fra fila, ganget med (1 + edge_min) / (1 + bet_rule.edge_min) (europacup uten skarp pris: ingen minsteodds).
 5. Velg utfallet med høyest NT-odds / nt_min_odds. odds = NT-oddsen for det. p_mkt = NT-sannsynlighet uten margin for utfallet. implied_p = 1/odds. edge = own_p − 1/odds. edge_mkt = own_p − p_mkt. edge_sharp = odds × p_sharp − 1.
-6. SPILLREGEL: stake_main > 0 bare når odds ≥ nt_min_odds, edge > 0, og ligaen er med i regelen (league_in_rule er true; europacup er med). Innsats etter predictions.staking_spec (valgt av modellen hver søndag). Med b = odds − 1, p = own_p, k = (b·p − (1−p))/b og e = edge_sharp:
+6. SPILLREGEL: stake_main > 0 bare når odds ≥ nt_min_odds, edge > 0, og ligaen er med i regelen (league_in_rule er true; europacup er med). Innsats etter predictions.staking_spec (valgt av modellen hver søndag), eller selection.staking_spec ved aktivt live-valg. Med b = odds − 1, p = own_p, k = (b·p − (1−p))/b og e = edge_sharp:
    - kelly_mult = [[terskel, andel], ...]: andel = k × andelen for høyeste terskel ≤ e (ingen terskel ≤ e gir 0).
    - kelly_mult_per_edge og kelly_mult_max: andel = k × min(kelly_mult_max, e × kelly_mult_per_edge).
    - odds_min og odds_max: odds utenfor båndet gir 0.
    - fixed: fast andel. fixed_tiers: fast andel for høyeste terskel ≤ e. edge_mult: andel = e × edge_mult.
-   Innsats = andel × main. Skriv staking_rule = predictions.staking. Tak: maks config.cap_bet × main per bet. Overstiger dagens sum config.cap_day × main, skaler alle dagens innsatser ned proporsjonalt.
+   Innsats = andel × main. Skriv staking_rule = predictions.staking (eller selection.id ved aktivt live-valg). Tak: maks config.cap_bet × main per bet. Overstiger dagens sum config.cap_day × main, skaler alle dagens innsatser ned proporsjonalt.
 7. stake_flat = config.flat_stake × flat for bets som passerer regelen, ellers 0. stake_all = config.all_stake × all for alle kandidater (kontrollspor).
 8. reasoning: 2–4 setninger: sannsynlighet, NT-odds mot minsteodds, skarp pris, eventuell nyhet, og hvorfor det ble spill eller ikke.
 

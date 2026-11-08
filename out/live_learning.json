@@ -1,11 +1,45 @@
 {
- "generated": "2026-11-08T22:46:45+01:00",
+ "generated": "2026-11-09T00:01:26+01:00",
  "n_logged": 0,
  "n_done": 0,
  "race": [
   {
    "id": "r_k25",
    "name": "Regel 2 % · ¼ Kelly",
+   "src": "sharp",
+   "edge_min": 0.02,
+   "st": {
+    "kelly": [
+     [
+      0,
+      0.25
+     ]
+    ]
+   },
+   "fun": false,
+   "max_dd": 0.0,
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  },
+  {
+   "id": "r_k33",
+   "name": "Regel 2 % · ⅓ Kelly",
+   "src": "sharp",
+   "edge_min": 0.02,
+   "st": {
+    "kelly": [
+     [
+      0,
+      0.33
+     ]
+    ]
+   },
+   "fun": false,
+   "max_dd": 0.0,
    "bank": 100.0,
    "n": 0,
    "open": 0,
@@ -16,6 +50,20 @@
   {
    "id": "r_band",
    "name": "Regel 2 % · odds-bånd ½ Kelly",
+   "src": "sharp",
+   "edge_min": 0.02,
+   "st": {
+    "kelly": [
+     [
+      0,
+      0.5
+     ]
+    ],
+    "omin": 1.5,
+    "omax": 3.5
+   },
+   "fun": false,
+   "max_dd": 0.0,
    "bank": 100.0,
    "n": 0,
    "open": 0,
@@ -26,6 +74,18 @@
   {
    "id": "r_k50",
    "name": "Regel 2 % · ½ Kelly",
+   "src": "sharp",
+   "edge_min": 0.02,
+   "st": {
+    "kelly": [
+     [
+      0,
+      0.5
+     ]
+    ]
+   },
+   "fun": false,
+   "max_dd": 0.0,
    "bank": 100.0,
    "n": 0,
    "open": 0,
@@ -36,6 +96,18 @@
   {
    "id": "r_k100",
    "name": "Regel 2 % · full Kelly",
+   "src": "sharp",
+   "edge_min": 0.02,
+   "st": {
+    "kelly": [
+     [
+      0,
+      1
+     ]
+    ]
+   },
+   "fun": false,
+   "max_dd": 0.0,
    "bank": 100.0,
    "n": 0,
    "open": 0,
@@ -46,6 +118,26 @@
   {
    "id": "r_edge",
    "name": "Regel 2 % · mer på store edges",
+   "src": "sharp",
+   "edge_min": 0.02,
+   "st": {
+    "kelly": [
+     [
+      0,
+      0.25
+     ],
+     [
+      0.04,
+      0.5
+     ],
+     [
+      0.06,
+      0.75
+     ]
+    ]
+   },
+   "fun": false,
+   "max_dd": 0.0,
    "bank": 100.0,
    "n": 0,
    "open": 0,
@@ -56,6 +148,13 @@
   {
    "id": "r_flat",
    "name": "Regel 2 % · flat 1 %",
+   "src": "sharp",
+   "edge_min": 0.02,
+   "st": {
+    "fixed": 0.01
+   },
+   "fun": false,
+   "max_dd": 0.0,
    "bank": 100.0,
    "n": 0,
    "open": 0,
@@ -66,6 +165,18 @@
   {
    "id": "r_big",
    "name": "Bare edge ≥ 6 % · ½ Kelly",
+   "src": "sharp",
+   "edge_min": 0.06,
+   "st": {
+    "kelly": [
+     [
+      0,
+      0.5
+     ]
+    ]
+   },
+   "fun": false,
+   "max_dd": 0.0,
    "bank": 100.0,
    "n": 0,
    "open": 0,
@@ -76,6 +187,18 @@
   {
    "id": "m_model",
    "name": "Sannsynlighetsmodellen ≥ 4 % · ¼ Kelly",
+   "src": "model",
+   "edge_min": 0.04,
+   "st": {
+    "kelly": [
+     [
+      0,
+      0.25
+     ]
+    ]
+   },
+   "fun": false,
+   "max_dd": 0.0,
    "bank": 100.0,
    "n": 0,
    "open": 0,
@@ -86,6 +209,18 @@
   {
    "id": "m_own",
    "name": "Egen modell (xG) ≥ 4 % · ¼ Kelly",
+   "src": "own",
+   "edge_min": 0.04,
+   "st": {
+    "kelly": [
+     [
+      0,
+      0.25
+     ]
+    ]
+   },
+   "fun": false,
+   "max_dd": 0.0,
    "bank": 100.0,
    "n": 0,
    "open": 0,
@@ -96,6 +231,35 @@
   {
    "id": "ou",
    "name": "Over/under 2,5 mot skarp pris ≥ 2 %",
+   "src": "ou",
+   "edge_min": 0.02,
+   "st": {
+    "kelly": [
+     [
+      0,
+      0.25
+     ]
+    ]
+   },
+   "fun": false,
+   "max_dd": 0.0,
+   "bank": 100.0,
+   "n": 0,
+   "open": 0,
+   "roi": null,
+   "clv": null,
+   "n_clv": 0
+  },
+  {
+   "id": "r_mart",
+   "name": "Martingale: $1, doble etter tap",
+   "src": "sharp",
+   "edge_min": 0.02,
+   "st": {
+    "mart": 1
+   },
+   "fun": true,
+   "max_dd": 0.0,
    "bank": 100.0,
    "n": 0,
    "open": 0,
@@ -104,6 +268,14 @@
    "n_clv": 0
   }
  ],
+ "selection": {
+  "need": 150,
+  "current": "r_k33",
+  "current_name": "Regel 2 % · ⅓ Kelly",
+  "status": "venter",
+  "n": 0,
+  "reason": "Regel 2 % · ⅓ Kelly har 0 av 150 oppgjorte live-bets. Til da styrer backtesten alene."
+ },
  "nt_lag": {
   "status": "venter",
   "n_matches": 0,

@@ -23,6 +23,7 @@ MIN_MATCHES_A = 150   # kamper med NT og skarp pris før modell A trenes
 MIN_MATCHES_B = 150   # ferdigspilte kamper med sluttodds før modell B trenes
 RACE = [  # samme som i dashboardet
     ("r_k25", "Regel 2 % · ¼ Kelly", "sharp", 0.02, {"kelly": [[0, .25]]}),
+    ("r_k33", "Regel 2 % · ⅓ Kelly", "sharp", 0.02, {"kelly": [[0, .33]]}),
     ("r_band", "Regel 2 % · odds-bånd ½ Kelly", "sharp", 0.02, {"kelly": [[0, .5]], "omin": 1.5, "omax": 3.5}),
     ("r_k50", "Regel 2 % · ½ Kelly", "sharp", 0.02, {"kelly": [[0, .5]]}),
     ("r_k100", "Regel 2 % · full Kelly", "sharp", 0.02, {"kelly": [[0, 1]]}),
@@ -32,7 +33,13 @@ RACE = [  # samme som i dashboardet
     ("m_model", "Sannsynlighetsmodellen ≥ 4 % · ¼ Kelly", "model", 0.04, {"kelly": [[0, .25]]}),
     ("m_own", "Egen modell (xG) ≥ 4 % · ¼ Kelly", "own", 0.04, {"kelly": [[0, .25]]}),
     ("ou", "Over/under 2,5 mot skarp pris ≥ 2 %", "ou", 0.02, {"kelly": [[0, .25]]}),
+    ("r_mart", "Martingale: $1, doble etter tap", "sharp", 0.02, {"mart": 1}),
 ]
+FUN = {"r_mart"}
+NEED = 150          # live-bets en strategi må ha før live-resultatet kan påvirke valget
+# race-id <-> innsatsregel i backtesten (learn.STAKING), for regelen NT mot skarp pris med 2 % edge
+BT_KEY = {"r_k25": "kelly_25", "r_k33": "kelly_33", "r_k50": "kelly_50", "r_k100": "kelly_100", "r_edge": "kelly_edge",
+          "r_flat": "flat_1", "r_band": "odds_band", "r_mart": "martingale"}
 
 
 def devig(d: dict | None, keys) -> dict | None:
@@ -45,6 +52,8 @@ def devig(d: dict | None, keys) -> dict | None:
 
 def frac(st: dict, p: float, o: float, e: float) -> float:
     k = max((p * o - 1) / (o - 1), 0.0)
+    if "mart" in st:
+        return 1.0
     if "fixed" in st:
         return st["fixed"]
     if "omin" in st and not (st["omin"] <= o <= st["omax"]):
@@ -91,8 +100,28 @@ def race(ms: list[dict]) -> list[dict]:
                 pc = devig(m.get("closing_sharp"), keys)
                 if pc:
                     clv = best[1] * pc[best[0]] - 1
-            bets.append({"day": str(m.get("date") or m.get("kickoff"))[:10], "f": f, "o": best[1], "res": res, "clv": clv})
-        bank, turn, pnl, n, opn, clvs = 100.0, 0.0, 0.0, 0, 0, []
+            bets.append({"day": str(m.get("date") or m.get("kickoff"))[:10], "ko": str(m.get("kickoff") or m.get("date") or ""),
+                         "f": f, "o": best[1], "res": res, "clv": clv})
+        bank, turn, pnl, n, opn, clvs, peak, dd, streak = 100.0, 0.0, 0.0, 0, 0, [], 100.0, 0.0, 0
+        if "mart" in st:
+            for b in sorted(bets, key=lambda b: b["ko"]):
+                if b["res"] is None:
+                    opn += 1
+                    continue
+                if bank <= 0.01:
+                    continue
+                stake = min(bank, 2.0 ** streak)
+                n += 1
+                turn += stake
+                pl = stake * (b["o"] - 1) if b["res"] else -stake
+                pnl += pl
+                bank += pl
+                streak = 0 if b["res"] else streak + 1
+                if b["clv"] is not None:
+                    clvs.append(b["clv"])
+                peak = max(peak, bank)
+                dd = max(dd, 1 - bank / peak)
+            bets = []
         for day in sorted({b["day"] for b in bets}):
             g = [b for b in bets if b["day"] == day]
             tot = sum(b["f"] for b in g)
@@ -111,10 +140,62 @@ def race(ms: list[dict]) -> list[dict]:
                 if b["clv"] is not None:
                     clvs.append(b["clv"])
             bank += ret
-        out.append({"id": sid, "name": name, "bank": round(bank, 2), "n": n, "open": opn,
+            peak = max(peak, bank)
+            dd = max(dd, 1 - bank / peak)
+        out.append({"id": sid, "name": name, "src": src, "edge_min": thr, "st": st, "fun": sid in FUN, "max_dd": round(dd, 4),
+                    "bank": round(bank, 2), "n": n, "open": opn,
                     "roi": round(pnl / turn, 4) if turn else None, "clv": round(float(np.mean(clvs)), 4) if clvs else None,
                     "n_clv": len(clvs)})
     return sorted(out, key=lambda r: -r["bank"])
+
+
+def spec_of(st: dict) -> dict:
+    """Race-oppskrift -> staking_spec slik morgenkjøringen leser den."""
+    if "fixed" in st:
+        return {"fixed": st["fixed"]}
+    spec = {"kelly_mult": st.get("kelly", [[0.0, 0.25]])}
+    if "omin" in st:
+        spec.update({"odds_min": st["omin"], "odds_max": st["omax"]})
+    return spec
+
+
+def selection(rows: list[dict]) -> dict:
+    """Lar live-kappløpet påvirke søndagsvalget når det finnes nok live-bets.
+
+    Bare strategier med NT mot skarp pris kan ta over (de kan følges direkte av morgenkjøringen). En utfordrer tar over når den
+    har minst NEED oppgjorte live-bets, positiv live-CLV, fall under 25 % både live og i backtesten, og minst 10 % høyere bankroll
+    enn strategien backtesten har valgt. Ellers beholdes backtestens valg."""
+    try:
+        champ = json.loads((ROOT / "out" / "champion.json").read_text())
+        dash = json.loads((ROOT / "out" / "dashboard.json").read_text())
+    except Exception:  # noqa: BLE001
+        champ, dash = {}, {}
+    rule = champ.get("bet_rule") or {}
+    inv = {v: k for k, v in BT_KEY.items()}
+    cur_id = inv.get(champ.get("staking")) if rule.get("model") == "mkt_sharp" and abs((rule.get("edge_min") or 0) - 0.02) < 1e-9 else None
+    se = dash.get("staking_exp") or {}
+    by = {r["id"]: r for r in rows}
+    cur = by.get(cur_id)
+    base = {"need": NEED, "current": cur_id, "current_name": cur["name"] if cur else None}
+    if not cur:
+        return {**base, "status": "venter", "n": 0, "reason": "Backtestens valg finnes ikke i kappløpet ennå."}
+    if cur["n"] < NEED:
+        return {**base, "status": "venter", "n": cur["n"],
+                "reason": f"{cur['name']} har {cur['n']} av {NEED} oppgjorte live-bets. Til da styrer backtesten alene."}
+    cands = []
+    for r in rows:
+        bt = se.get(BT_KEY.get(r["id"], ""), {})
+        if (r["src"] == "sharp" and not r["fun"] and r["n"] >= NEED and r["max_dd"] < 0.25
+                and (bt.get("max_dd") is None or bt["max_dd"] < 0.25) and (r["clv"] or 0) > 0):
+            cands.append(r)
+    best = max(cands, key=lambda r: r["bank"]) if cands else None
+    if best and best["id"] != cur["id"] and best["bank"] >= cur["bank"] * 1.10:
+        return {**base, "status": "aktiv", "n": cur["n"], "id": best["id"], "name": best["name"], "edge_min": best["edge_min"],
+                "staking_spec": spec_of(best["st"]),
+                "reason": (f"{best['name']} står på ${best['bank']:.2f} mot ${cur['bank']:.2f} for {cur['name']} etter {best['n']} live-bets, "
+                           f"med live-CLV {best['clv'] * 100:+.1f} % og maks fall {best['max_dd'] * 100:.0f} %. Den styrer bettene til neste søndag.").replace(".", ",").replace(", Den", ". Den").rstrip(",") + "."}
+    return {**base, "status": "beholder", "n": cur["n"],
+            "reason": f"Ingen utfordrer slår {cur['name']} med minst 10 % og lav nok risiko live. Backtestens valg beholdes."}
 
 
 def outcome_rows(ms: list[dict]) -> pd.DataFrame:
@@ -276,10 +357,11 @@ def main(path: str):
     n_with = int(df.groupby(["league"]).size().sum() // 3) if not df.empty else 0
     out = {"generated": pd.Timestamp.now(tz="Europe/Oslo").isoformat(timespec="seconds"),
            "n_logged": len(ms), "n_done": sum(1 for m in ms if m.get("status") == "done"),
-           "race": race(ms), "nt_lag": model_a(df, n_with), "closing_line": model_b(df), "nt_calibration": nt_calibration(df)}
+           "race": (rc := race(ms)), "selection": selection(rc), "nt_lag": model_a(df, n_with), "closing_line": model_b(df), "nt_calibration": nt_calibration(df)}
     (ROOT / "out" / "nt_calibration.json").write_text(json.dumps(out["nt_calibration"], ensure_ascii=False, indent=1))
     (ROOT / "out").mkdir(exist_ok=True)
     (ROOT / "out" / "live_learning.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=float))
+    print(f"Live-valg: {out['selection']['status']} ({out['selection']['reason']})")
     print(f"{out['n_logged']} kamper logget, {out['n_done']} ferdige. NT-treghet: {out['nt_lag']['status']}, sluttodds: {out['closing_line']['status']}")
 
 
