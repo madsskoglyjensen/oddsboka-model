@@ -59,6 +59,9 @@ def findings(m: dict, ch: dict, ra: dict, doc: dict) -> list[str]:
         if best_final != chosen:
             txt += (f" {se[best_final]['label']} endte høyere (${se[best_final]['final']:.0f}), men falt opptil "
                     f"{se[best_final]['max_dd'] * 100:.0f} % underveis, over grensen på 25 %.")
+        if "kelly_edge" in se and "kelly_25" in se and se["kelly_edge"]["final"] < se["kelly_25"]["final"]:
+            txt += (f" Å satse mer på store edges (edge-vektet Kelly) ga ${se['kelly_edge']['final']:.0f} mot ${se['kelly_25']['final']:.0f} for ¼ Kelly: "
+                    "de største edgene ligger oftest på høye odds, der prisforskjellen oftere er støy enn ekte verdi.")
         if "trapp" in se:
             txt += f" Innsats etter edge-trapp ga ${se['trapp']['final']:.0f}: den satser for mye på høye odds. Kelly tar hensyn til både edge og odds."
         out.append(txt)

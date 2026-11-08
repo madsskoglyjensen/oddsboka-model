@@ -222,13 +222,37 @@ def simulate(df: pd.DataFrame, P: np.ndarray, kind: str, edge_min: float, nt: fl
 STAKING = {
     "flat_1": "Flat 1 % av bankroll",
     "trapp": "Trapp: 1 % ved 2–4 % edge, 2 % ved 4–6 %, 3 % over 6 %",
-    "prop": "Proporsjonal: innsats = edge × 30 % (4 % edge gir 1,2 %)",
+    "prop": "Proporsjonal: innsats = edge × 30 %",
     "kelly_25": "¼ Kelly",
+    "kelly_33": "⅓ Kelly",
     "kelly_50": "½ Kelly",
+    "kelly_100": "Full Kelly",
+    "kelly_edge": "Edge-vektet Kelly: ¼ ved 2–4 % edge, ½ ved 4–6 %, ¾ over 6 %",
+    "kelly_conf": "Tillitsvektet Kelly: andel = edge × 10 (2 % gir 0,2, 5 % gir 0,5, maks 1)",
+    "big_edge": "Bare store edges: ½ Kelly når edge ≥ 5 %, ellers ingenting",
+    "odds_band": "Odds-bånd: ½ Kelly bare på odds 1,5–3,5",
+}
+
+
+# Samme regler som maskinlesbar oppskrift, slik at morgenkjøringen kan følge den som er valgt.
+# kelly_mult: [[edge_fra, andel av full Kelly], ...] (høyeste terskel ≤ edge gjelder). fixed: fast andel av bankroll.
+STAKING_SPEC = {
+    "flat_1": {"fixed": 0.01},
+    "trapp": {"fixed_tiers": [[0.0, 0.01], [0.04, 0.02], [0.06, 0.03]]},
+    "prop": {"edge_mult": 0.3},
+    "kelly_25": {"kelly_mult": [[0.0, 0.25]]},
+    "kelly_33": {"kelly_mult": [[0.0, 0.33]]},
+    "kelly_50": {"kelly_mult": [[0.0, 0.5]]},
+    "kelly_100": {"kelly_mult": [[0.0, 1.0]]},
+    "kelly_edge": {"kelly_mult": [[0.0, 0.25], [0.04, 0.5], [0.06, 0.75]]},
+    "kelly_conf": {"kelly_mult_per_edge": 10, "kelly_mult_max": 1.0},
+    "big_edge": {"kelly_mult": [[0.05, 0.5]]},
+    "odds_band": {"kelly_mult": [[0.0, 0.5]], "odds_min": 1.5, "odds_max": 3.5},
 }
 
 
 def stake_frac(scheme: str, p: float, o: float, edge: float) -> float:
+    """Andel av bankrollen. k = full Kelly = edge / (odds − 1)."""
     k = max((p * o - 1) / (o - 1), 0.0)
     if scheme == "flat_1":
         return 0.01
@@ -236,10 +260,16 @@ def stake_frac(scheme: str, p: float, o: float, edge: float) -> float:
         return 0.01 if edge < 0.04 else 0.02 if edge < 0.06 else 0.03
     if scheme == "prop":
         return 0.3 * edge
-    if scheme == "kelly_25":
-        return 0.25 * k
-    if scheme == "kelly_50":
-        return 0.5 * k
+    if scheme.startswith("kelly_") and scheme[6:].isdigit():
+        return int(scheme[6:]) / 100 * k
+    if scheme == "kelly_edge":
+        return (0.25 if edge < 0.04 else 0.5 if edge < 0.06 else 0.75) * k
+    if scheme == "kelly_conf":
+        return min(1.0, 10 * edge) * k
+    if scheme == "big_edge":
+        return 0.5 * k if edge >= 0.05 else 0.0
+    if scheme == "odds_band":
+        return 0.5 * k if 1.5 <= o <= 3.5 else 0.0
     raise ValueError(scheme)
 
 
@@ -371,7 +401,8 @@ def choose_champion(met: dict) -> dict:
         leagues = sorted(lg for lg, v in ra["by_league"].items() if v["clv"] > 0 or v["n"] < 30)
         dropped = sorted(lg for lg, v in ra["by_league"].items() if lg not in leagues)
     return {"prob_model": prob, "logloss_last3": score, "bet_rule": best, "alternatives": rules[1:5], "bet": bool(rules),
-            "staking": staking, "staking_label": STAKING[staking], "leagues": leagues, "leagues_dropped": dropped}
+            "staking": staking, "staking_label": STAKING[staking], "staking_spec": STAKING_SPEC[staking],
+            "leagues": leagues, "leagues_dropped": dropped}
 
 
 def main():

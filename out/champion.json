@@ -5,10 +5,10 @@
   "mkt_sharp": 1.0021536611559296,
   "goals": 1.024436189776844,
   "pxg": 1.0210542963045601,
-  "elo_lr": 1.0256360709265964,
-  "own_lr": 1.016929605349832,
-  "stack_lr": 1.0012854458933313,
-  "stack_sharp_lr": 1.0016903399085895,
+  "elo_lr": 1.0256360709265961,
+  "own_lr": 1.0169321598437486,
+  "stack_lr": 1.0012851350614251,
+  "stack_sharp_lr": 1.0018006588680137,
   "stack_lgbm": 1.0035644376352966
  },
  "bet_rule": {
@@ -54,8 +54,18 @@
   }
  ],
  "bet": true,
- "staking": "kelly_25",
- "staking_label": "\u00bc Kelly",
+ "staking": "odds_band",
+ "staking_label": "Odds-b\u00e5nd: \u00bd Kelly bare p\u00e5 odds 1,5\u20133,5",
+ "staking_spec": {
+  "kelly_mult": [
+   [
+    0.0,
+    0.5
+   ]
+  ],
+  "odds_min": 1.5,
+  "odds_max": 3.5
+ },
  "leagues": [
   "D1",
   "D2",

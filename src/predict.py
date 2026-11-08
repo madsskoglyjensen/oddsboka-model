@@ -117,6 +117,7 @@ def main():
     out = {"generated": pd.Timestamp.now(tz="Europe/Oslo").isoformat(timespec="seconds"),
            "model_version": CFG["version"], "prob_model": prob_model, "bet_rule": rule,
            "staking": champ.get("staking", "kelly_25"), "staking_label": champ.get("staking_label", "¼ Kelly"),
+           "staking_spec": champ.get("staking_spec", {"kelly_mult": [[0.0, 0.25]]}),
            "leagues_in_rule": [data.LEAGUES[l] for l in (champ.get("leagues") or [])],
            "note": "p = beste kalibrerte modell. Spill et utfall bare hvis NT-odds >= nt_min_odds.",
            "fixtures": rows}
