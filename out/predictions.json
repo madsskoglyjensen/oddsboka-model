@@ -1,0 +1,1192 @@
+{
+ "generated": "2026-11-08T18:07:43+01:00",
+ "model_version": "2.0",
+ "prob_model": "stack_sharp_lr",
+ "bet_rule": {
+  "model": "mkt_sharp",
+  "edge_min": 0.02,
+  "clv": 0.020063627960864916,
+  "n": 581,
+  "roi": 0.10491497418244403,
+  "value": 11.656967845262516
+ },
+ "note": "p = beste kalibrerte modell. Spill et utfall bare hvis NT-odds >= nt_min_odds.",
+ "fixtures": [
+  {
+   "league": "Serie A",
+   "date": "2026-11-08",
+   "time": "11:30",
+   "home": "Napoli",
+   "away": "Lazio",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.4145,
+     "p_rule": 0.4169,
+     "nt_min_odds": 2.45,
+     "avg_odds": 2.25,
+     "sharp_odds": 2.38
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2672,
+     "p_rule": 0.2682,
+     "nt_min_odds": 3.8,
+     "avg_odds": 3.52,
+     "sharp_odds": 3.7
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.3183,
+     "p_rule": 0.315,
+     "nt_min_odds": 3.24,
+     "avg_odds": 2.97,
+     "sharp_odds": 3.15
+    }
+   },
+   "over25": {
+    "p_model": 0.5582,
+    "p_market": 0.5572,
+    "avg_over": 1.71,
+    "avg_under": 2.06
+   },
+   "btts": {
+    "p_model": 0.5124
+   },
+   "own_model": {
+    "p_h": 0.4522,
+    "p_d": 0.2726,
+    "p_a": 0.2753,
+    "xg_home": 1.3916,
+    "xg_away": 1.0237
+   }
+  },
+  {
+   "league": "La Liga",
+   "date": "2026-11-08",
+   "time": "13:00",
+   "home": "Elche",
+   "away": "Betis",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.2742,
+     "p_rule": 0.2821,
+     "nt_min_odds": 3.62,
+     "avg_odds": 3.2,
+     "sharp_odds": 3.5
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2531,
+     "p_rule": 0.2565,
+     "nt_min_odds": 3.98,
+     "avg_odds": 3.64,
+     "sharp_odds": 3.85
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.4726,
+     "p_rule": 0.4614,
+     "nt_min_odds": 2.21,
+     "avg_odds": 2.07,
+     "sharp_odds": 2.14
+    }
+   },
+   "over25": {
+    "p_model": 0.5889,
+    "p_market": 0.5764,
+    "avg_over": 1.62,
+    "avg_under": 2.2
+   },
+   "btts": {
+    "p_model": 0.587
+   },
+   "own_model": {
+    "p_h": 0.3801,
+    "p_d": 0.2526,
+    "p_a": 0.3674,
+    "xg_home": 1.4746,
+    "xg_away": 1.4461
+   }
+  },
+  {
+   "league": "Premier League",
+   "date": "2026-11-08",
+   "time": "14:00",
+   "home": "Brighton",
+   "away": "Brentford",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.4884,
+     "p_rule": 0.5038,
+     "nt_min_odds": 2.02,
+     "avg_odds": 1.9,
+     "sharp_odds": 1.97
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2555,
+     "p_rule": 0.2481,
+     "nt_min_odds": 4.11,
+     "avg_odds": 3.82,
+     "sharp_odds": 4.0
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.2562,
+     "p_rule": 0.2481,
+     "nt_min_odds": 4.11,
+     "avg_odds": 3.59,
+     "sharp_odds": 4.0
+    }
+   },
+   "over25": {
+    "p_model": 0.6078,
+    "p_market": 0.6087,
+    "avg_over": 1.57,
+    "avg_under": 2.3
+   },
+   "btts": {
+    "p_model": 0.5849
+   },
+   "own_model": {
+    "p_h": 0.5016,
+    "p_d": 0.2489,
+    "p_a": 0.2495,
+    "xg_home": 1.796,
+    "xg_away": 1.2143
+   }
+  },
+  {
+   "league": "Premier League",
+   "date": "2026-11-08",
+   "time": "14:00",
+   "home": "Crystal Palace",
+   "away": "Liverpool",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.1408,
+     "p_rule": 0.168,
+     "nt_min_odds": 6.07,
+     "avg_odds": 5.15,
+     "sharp_odds": 5.9
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.1981,
+     "p_rule": 0.2202,
+     "nt_min_odds": 4.63,
+     "avg_odds": 4.27,
+     "sharp_odds": 4.5
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.6611,
+     "p_rule": 0.6118,
+     "nt_min_odds": 1.67,
+     "avg_odds": 1.57,
+     "sharp_odds": 1.62
+    }
+   },
+   "over25": {
+    "p_model": 0.6229,
+    "p_market": 0.6139,
+    "avg_over": 1.54,
+    "avg_under": 2.38
+   },
+   "btts": {
+    "p_model": 0.5746
+   },
+   "own_model": {
+    "p_h": 0.2519,
+    "p_d": 0.2549,
+    "p_a": 0.4932,
+    "xg_home": 1.1828,
+    "xg_away": 1.7308
+   }
+  },
+  {
+   "league": "Premier League",
+   "date": "2026-11-08",
+   "time": "14:00",
+   "home": "Ipswich",
+   "away": "Bournemouth",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.2444,
+     "p_rule": 0.236,
+     "nt_min_odds": 4.32,
+     "avg_odds": 3.72,
+     "sharp_odds": 4.2
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2632,
+     "p_rule": 0.2608,
+     "nt_min_odds": 3.91,
+     "avg_odds": 3.69,
+     "sharp_odds": 3.8
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.4924,
+     "p_rule": 0.5032,
+     "nt_min_odds": 2.03,
+     "avg_odds": 1.9,
+     "sharp_odds": 1.97
+    }
+   },
+   "over25": {
+    "p_model": 0.5646,
+    "p_market": 0.56,
+    "avg_over": 1.67,
+    "avg_under": 2.12
+   },
+   "btts": {
+    "p_model": 0.6063
+   },
+   "own_model": {
+    "p_h": 0.2342,
+    "p_d": 0.2303,
+    "p_a": 0.5355,
+    "xg_home": 1.2882,
+    "xg_away": 2.018
+   }
+  },
+  {
+   "league": "Premier League",
+   "date": "2026-11-08",
+   "time": "14:00",
+   "home": "Sunderland",
+   "away": "Chelsea",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.2312,
+     "p_rule": 0.2476,
+     "nt_min_odds": 4.12,
+     "avg_odds": 3.68,
+     "sharp_odds": 4.0
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2525,
+     "p_rule": 0.2572,
+     "nt_min_odds": 3.97,
+     "avg_odds": 3.6,
+     "sharp_odds": 3.85
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.5163,
+     "p_rule": 0.4952,
+     "nt_min_odds": 2.06,
+     "avg_odds": 1.93,
+     "sharp_odds": 2.0
+    }
+   },
+   "over25": {
+    "p_model": 0.533,
+    "p_market": 0.534,
+    "avg_over": 1.77,
+    "avg_under": 1.97
+   },
+   "btts": {
+    "p_model": 0.5652
+   },
+   "own_model": {
+    "p_h": 0.2887,
+    "p_d": 0.2704,
+    "p_a": 0.4409,
+    "xg_home": 1.2088,
+    "xg_away": 1.5432
+   }
+  },
+  {
+   "league": "Ligue 1",
+   "date": "2026-11-08",
+   "time": "14:00",
+   "home": "Rennes",
+   "away": "Lille",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.4525,
+     "p_rule": 0.4451,
+     "nt_min_odds": 2.29,
+     "avg_odds": 2.11,
+     "sharp_odds": 2.22
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2684,
+     "p_rule": 0.26,
+     "nt_min_odds": 3.92,
+     "avg_odds": 3.62,
+     "sharp_odds": 3.8
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.2791,
+     "p_rule": 0.2949,
+     "nt_min_odds": 3.46,
+     "avg_odds": 3.11,
+     "sharp_odds": 3.35
+    }
+   },
+   "over25": {
+    "p_model": 0.6057,
+    "p_market": 0.5799,
+    "avg_over": 1.58,
+    "avg_under": 2.28
+   },
+   "btts": {
+    "p_model": 0.5729
+   },
+   "own_model": {
+    "p_h": 0.3575,
+    "p_d": 0.2632,
+    "p_a": 0.3793,
+    "xg_home": 1.3759,
+    "xg_away": 1.4241
+   }
+  },
+  {
+   "league": "Serie A",
+   "date": "2026-11-08",
+   "time": "14:00",
+   "home": "Genoa",
+   "away": "Milan",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.1785,
+     "p_rule": 0.1951,
+     "nt_min_odds": 5.23,
+     "avg_odds": 4.45,
+     "sharp_odds": 5.1
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2597,
+     "p_rule": 0.2727,
+     "nt_min_odds": 3.74,
+     "avg_odds": 3.49,
+     "sharp_odds": 3.65
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.5618,
+     "p_rule": 0.5322,
+     "nt_min_odds": 1.92,
+     "avg_odds": 1.8,
+     "sharp_odds": 1.87
+    }
+   },
+   "over25": {
+    "p_model": 0.4539,
+    "p_market": 0.4523,
+    "avg_over": 2.05,
+    "avg_under": 1.72
+   },
+   "btts": {
+    "p_model": 0.5118
+   },
+   "own_model": {
+    "p_h": 0.2536,
+    "p_d": 0.2656,
+    "p_a": 0.4808,
+    "xg_home": 0.9923,
+    "xg_away": 1.4705
+   }
+  },
+  {
+   "league": "Serie A",
+   "date": "2026-11-08",
+   "time": "14:00",
+   "home": "Monza",
+   "away": "Atalanta",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.3001,
+     "p_rule": 0.284,
+     "nt_min_odds": 3.59,
+     "avg_odds": 3.22,
+     "sharp_odds": 3.5
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2647,
+     "p_rule": 0.2516,
+     "nt_min_odds": 4.05,
+     "avg_odds": 3.74,
+     "sharp_odds": 3.95
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.4352,
+     "p_rule": 0.4644,
+     "nt_min_odds": 2.2,
+     "avg_odds": 2.06,
+     "sharp_odds": 2.14
+    }
+   },
+   "over25": {
+    "p_model": 0.6181,
+    "p_market": 0.6154,
+    "avg_over": 1.54,
+    "avg_under": 2.38
+   },
+   "btts": {
+    "p_model": 0.5925
+   },
+   "own_model": {
+    "p_h": 0.2043,
+    "p_d": 0.2061,
+    "p_a": 0.5897,
+    "xg_home": 1.1937,
+    "xg_away": 2.1436
+   }
+  },
+  {
+   "league": "Bundesliga",
+   "date": "2026-11-08",
+   "time": "14:30",
+   "home": "FC Koln",
+   "away": "Leverkusen",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.2279,
+     "p_rule": 0.2432,
+     "nt_min_odds": 4.19,
+     "avg_odds": 3.85,
+     "sharp_odds": 4.1
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2306,
+     "p_rule": 0.2374,
+     "nt_min_odds": 4.3,
+     "avg_odds": 4.03,
+     "sharp_odds": 4.2
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.5415,
+     "p_rule": 0.5194,
+     "nt_min_odds": 1.96,
+     "avg_odds": 1.78,
+     "sharp_odds": 1.92
+    }
+   },
+   "over25": {
+    "p_model": 0.6932,
+    "p_market": 0.6726,
+    "avg_over": 1.39,
+    "avg_under": 2.85
+   },
+   "btts": {
+    "p_model": 0.6156
+   },
+   "own_model": {
+    "p_h": 0.2625,
+    "p_d": 0.2348,
+    "p_a": 0.5027,
+    "xg_home": 1.3438,
+    "xg_away": 1.918
+   }
+  },
+  {
+   "league": "La Liga",
+   "date": "2026-11-08",
+   "time": "15:15",
+   "home": "Sociedad",
+   "away": "Vallecano",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.5743,
+     "p_rule": 0.5617,
+     "nt_min_odds": 1.82,
+     "avg_odds": 1.66,
+     "sharp_odds": 1.77
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2351,
+     "p_rule": 0.2312,
+     "nt_min_odds": 4.41,
+     "avg_odds": 4.09,
+     "sharp_odds": 4.3
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.1906,
+     "p_rule": 0.2071,
+     "nt_min_odds": 4.92,
+     "avg_odds": 4.5,
+     "sharp_odds": 4.8
+    }
+   },
+   "over25": {
+    "p_model": 0.6204,
+    "p_market": 0.6102,
+    "avg_over": 1.55,
+    "avg_under": 2.35
+   },
+   "btts": {
+    "p_model": 0.5621
+   },
+   "own_model": {
+    "p_h": 0.4748,
+    "p_d": 0.2534,
+    "p_a": 0.2718,
+    "xg_home": 1.6061,
+    "xg_away": 1.1576
+   }
+  },
+  {
+   "league": "Ligue 1",
+   "date": "2026-11-08",
+   "time": "16:15",
+   "home": "Angers",
+   "away": "Nice",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.2482,
+     "p_rule": 0.2642,
+     "nt_min_odds": 3.86,
+     "avg_odds": 3.38,
+     "sharp_odds": 3.75
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.26,
+     "p_rule": 0.2642,
+     "nt_min_odds": 3.86,
+     "avg_odds": 3.61,
+     "sharp_odds": 3.75
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.4918,
+     "p_rule": 0.4717,
+     "nt_min_odds": 2.16,
+     "avg_odds": 2.0,
+     "sharp_odds": 2.1
+    }
+   },
+   "over25": {
+    "p_model": 0.5668,
+    "p_market": 0.5455,
+    "avg_over": 1.69,
+    "avg_under": 2.08
+   },
+   "btts": {
+    "p_model": 0.5296
+   },
+   "own_model": {
+    "p_h": 0.2837,
+    "p_d": 0.2794,
+    "p_a": 0.4369,
+    "xg_home": 1.0703,
+    "xg_away": 1.3911
+   }
+  },
+  {
+   "league": "Ligue 1",
+   "date": "2026-11-08",
+   "time": "16:15",
+   "home": "Brest",
+   "away": "Lyon",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.3402,
+     "p_rule": 0.3432,
+     "nt_min_odds": 2.97,
+     "avg_odds": 2.74,
+     "sharp_odds": 2.86
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2815,
+     "p_rule": 0.2765,
+     "nt_min_odds": 3.69,
+     "avg_odds": 3.43,
+     "sharp_odds": 3.55
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.3783,
+     "p_rule": 0.3804,
+     "nt_min_odds": 2.68,
+     "avg_odds": 2.41,
+     "sharp_odds": 2.58
+    }
+   },
+   "over25": {
+    "p_model": 0.5105,
+    "p_market": 0.5051,
+    "avg_over": 1.83,
+    "avg_under": 1.9
+   },
+   "btts": {
+    "p_model": 0.5829
+   },
+   "own_model": {
+    "p_h": 0.3391,
+    "p_d": 0.2562,
+    "p_a": 0.4047,
+    "xg_home": 1.3856,
+    "xg_away": 1.5333
+   }
+  },
+  {
+   "league": "Ligue 1",
+   "date": "2026-11-08",
+   "time": "16:15",
+   "home": "Le Havre",
+   "away": "Lorient",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.3276,
+     "p_rule": 0.3298,
+     "nt_min_odds": 3.09,
+     "avg_odds": 2.78,
+     "sharp_odds": 3.0
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2942,
+     "p_rule": 0.2954,
+     "nt_min_odds": 3.45,
+     "avg_odds": 3.26,
+     "sharp_odds": 3.35
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.3782,
+     "p_rule": 0.3748,
+     "nt_min_odds": 2.72,
+     "avg_odds": 2.47,
+     "sharp_odds": 2.64
+    }
+   },
+   "over25": {
+    "p_model": 0.4744,
+    "p_market": 0.4731,
+    "avg_over": 1.97,
+    "avg_under": 1.77
+   },
+   "btts": {
+    "p_model": 0.5158
+   },
+   "own_model": {
+    "p_h": 0.3473,
+    "p_d": 0.2909,
+    "p_a": 0.3618,
+    "xg_home": 1.1651,
+    "xg_away": 1.1949
+   }
+  },
+  {
+   "league": "Ligue 1",
+   "date": "2026-11-08",
+   "time": "16:15",
+   "home": "Le Mans",
+   "away": "Monaco",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.2192,
+     "p_rule": 0.2143,
+     "nt_min_odds": 4.76,
+     "avg_odds": 4.25,
+     "sharp_odds": 4.6
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2211,
+     "p_rule": 0.2191,
+     "nt_min_odds": 4.66,
+     "avg_odds": 3.99,
+     "sharp_odds": 4.5
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.5598,
+     "p_rule": 0.5666,
+     "nt_min_odds": 1.8,
+     "avg_odds": 1.71,
+     "sharp_odds": 1.74
+    }
+   },
+   "over25": {
+    "p_model": 0.6012,
+    "p_market": 0.5975,
+    "avg_over": 1.57,
+    "avg_under": 2.28
+   },
+   "btts": {
+    "p_model": 0.5908
+   },
+   "own_model": {
+    "p_h": 0.2394,
+    "p_d": 0.2284,
+    "p_a": 0.5322,
+    "xg_home": 1.2536,
+    "xg_away": 1.9519
+   }
+  },
+  {
+   "league": "Bundesliga",
+   "date": "2026-11-08",
+   "time": "16:30",
+   "home": "Freiburg",
+   "away": "Union Berlin",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.6541,
+     "p_rule": 0.6603,
+     "nt_min_odds": 1.54,
+     "avg_odds": 1.49,
+     "sharp_odds": 1.5
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2101,
+     "p_rule": 0.2021,
+     "nt_min_odds": 5.05,
+     "avg_odds": 4.39,
+     "sharp_odds": 4.9
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.1359,
+     "p_rule": 0.1376,
+     "nt_min_odds": 7.41,
+     "avg_odds": 5.89,
+     "sharp_odds": 7.2
+    }
+   },
+   "over25": {
+    "p_model": 0.5984,
+    "p_market": 0.5897,
+    "avg_over": 1.59,
+    "avg_under": 2.26
+   },
+   "btts": {
+    "p_model": 0.542
+   },
+   "own_model": {
+    "p_h": 0.5495,
+    "p_d": 0.2462,
+    "p_a": 0.2043,
+    "xg_home": 1.7836,
+    "xg_away": 1.0048
+   }
+  },
+  {
+   "league": "Premier League",
+   "date": "2026-11-08",
+   "time": "16:30",
+   "home": "Man United",
+   "away": "Aston Villa",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.436,
+     "p_rule": 0.4424,
+     "nt_min_odds": 2.31,
+     "avg_odds": 2.13,
+     "sharp_odds": 2.24
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2607,
+     "p_rule": 0.2574,
+     "nt_min_odds": 3.96,
+     "avg_odds": 3.68,
+     "sharp_odds": 3.85
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.3033,
+     "p_rule": 0.3003,
+     "nt_min_odds": 3.4,
+     "avg_odds": 3.07,
+     "sharp_odds": 3.3
+    }
+   },
+   "over25": {
+    "p_model": 0.6178,
+    "p_market": 0.6024,
+    "avg_over": 1.55,
+    "avg_under": 2.34
+   },
+   "btts": {
+    "p_model": 0.5986
+   },
+   "own_model": {
+    "p_h": 0.4486,
+    "p_d": 0.2562,
+    "p_a": 0.2952,
+    "xg_home": 1.6811,
+    "xg_away": 1.3301
+   }
+  },
+  {
+   "league": "Serie A",
+   "date": "2026-11-08",
+   "time": "17:00",
+   "home": "Inter",
+   "away": "Como",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.4975,
+     "p_rule": 0.5128,
+     "nt_min_odds": 1.99,
+     "avg_odds": 1.86,
+     "sharp_odds": 1.93
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2458,
+     "p_rule": 0.2302,
+     "nt_min_odds": 4.43,
+     "avg_odds": 4.01,
+     "sharp_odds": 4.3
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.2568,
+     "p_rule": 0.2571,
+     "nt_min_odds": 3.97,
+     "avg_odds": 3.58,
+     "sharp_odds": 3.85
+    }
+   },
+   "over25": {
+    "p_model": 0.6608,
+    "p_market": 0.6529,
+    "avg_over": 1.46,
+    "avg_under": 2.61
+   },
+   "btts": {
+    "p_model": 0.5653
+   },
+   "own_model": {
+    "p_h": 0.4871,
+    "p_d": 0.2433,
+    "p_a": 0.2696,
+    "xg_home": 1.6815,
+    "xg_away": 1.1918
+   }
+  },
+  {
+   "league": "La Liga",
+   "date": "2026-11-08",
+   "time": "17:30",
+   "home": "Celta",
+   "away": "Levante",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.5114,
+     "p_rule": 0.5085,
+     "nt_min_odds": 2.01,
+     "avg_odds": 1.86,
+     "sharp_odds": 1.95
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.275,
+     "p_rule": 0.2609,
+     "nt_min_odds": 3.91,
+     "avg_odds": 3.56,
+     "sharp_odds": 3.8
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.2135,
+     "p_rule": 0.2306,
+     "nt_min_odds": 4.42,
+     "avg_odds": 4.02,
+     "sharp_odds": 4.3
+    }
+   },
+   "over25": {
+    "p_model": 0.4972,
+    "p_market": 0.4911,
+    "avg_over": 1.87,
+    "avg_under": 1.85
+   },
+   "btts": {
+    "p_model": 0.5545
+   },
+   "own_model": {
+    "p_h": 0.5206,
+    "p_d": 0.2424,
+    "p_a": 0.237,
+    "xg_home": 1.7392,
+    "xg_away": 1.0995
+   }
+  },
+  {
+   "league": "La Liga",
+   "date": "2026-11-08",
+   "time": "17:30",
+   "home": "Villarreal",
+   "away": "Getafe",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.6948,
+     "p_rule": 0.6732,
+     "nt_min_odds": 1.52,
+     "avg_odds": 1.42,
+     "sharp_odds": 1.47
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.1942,
+     "p_rule": 0.2062,
+     "nt_min_odds": 4.95,
+     "avg_odds": 4.41,
+     "sharp_odds": 4.8
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.111,
+     "p_rule": 0.1207,
+     "nt_min_odds": 8.45,
+     "avg_odds": 7.1,
+     "sharp_odds": 8.2
+    }
+   },
+   "over25": {
+    "p_model": 0.5415,
+    "p_market": 0.5404,
+    "avg_over": 1.75,
+    "avg_under": 1.99
+   },
+   "btts": {
+    "p_model": 0.469
+   },
+   "own_model": {
+    "p_h": 0.5938,
+    "p_d": 0.2475,
+    "p_a": 0.1588,
+    "xg_home": 1.6543,
+    "xg_away": 0.7259
+   }
+  },
+  {
+   "league": "Bundesliga",
+   "date": "2026-11-08",
+   "time": "18:30",
+   "home": "Hoffenheim",
+   "away": "Schalke 04",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.5939,
+     "p_rule": 0.5959,
+     "nt_min_odds": 1.71,
+     "avg_odds": 1.59,
+     "sharp_odds": 1.67
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2174,
+     "p_rule": 0.2163,
+     "nt_min_odds": 4.71,
+     "avg_odds": 4.33,
+     "sharp_odds": 4.6
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.1888,
+     "p_rule": 0.1878,
+     "nt_min_odds": 5.43,
+     "avg_odds": 4.81,
+     "sharp_odds": 5.3
+    }
+   },
+   "over25": {
+    "p_model": 0.6732,
+    "p_market": 0.6514,
+    "avg_over": 1.47,
+    "avg_under": 2.59
+   },
+   "btts": {
+    "p_model": 0.4854
+   },
+   "own_model": {
+    "p_h": 0.5935,
+    "p_d": 0.2573,
+    "p_a": 0.1492,
+    "xg_home": 1.6375,
+    "xg_away": 0.6959
+   }
+  },
+  {
+   "league": "Ligue 1",
+   "date": "2026-11-08",
+   "time": "19:45",
+   "home": "Lens",
+   "away": "Marseille",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.4117,
+     "p_rule": 0.4275,
+     "nt_min_odds": 2.39,
+     "avg_odds": 2.17,
+     "sharp_odds": 2.32
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2579,
+     "p_rule": 0.2419,
+     "nt_min_odds": 4.22,
+     "avg_odds": 3.79,
+     "sharp_odds": 4.1
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.3304,
+     "p_rule": 0.3306,
+     "nt_min_odds": 3.09,
+     "avg_odds": 2.89,
+     "sharp_odds": 3.0
+    }
+   },
+   "over25": {
+    "p_model": 0.6584,
+    "p_market": 0.6497,
+    "avg_over": 1.46,
+    "avg_under": 2.6
+   },
+   "btts": {
+    "p_model": 0.6164
+   },
+   "own_model": {
+    "p_h": 0.4607,
+    "p_d": 0.2377,
+    "p_a": 0.3016,
+    "xg_home": 1.8042,
+    "xg_away": 1.4281
+   }
+  },
+  {
+   "league": "Serie A",
+   "date": "2026-11-08",
+   "time": "19:45",
+   "home": "Fiorentina",
+   "away": "Juventus",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.266,
+     "p_rule": 0.272,
+     "nt_min_odds": 3.75,
+     "avg_odds": 3.36,
+     "sharp_odds": 3.65
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2762,
+     "p_rule": 0.2683,
+     "nt_min_odds": 3.8,
+     "avg_odds": 3.53,
+     "sharp_odds": 3.7
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.4579,
+     "p_rule": 0.4597,
+     "nt_min_odds": 2.22,
+     "avg_odds": 2.06,
+     "sharp_odds": 2.16
+    }
+   },
+   "over25": {
+    "p_model": 0.5439,
+    "p_market": 0.5316,
+    "avg_over": 1.75,
+    "avg_under": 2.01
+   },
+   "btts": {
+    "p_model": 0.5196
+   },
+   "own_model": {
+    "p_h": 0.2472,
+    "p_d": 0.2586,
+    "p_a": 0.4942,
+    "xg_home": 1.0089,
+    "xg_away": 1.5376
+   }
+  },
+  {
+   "league": "La Liga",
+   "date": "2026-11-08",
+   "time": "20:00",
+   "home": "Ath Madrid",
+   "away": "Barcelona",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.2199,
+     "p_rule": 0.2547,
+     "nt_min_odds": 4.01,
+     "avg_odds": 3.61,
+     "sharp_odds": 3.9
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2139,
+     "p_rule": 0.2113,
+     "nt_min_odds": 4.83,
+     "avg_odds": 4.21,
+     "sharp_odds": 4.7
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.5662,
+     "p_rule": 0.534,
+     "nt_min_odds": 1.91,
+     "avg_odds": 1.81,
+     "sharp_odds": 1.86
+    }
+   },
+   "over25": {
+    "p_model": 0.7417,
+    "p_market": 0.7273,
+    "avg_over": 1.31,
+    "avg_under": 3.33
+   },
+   "btts": {
+    "p_model": 0.6163
+   },
+   "own_model": {
+    "p_h": 0.3397,
+    "p_d": 0.2359,
+    "p_a": 0.4243,
+    "xg_home": 1.5286,
+    "xg_away": 1.7285
+   }
+  }
+ ]
+}

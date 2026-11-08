@@ -1,0 +1,44 @@
+name: oddsboka-model
+
+on:
+  schedule:
+    - cron: "10 7 * * *"   # hver dag ~08:10 norsk vintertid: nye resultater + prediksjoner
+    - cron: "20 5 * * 0"   # søndag ~06:20: ukentlig læring (tuning, retrening, valg av mester)
+  workflow_dispatch:
+    inputs:
+      learn:
+        description: "Kjør full ukentlig læring"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Data
+        run: python src/data.py
+      - name: Ukentlig læring
+        if: github.event.schedule == '20 5 * * 0' || inputs.learn
+        run: |
+          python src/tune.py
+          python src/base.py
+          python src/learn.py
+      - name: Daglige prediksjoner
+        run: python src/predict.py --no-download
+      - name: Lagre resultater
+        run: |
+          git config user.name "oddsboka-bot"
+          git config user.email "oddsboka-bot@users.noreply.github.com"
+          git add out/predictions.json out/metrics.json out/champion.json out/models.pkl out/tuning.json config.json
+          git diff --cached --quiet || git commit -m "Oddsboka: oppdatering $(date -u +%Y-%m-%d)"
+          git push

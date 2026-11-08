@@ -1,0 +1,14 @@
+{
+  "version": "2.0",
+  "xi": 0.0019,
+  "shrink": 0.5,
+  "pxg_alpha": 0.7,
+  "elo_k": 20.0,
+  "elo_hfa": 60.0,
+  "champion": "stack_lr",
+  "edge_min": 0.02,
+  "kelly_fraction": 0.25,
+  "max_stake": 0.05,
+  "max_day": 0.1,
+  "nt_odds_factor": 0.99
+}

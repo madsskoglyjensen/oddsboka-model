@@ -1,0 +1,6 @@
+data/raw/
+data/matches.csv
+out/base_preds.csv
+out/oos_preds.csv
+__pycache__/
+*.pyc
