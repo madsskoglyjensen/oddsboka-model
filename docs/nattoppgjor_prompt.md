@@ -18,11 +18,12 @@ OPPGAVE
 4. pnl per spor: vunnet = innsats × (odds − 1), tapt = −innsats, void = 0. Skriv pnl_main, pnl_flat, pnl_all og settled_at (ISO med +01:00/+02:00).
 5. Kuponger (kind "kombo" og "hoyrisiko"): vunnet når alle ledd er vunnet (void-ledd teller odds 1,00, totalodds regnes på nytt i kode), tapt så snart ett ledd er tapt, ellers åpen. pnl og settled_at.
 6. Dagsnapshot til bankroll_history/<dagens dato>: main = 100 + sum pnl_main + sum pnl for kombo-kuponger; flat = 100 + sum pnl_flat; all = 100 + sum pnl_all; coupon = 100 + sum pnl for høyrisiko-kuponger; open_exposure = åpne stake_main + innsats på åpne kombo-kuponger. Finnes dokumentet, oppdater med if_version.
-7. Skriv run_log/<dagens dato>-natt med date ("<dagens dato> natt"), started, finished, errors (liste) og data_gaps (liste), og hvilke kamper som ble gjort opp og hvilke som står åpne og hvorfor.
+7. Live-kappløpet: for hvert dokument i matches uten result der avspark + 2,5 timer er passert: legg til hg, ag, result (f.eks. "2-1"), status ("done", eller "void" ved utsatt/avlyst) og closing_sharp {h, d, a, o, u} (skarp sluttodds, o/u = over/under 2,5, null hvis mangler). Endre aldri andre felt.
+8. Skriv run_log/<dagens dato>-natt med date ("<dagens dato> natt"), started, finished, errors (liste) og data_gaps (liste), og hvilke kamper som ble gjort opp og hvilke som står åpne og hvorfor.
 
 AVGRENSNINGER
 - Endre aldri låste felt (odds, nt_odds, own_p, p_sharp, edge, innsats, locked_at, reasoning osv.). Bare oppgjørsfeltene over og notes.
-- Opprett aldri nye bets eller kuponger, endre aldri config, og publiser aldri artifact-siden.
+- Opprett aldri nye bets, kuponger eller matches-dokumenter, endre aldri config, og publiser aldri artifact-siden.
 - Ingen e-post, varsler eller meldinger. Dashboardet er eneste output.
 
 KVALITET

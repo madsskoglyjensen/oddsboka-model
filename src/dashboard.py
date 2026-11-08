@@ -131,8 +131,9 @@ def main():
         "gap": {k: {s: round(v["logloss"] - v["mkt"], 4) for s, v in m["models"][k]["by_season"].items()}
                 for k in ("mkt_sharp", "stack_sharp_lr", "pxg") if k in m["models"]},
         "calibration": {k: m["models"][k]["calibration"] for k in ("stack_sharp_lr", "pxg") if "calibration" in m["models"].get(k, {})},
-        "edges": {k: {t: {"n": b["n"], "clv": r4(b["clv"]), "roi": r4(b["roi"])} for t, b in m["models"][k]["bet_by_edge"].items()}
-                  for k in ("mkt_sharp", "stack_sharp_lr", "pxg") if k in m["models"]},
+        "edges": {k: {t: {"n": b["n"], "clv": r4(b["clv"]), "roi": r4(b["roi"]), "kelly_final": b.get("kelly_final")}
+                      for t, b in m["models"][k]["bet_by_edge"].items()}
+                  for k in ("mkt_sharp", "stack_sharp_lr", "stack_lr", "pxg", "ou:mkt_sharp") if k in m["models"]},
         "tuning": {"params": tu.get("params"), "gain": r4(tu.get("gain")), "changed": tu.get("changed")},
         "nt_proxy": {"book": "Bet365", "factor": m["config"].get("nt_odds_factor"), "nt_vs_sharp": 0.955, "b365_vs_sharp": 0.956, "n_checked": 22},
     }

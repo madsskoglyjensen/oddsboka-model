@@ -36,23 +36,28 @@ STEG 4: KANDIDATER OG LÅSING (bare HUB)
 Ta med kamper med avspark fra nå og 36 timer frem: alle kamper i predictions.json, pluss europacup (Champions League, Europa League, Conference League).
 
 For hver kamp:
-1. Hent NT-odds for alle tre HUB-utfall: nt_odds = {h, d, a}.
-2. Skarp pris live: slå opp HUB-odds hos Pinnacle (ellers Betfair Exchange) på en offentlig oddssammenligningsside som OddsPortal: sharp_live_odds = {h, d, a}, sharp_source. p_sharp = de-vig av de tre (1/odds delt på summen).
+1. Hent NT-odds for alle tre HUB-utfall: nt_odds = {h, d, a}. Hent også NT over/under 2,5 hvis de finnes (til live-kappløpet, ikke til spill).
+2. Skarp pris live: slå opp HUB-odds hos Pinnacle (ellers Betfair Exchange) på en offentlig oddssammenligningsside som OddsPortal: sharp_live_odds = {h, d, a}, sharp_source. p_sharp = de-vig av de tre (1/odds delt på summen). Ta også skarp over/under 2,5 hvis den finnes.
 3. Sannsynlighet:
    - Kamper i predictions.json: p_model = outcomes.k.p. own_p_raw = p_model.
    - Europacup: own_p_raw = p_sharp (ingen egen modell for cup ennå).
    Nyhetssjekk: bare vesentlige, verifiserte nyheter som kom etter at modellfila ble laget (bekreftet startoppstilling, nøkkelspiller ute). Da kan own_p justeres maks ±0,03 med adj_reason. Ellers own_p = own_p_raw. Aldri juster på form, H2H eller magefølelse.
 4. Minsteodds per utfall: nt_min_odds = (1 + bet_rule.edge_min) / p_sharp hvis skarp pris ble funnet, ellers outcomes.k.nt_min_odds fra fila (europacup uten skarp pris: ingen minsteodds).
 5. Velg utfallet med høyest NT-odds / nt_min_odds. odds = NT-oddsen for det. p_mkt = NT-sannsynlighet uten margin for utfallet. implied_p = 1/odds. edge = own_p − 1/odds. edge_mkt = own_p − p_mkt. edge_sharp = odds × p_sharp − 1.
-6. SPILLREGEL: stake_main > 0 bare når odds ≥ nt_min_odds, edge > 0, og ligaen er med i regelen (league_in_rule er true; europacup er med). Innsats etter predictions.staking (b = odds − 1, p = own_p, k = (b·p − (1−p))/b):
-   - kelly_25: 0,25 × k × main. kelly_50: 0,5 × k × main.
-   - flat_1: 0,01 × main. trapp: 1 % ved edge_sharp 2–4 %, 2 % ved 4–6 %, 3 % over 6 %. prop: 0,3 × edge_sharp × main.
-   Tak: maks config.cap_bet × main per bet. Overstiger dagens sum config.cap_day × main, skaler alle dagens innsatser ned proporsjonalt.
+6. SPILLREGEL: stake_main > 0 bare når odds ≥ nt_min_odds, edge > 0, og ligaen er med i regelen (league_in_rule er true; europacup er med). Innsats etter predictions.staking_spec (valgt av modellen hver søndag). Med b = odds − 1, p = own_p, k = (b·p − (1−p))/b og e = edge_sharp:
+   - kelly_mult = [[terskel, andel], ...]: andel = k × andelen for høyeste terskel ≤ e (ingen terskel ≤ e gir 0).
+   - kelly_mult_per_edge og kelly_mult_max: andel = k × min(kelly_mult_max, e × kelly_mult_per_edge).
+   - odds_min og odds_max: odds utenfor båndet gir 0.
+   - fixed: fast andel. fixed_tiers: fast andel for høyeste terskel ≤ e. edge_mult: andel = e × edge_mult.
+   Innsats = andel × main. Skriv staking_rule = predictions.staking. Tak: maks config.cap_bet × main per bet. Overstiger dagens sum config.cap_day × main, skaler alle dagens innsatser ned proporsjonalt.
 7. stake_flat = config.flat_stake × flat for bets som passerer regelen, ellers 0. stake_all = config.all_stake × all for alle kandidater (kontrollspor).
 8. reasoning: 2–4 setninger: sannsynlighet, NT-odds mot minsteodds, skarp pris, eventuell nyhet, og hvorfor det ble spill eller ikke.
 
 Dokument-id: "ÅÅÅÅMMDD-xxx-yyy-hub" (avsparksdato, tre bokstaver per lag). Felter: bet_type "HUB", market "HUB", selection, match ("Hjemmelag – Bortelag"), league, date (dagens dato), kickoff (ISO med tidssone), locked_at, lock_phase "morgen", odds, nt_odds, odds_source "NT", sharp_live_odds, sharp_source, p_sharp, own_p_raw, own_p, p_model, p_mkt, implied_p, edge, edge_mkt, edge_sharp, nt_min_odds, avg_odds, adj_reason, stake_main, stake_flat, stake_all, staking_rule, track, status "open", method_version "2.1", reasoning.
-Over/under og BTTS logges ikke lenger (modellen vurderer dem fortsatt hver søndag og tar dem inn igjen hvis de slår markedet).
+Over/under og BTTS låses ikke som egne bets (modellen vurderer dem hver søndag), men over/under-oddsene logges i matches til live-kappløpet.
+
+STEG 4B: LIVE-KAPPLØPET (matches)
+For hver kamp du vurderte i steg 4, også de uten spill: skriv matches/{ÅÅÅÅMMDD-xxx-yyy} (samme id som bettet uten "-hub"). Finnes dokumentet, ikke endre det. Felter: date, kickoff, league, home, away, locked_at, nt {h, d, a, o, u} (o/u = NT over/under 2,5, null hvis mangler), sharp {h, d, a, o, u} (skarp pris, null hvis mangler), sharp_source, p_model {h, d, a} (outcomes.k.p fra modellfila, null for cup), p_own {h, d, a} (own_model.p_h, p_d, p_a, null for cup), p_ou_model (over25.p_model, null for cup), in_rule (league_in_rule, true for cup). Dashboardet regner selv ut hva hver strategi i kappløpet ville spilt, så her skal det bare stå rådata, låst før avspark. Bruk batch.
 
 SAFE: merk nøyaktig ett bet per dag med track "safe": kandidaten med odds mellom config.safe_odds_min og safe_odds_max og høyest edge_sharp. Alle andre får track "candidate". Safe får bare stake_main hvis den passerer spillregelen.
 
