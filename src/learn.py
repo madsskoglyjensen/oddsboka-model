@@ -173,11 +173,35 @@ def p_over(df, name):
 
 
 # ---------- betting ----------
+LEAGUE_NAME = {"E0": "Premier League", "SP1": "La Liga", "I1": "Serie A", "D1": "Bundesliga", "F1": "Ligue 1",
+               "E1": "Championship", "E2": "League One", "D2": "2. Bundesliga", "I2": "Serie B"}
+
+
+def nt_factors(df: pd.DataFrame, default: float) -> np.ndarray:
+    """Faktor som gjør Bet365-odds om til NT-nivå, per kamp.
+    Uten live-data: fast faktor (config). Med out/nt_calibration.json (ekte NT mot skarp pris, logget live):
+    faktor = (NT/skarp live) / (Bet365/skarp i siste sesong) for ligaer med nok målinger."""
+    f = np.full(len(df), default)
+    cal_f = ROOT / "out" / "nt_calibration.json"
+    if not cal_f.exists():
+        return f
+    cal = json.loads(cal_f.read_text())
+    for code, name in LEAGUE_NAME.items():
+        if name not in (cal.get("ready") or []):
+            continue
+        sel = (df["league"] == code).to_numpy()
+        last = df.loc[sel & (df["season"] == df["season"].max()).to_numpy()]
+        r = pd.concat([last[f"b365_{k}"] / last[f"sharp_{k}"] for k in "hda"]).median()
+        if np.isfinite(r) and r > 0:
+            f[sel] = cal["leagues"][name]["nt_vs_sharp"] / r
+    return f
+
+
 def simulate(df: pd.DataFrame, P: np.ndarray, kind: str, edge_min: float, nt: float, ret_rows: bool = False) -> dict:
     """Flat 1 enhet per bet der edge > edge_min, mot NT-proxy-odds (snittodds * nt). CLV mot skarp sluttodds."""
     if kind == "1x2":
         # NT-proxy: Bet365 (lå likt med NT mot skarp pris i nov 2026), ellers snittodds
-        odds = np.column_stack([df[f"b365_{k}"].fillna(df[f"avg_{k}"]) for k in OUT3]) * nt
+        odds = np.column_stack([df[f"b365_{k}"].fillna(df[f"avg_{k}"]) for k in OUT3]) * nt_factors(df, nt)[:, None]
         fair_close = np.column_stack([df[f"mkt_sharpc_{k}"] for k in OUT3])
         y = y_1x2(df)
         win = np.eye(3)[y]

@@ -19,6 +19,7 @@ STEG
    - Hva sier NT-treghet og sluttodds-modellen (eller hvor mye data mangler før de kan si noe)?
    - Hva endret søndagens læring, og er endringen stabil eller støy (se experiments.json over flere uker)?
    - Hva er den svakeste antakelsen i systemet akkurat nå?
+   - NT-kalibrering (nt_calibration i live_learning.json): hvilke ligaer har nok målinger, og hvor ligger NT mot skarp pris? Er minst én liga «klar», skal forslaget være å aktivere den i backtesten (SJ har sagt ja til dette 8. nov). Skriv da filens innhold i proposal.change, så den kan legges i repoet som out/nt_calibration.json.
 6. Velg ÉN forbedring med best forventet verdi i forhold til innsats. Den må kunne testes i koden (backtest, urørt test eller live), og den skal ikke fjerne noe uten at SJ sier ja.
 7. Skriv research/{ÅÅÅÅ}-U{uke} (ISO-uke) med: week, generated, summary (2–3 setninger på norsk, enkelt språk), observations (liste, 3–6 punkter med tall), proposal {title, why, change (hva i koden som endres), test (hvordan vi ser om det virker), risk}, status "forslag", author "forsker".
 8. Skriv run_log/{dato}-forsker med date, started, finished, errors, data_gaps.

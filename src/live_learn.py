@@ -193,6 +193,21 @@ def model_b(df: pd.DataFrame) -> dict:
     return res
 
 
+MIN_CAL = 40  # utfall per liga før NT-kalibreringen brukes i backtesten
+
+
+def nt_calibration(df: pd.DataFrame) -> dict:
+    """Ekte NT-nivå per liga: median av NT-odds / skarp odds på samme tidspunkt."""
+    if df.empty:
+        return {"status": "venter", "leagues": {}, "need_per_league": MIN_CAL}
+    d = df.assign(ratio=df["nt_odds"] / df["sharp_odds"])
+    d = d[(d["ratio"] > 0.7) & (d["ratio"] < 1.3)]
+    lg = {k: {"nt_vs_sharp": round(float(g["ratio"].median()), 4), "n": int(len(g))} for k, g in d.groupby("league")}
+    ready = {k: v for k, v in lg.items() if v["n"] >= MIN_CAL}
+    return {"status": "klar" if ready else "samler", "leagues": lg, "ready": sorted(ready), "need_per_league": MIN_CAL,
+            "all": round(float(d["ratio"].median()), 4) if len(d) else None}
+
+
 def main(path: str):
     ms = json.loads(Path(path).read_text())
     ms = [m.get("data", m) for m in ms]
@@ -201,7 +216,8 @@ def main(path: str):
     n_with = int(df.groupby(["league"]).size().sum() // 3) if not df.empty else 0
     out = {"generated": pd.Timestamp.now(tz="Europe/Oslo").isoformat(timespec="seconds"),
            "n_logged": len(ms), "n_done": sum(1 for m in ms if m.get("status") == "done"),
-           "race": race(ms), "nt_lag": model_a(df, n_with), "closing_line": model_b(df)}
+           "race": race(ms), "nt_lag": model_a(df, n_with), "closing_line": model_b(df), "nt_calibration": nt_calibration(df)}
+    (ROOT / "out" / "nt_calibration.json").write_text(json.dumps(out["nt_calibration"], ensure_ascii=False, indent=1))
     (ROOT / "out").mkdir(exist_ok=True)
     (ROOT / "out" / "live_learning.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=float))
     print(f"{out['n_logged']} kamper logget, {out['n_done']} ferdige. NT-treghet: {out['nt_lag']['status']}, sluttodds: {out['closing_line']['status']}")
