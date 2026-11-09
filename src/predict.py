@@ -39,9 +39,10 @@ def main():
     champ = json.loads((ROOT / "out" / "champion.json").read_text())
     with open(ROOT / "out" / "models.pkl", "rb") as fh:
         fitted = pickle.load(fh)
+    head = header(champ)
     if fx.empty:
-        out = {"generated": pd.Timestamp.now(tz="Europe/Oslo").isoformat(timespec="seconds"), "fixtures": [],
-               "note": "Ingen kommende kamper i topp 5-ligaene i fixtures.csv (f.eks. landslagspause)."}
+        out = {**head, "fixtures": [],
+               "note": "Ingen kommende kamper i ligaene i fixtures.csv (f.eks. landslagspause). Spillregel og innsats gjelder som vanlig."}
         (ROOT / "out" / "predictions.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
         print(out["note"])
         return
@@ -106,7 +107,7 @@ def main():
                            "nt_min_odds": round((1 + edge) / pr, 2) if ok else None,
                            "avg_odds": r4(r[f"avg_{k}"]), "sharp_odds": r4(r[f"sharp_{k}"])}
         rows.append({
-            "league": data.LEAGUES[r["league"]], "league_in_rule": bool(allowed), "date": r["date"].strftime("%Y-%m-%d"), "time": r.get("time"),
+            "league": data.LEAGUES[r["league"]], "league_in_rule": bool(allowed), **oslo_time(r),
             "home": r["home"], "away": r["away"],
             "outcomes": outcomes,
             "over25": {"p_model": r4(r.get("ou_stack_lr_p")), "p_market": r4(r.get("mkt_sharp_o25")),
@@ -115,16 +116,33 @@ def main():
             "own_model": {"p_h": r4(r.get("pxg_p_h")), "p_d": r4(r.get("pxg_p_d")), "p_a": r4(r.get("pxg_p_a")),
                           "xg_home": r4(r.get("pxg_lh")), "xg_away": r4(r.get("pxg_la"))},
         })
-    out = {"generated": pd.Timestamp.now(tz="Europe/Oslo").isoformat(timespec="seconds"),
-           "model_version": CFG["version"], "prob_model": prob_model, "bet_rule": rule,
-           "staking": champ.get("staking", "kelly_25"), "staking_label": champ.get("staking_label", "¼ Kelly"),
-           "staking_spec": champ.get("staking_spec", {"kelly_mult": [[0.0, 0.25]]}),
-           "leagues_in_rule": [data.LEAGUES[l] for l in (champ.get("leagues") or [])],
-           "note": "p = beste kalibrerte modell. Spill et utfall bare hvis NT-odds >= nt_min_odds.",
+    out = {**head, "note": "p = beste kalibrerte modell. Spill et utfall bare hvis NT-odds >= nt_min_odds. time og kickoff er norsk tid.",
            "fixtures": rows}
     (ROOT / "out" / "predictions.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
     write_viz_fixtures(df, specs, fitted)
     print(f"{len(rows)} kommende kamper skrevet. Spillregel: {rule_model} med edge >= {edge:.0%}")
+
+
+def header(champ: dict) -> dict:
+    """Felter som alltid skal med, også når det ikke er kamper (kjøringene leser regel og innsats herfra)."""
+    rule = champ.get("bet_rule") or {}
+    return {"generated": pd.Timestamp.now(tz="Europe/Oslo").isoformat(timespec="seconds"), "time_zone": "Europe/Oslo",
+            "model_version": CFG["version"], "prob_model": champ.get("prob_model"), "bet_rule": rule,
+            "staking": champ.get("staking", "kelly_25"), "staking_label": champ.get("staking_label", "¼ Kelly"),
+            "staking_spec": champ.get("staking_spec", {"kelly_mult": [[0.0, 0.25]]}),
+            "leagues_in_rule": [data.LEAGUES[lg] for lg in (champ.get("leagues") or [])]}
+
+
+def oslo_time(r) -> dict:
+    """football-data.co.uk oppgir avspark i britisk tid. Gjør om til norsk tid og ISO med tidssone."""
+    d, t = r["date"].strftime("%Y-%m-%d"), str(r.get("time") or "").strip()
+    if not t or t.lower() == "nan":
+        return {"date": d, "time": None, "kickoff": None}
+    try:
+        ko = pd.Timestamp(f"{d} {t}").tz_localize("Europe/London").tz_convert("Europe/Oslo")
+        return {"date": ko.strftime("%Y-%m-%d"), "time": ko.strftime("%H:%M"), "kickoff": ko.isoformat()}
+    except Exception:  # noqa: BLE001
+        return {"date": d, "time": t or None, "kickoff": None}
 
 
 def write_viz_fixtures(df: pd.DataFrame, specs: dict, fitted: dict) -> None:
@@ -133,7 +151,7 @@ def write_viz_fixtures(df: pd.DataFrame, specs: dict, fitted: dict) -> None:
     df = df.sort_values(["date", "time", "league"]).reset_index(drop=True)
     XS = {name: specs[name][1](df).astype(float) for name in ("stack_lr", "stack_sharp_lr")}
     for i, r in df.iterrows():
-        row = {"league": data.LEAGUES[r["league"]], "date": r["date"].strftime("%Y-%m-%d"), "time": r.get("time"),
+        row = {"league": data.LEAGUES[r["league"]], **oslo_time(r),
                "home": r["home"], "away": r["away"], "x": {}, "p": {}}
         for t in ("goals", "pxg"):
             row[t] = {"lh": r4(r[f"{t}_lh"]), "la": r4(r[f"{t}_la"]), "rho": r4(r[f"{t}_rho"])}

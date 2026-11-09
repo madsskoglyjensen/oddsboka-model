@@ -1,11 +1,12 @@
 name: oddsboka-model
 
-# GitHub-cron går i UTC. To tidspunkter per jobb dekker både vinter- og sommertid;
-# vakta under sørger for at bare den riktige kjøres (ca. 07:45 / 06:20 norsk tid).
+# GitHub-cron går i UTC og kan bli forsinket i flere timer. Derfor flere tidspunkter per jobb,
+# tidlig nok til at fila er klar før morgenkjøringen kl. 08:00. Vakta under sørger for at bare
+# første kjøring etter riktig norsk tid gjør jobben (daglig fra 04:00, læring søndag fra 03:30).
 on:
   schedule:
-    - cron: "45 5,6 * * *"  # daglig: ca. 07:45 norsk tid
-    - cron: "20 4,5 * * 0"  # søndag: ca. 06:20 norsk tid, ukentlig læring
+    - cron: "15 2,3,4,5,6 * * *"  # daglig: fra ca. 03:15/04:15 norsk tid, flere forsøk
+    - cron: "35 1,2,3,4 * * 0"  # søndag: fra ca. 02:35/03:35 norsk tid, ukentlig læring
   workflow_dispatch:
     inputs:
       learn:
@@ -16,12 +17,19 @@ on:
 permissions:
   contents: write
 
+# Kjøringer som overlapper (f.eks. søndag) står i kø i stedet for å kollidere ved push.
+concurrency:
+  group: oddsboka
+  cancel-in-progress: false
+
 jobs:
   run:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main   # siste versjon, så vakta ser om en kjøring i køen allerede har gjort jobben
 
       - name: Vakt (riktig tid, ikke kjørt i dag)
         id: gate
@@ -31,10 +39,10 @@ jobs:
           GO=0; LEARN=0
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             GO=1; [ "${{ inputs.learn }}" = "true" ] && LEARN=1
-          elif [ "${{ github.event.schedule }}" = "20 4,5 * * 0" ]; then
-            if [ "$NOW" -ge 0600 ] && [ "$(gen out/metrics.json)" != "$TODAY" ]; then GO=1; LEARN=1; fi
+          elif [ "${{ github.event.schedule }}" = "35 1,2,3,4 * * 0" ]; then
+            if [ "$NOW" -ge 0330 ] && [ "$(gen out/metrics.json)" != "$TODAY" ]; then GO=1; LEARN=1; fi
           else
-            if [ "$NOW" -ge 0730 ] && [ "$(gen out/predictions.json)" != "$TODAY" ]; then GO=1; fi
+            if [ "$NOW" -ge 0400 ] && [ "$(gen out/predictions.json)" != "$TODAY" ]; then GO=1; fi
           fi
           echo "go=$GO" >> "$GITHUB_OUTPUT"; echo "learn=$LEARN" >> "$GITHUB_OUTPUT"
           echo "Oslo $NOW, go=$GO, learn=$LEARN"
@@ -71,4 +79,5 @@ jobs:
           git config user.email "oddsboka-bot@users.noreply.github.com"
           git add out/*.json out/models.pkl config.json
           git diff --cached --quiet || git commit -m "Oddsboka: oppdatering $(TZ=Europe/Oslo date +%Y-%m-%d)"
+          git pull --rebase -X theirs origin main || true
           git push

@@ -1,5 +1,37 @@
 {
- "generated": "2026-11-09T15:21:26+01:00",
+ "generated": "2026-11-09T21:34:04+01:00",
+ "time_zone": "Europe/Oslo",
+ "model_version": "2.1",
+ "prob_model": "stack_lr",
+ "bet_rule": {
+  "model": "mkt_sharp",
+  "edge_min": 0.02,
+  "clv": 0.021346425500764477,
+  "n": 1136,
+  "roi": 0.0835794014084507,
+  "value": 24.249539368868447
+ },
+ "staking": "kelly_33",
+ "staking_label": "⅓ Kelly",
+ "staking_spec": {
+  "kelly_mult": [
+   [
+    0.0,
+    0.33
+   ]
+  ]
+ },
+ "leagues_in_rule": [
+  "Bundesliga",
+  "2. Bundesliga",
+  "Premier League",
+  "Championship",
+  "League One",
+  "Ligue 1",
+  "Serie A",
+  "Serie B",
+  "La Liga"
+ ],
  "fixtures": [],
- "note": "Ingen kommende kamper i topp 5-ligaene i fixtures.csv (f.eks. landslagspause)."
+ "note": "Ingen kommende kamper i ligaene i fixtures.csv (f.eks. landslagspause). Spillregel og innsats gjelder som vanlig."
 }
