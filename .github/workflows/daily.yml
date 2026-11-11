@@ -1,12 +1,12 @@
 name: oddsboka-model
 
-# GitHub-cron går i UTC og kan bli forsinket i flere timer. Derfor flere tidspunkter per jobb,
-# tidlig nok til at fila er klar før morgenkjøringen kl. 08:00. Vakta under sørger for at bare
-# første kjøring etter riktig norsk tid gjør jobben (daglig fra 04:00, læring søndag fra 03:30).
+# GitHub-cron går i UTC og er upålitelig: kjøringer kan bli forsinket i timevis eller hoppet over.
+# Derfor prøver vi hvert 20. minutt hele natta og formiddagen. Vakta under sørger for at bare den
+# første kjøringen som faktisk starter gjør jobben. Morgenkjøringen kl. 08:00 bygger modellfila selv
+# (scripts/build_daily.sh), så denne jobben er reserve for dagsfila og hovedvei for ukentlig læring.
 on:
   schedule:
-    - cron: "15 2,3,4,5,6 * * *"  # daglig: fra ca. 03:15/04:15 norsk tid, flere forsøk
-    - cron: "35 1,2,3,4 * * 0"  # søndag: fra ca. 02:35/03:35 norsk tid, ukentlig læring
+    - cron: "*/20 0-10 * * *"  # ca. 01:00–11:40 norsk tid, hvert 20. minutt
   workflow_dispatch:
     inputs:
       learn:
@@ -39,10 +39,12 @@ jobs:
           GO=0; LEARN=0
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             GO=1; [ "${{ inputs.learn }}" = "true" ] && LEARN=1
-          elif [ "${{ github.event.schedule }}" = "35 1,2,3,4 * * 0" ]; then
-            if [ "$NOW" -ge 0330 ] && [ "$(gen out/metrics.json)" != "$TODAY" ]; then GO=1; LEARN=1; fi
-          else
-            if [ "$NOW" -ge 0400 ] && [ "$(gen out/predictions.json)" != "$TODAY" ]; then GO=1; fi
+          elif [ "$NOW" -ge 0130 ]; then
+            # Dagsfil: én gang per dag. Læring: på søndag, eller første dag etter hvis søndagen ble hoppet over.
+            [ "$(gen out/predictions.json)" != "$TODAY" ] && GO=1
+            LAST=$(gen out/metrics.json); AGE=999
+            [ -n "$LAST" ] && AGE=$(( ( $(date -d "$TODAY" +%s) - $(date -d "$LAST" +%s) ) / 86400 ))
+            if [ "$AGE" -ge 7 ] || { [ "$(TZ=Europe/Oslo date +%u)" = "7" ] && [ "$AGE" -ge 1 ]; }; then GO=1; LEARN=1; fi
           fi
           echo "go=$GO" >> "$GITHUB_OUTPUT"; echo "learn=$LEARN" >> "$GITHUB_OUTPUT"
           echo "Oslo $NOW, go=$GO, learn=$LEARN"

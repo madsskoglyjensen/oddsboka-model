@@ -47,3 +47,10 @@ Kjøres hver morgen etter `predict.py`. Henter innmaten fra de ekte trente model
 vektene i logistisk regresjon, de øverste nivåene i et tre fra random forest og hvordan alle trærne stemmer per kamp,
 hvordan LightGBM bygger sannsynligheten tre for tre, alle vektene i det nevrale nettet (dashboardet regner fremoverpasset selv),
 Elo-kurver for topplagene og feature-viktighet (permutasjon per feature-gruppe, beregnes på søndager).
+
+## Daglig kjøring uten GitHub-avhengighet
+
+GitHub sine planlagte jobber er upålitelige (forsinket i timevis eller hoppet over). Morgenkjøringen kl. 08:00
+bygger derfor modellfila selv med `bash scripts/build_daily.sh` (3–5 min) og legger den i databasen som
+`model/predictions`, som kjøringene før avspark leser. GitHub-jobben prøver hvert 20. minutt fra ca. 01:00 til 11:40
+og er reserve for dagsfila og hovedvei for den ukentlige læringen (søndag, eller første dag etter hvis søndagen ble hoppet over).
