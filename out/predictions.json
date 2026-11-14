@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-13T06:51:28+01:00",
+ "generated": "2026-11-14T06:41:29+01:00",
  "time_zone": "Europe/Oslo",
  "model_version": "2.1",
  "prob_model": "stack_lr",
@@ -32,6 +32,262 @@
   "Serie B",
   "La Liga"
  ],
- "fixtures": [],
- "note": "Ingen kommende kamper i ligaene i fixtures.csv (f.eks. landslagspause). Spillregel og innsats gjelder som vanlig."
+ "note": "p = beste kalibrerte modell. Spill et utfall bare hvis NT-odds >= nt_min_odds. time og kickoff er norsk tid.",
+ "fixtures": [
+  {
+   "league": "League One",
+   "league_in_rule": true,
+   "date": "2026-11-14",
+   "time": "16:00",
+   "kickoff": "2026-11-14T16:00:00+01:00",
+   "home": "AFC Wimbledon",
+   "away": "Blackpool",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.3517,
+     "p_rule": 0.3634,
+     "nt_min_odds": 2.81,
+     "avg_odds": 2.65,
+     "sharp_odds": 2.72
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2774,
+     "p_rule": 0.2784,
+     "nt_min_odds": 3.66,
+     "avg_odds": 3.4,
+     "sharp_odds": 3.55
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.371,
+     "p_rule": 0.3581,
+     "nt_min_odds": 2.85,
+     "avg_odds": 2.49,
+     "sharp_odds": 2.76
+    }
+   },
+   "over25": {
+    "p_model": 0.5444,
+    "p_market": 0.5231,
+    "avg_over": 1.75,
+    "avg_under": 1.98
+   },
+   "btts": {
+    "p_model": 0.5309
+   },
+   "own_model": {
+    "p_h": 0.3132,
+    "p_d": 0.2777,
+    "p_a": 0.4091,
+    "xg_home": 1.1598,
+    "xg_away": 1.362
+   }
+  },
+  {
+   "league": "League One",
+   "league_in_rule": true,
+   "date": "2026-11-14",
+   "time": "16:00",
+   "kickoff": "2026-11-14T16:00:00+01:00",
+   "home": "Milton Keynes Dons",
+   "away": "Burton",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.5884,
+     "p_rule": 0.5746,
+     "nt_min_odds": 1.78,
+     "avg_odds": 1.66,
+     "sharp_odds": 1.69
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2316,
+     "p_rule": 0.2312,
+     "nt_min_odds": 4.41,
+     "avg_odds": 3.97,
+     "sharp_odds": 4.2
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.18,
+     "p_rule": 0.1942,
+     "nt_min_odds": 5.25,
+     "avg_odds": 4.56,
+     "sharp_odds": 5.0
+    }
+   },
+   "over25": {
+    "p_model": 0.5817,
+    "p_market": 0.5772,
+    "avg_over": 1.63,
+    "avg_under": 2.18
+   },
+   "btts": {
+    "p_model": 0.5637
+   },
+   "own_model": {
+    "p_h": 0.4739,
+    "p_d": 0.253,
+    "p_a": 0.273,
+    "xg_home": 1.6479,
+    "xg_away": 1.198
+   }
+  },
+  {
+   "league": "League One",
+   "league_in_rule": true,
+   "date": "2026-11-14",
+   "time": "16:00",
+   "kickoff": "2026-11-14T16:00:00+01:00",
+   "home": "Sheffield Weds",
+   "away": "Plymouth",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.4138,
+     "p_rule": 0.3974,
+     "nt_min_odds": 2.57,
+     "avg_odds": 2.28,
+     "sharp_odds": 2.48
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2642,
+     "p_rule": 0.2628,
+     "nt_min_odds": 3.88,
+     "avg_odds": 3.6,
+     "sharp_odds": 3.75
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.3221,
+     "p_rule": 0.3398,
+     "nt_min_odds": 3.0,
+     "avg_odds": 2.81,
+     "sharp_odds": 2.9
+    }
+   },
+   "over25": {
+    "p_model": 0.6192,
+    "p_market": 0.5911,
+    "avg_over": 1.55,
+    "avg_under": 2.34
+   },
+   "btts": {
+    "p_model": 0.5744
+   },
+   "own_model": {
+    "p_h": 0.4585,
+    "p_d": 0.2445,
+    "p_a": 0.297,
+    "xg_home": 1.7214,
+    "xg_away": 1.3484
+   }
+  },
+  {
+   "league": "League One",
+   "league_in_rule": true,
+   "date": "2026-11-14",
+   "time": "16:00",
+   "kickoff": "2026-11-14T16:00:00+01:00",
+   "home": "Stockport",
+   "away": "Reading",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.5109,
+     "p_rule": 0.5133,
+     "nt_min_odds": 1.99,
+     "avg_odds": 1.85,
+     "sharp_odds": 1.92
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2501,
+     "p_rule": 0.2464,
+     "nt_min_odds": 4.14,
+     "avg_odds": 3.75,
+     "sharp_odds": 4.0
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.2391,
+     "p_rule": 0.2404,
+     "nt_min_odds": 4.24,
+     "avg_odds": 3.76,
+     "sharp_odds": 4.1
+    }
+   },
+   "over25": {
+    "p_model": 0.6015,
+    "p_market": 0.5842,
+    "avg_over": 1.59,
+    "avg_under": 2.23
+   },
+   "btts": {
+    "p_model": 0.5536
+   },
+   "own_model": {
+    "p_h": 0.4824,
+    "p_d": 0.2528,
+    "p_a": 0.2648,
+    "xg_home": 1.6567,
+    "xg_away": 1.1704
+   }
+  },
+  {
+   "league": "League One",
+   "league_in_rule": true,
+   "date": "2026-11-14",
+   "time": "16:00",
+   "kickoff": "2026-11-14T16:00:00+01:00",
+   "home": "Wigan",
+   "away": "Barnsley",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.3964,
+     "p_rule": 0.3959,
+     "nt_min_odds": 2.58,
+     "avg_odds": 2.31,
+     "sharp_odds": 2.48
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.26,
+     "p_rule": 0.2584,
+     "nt_min_odds": 3.95,
+     "avg_odds": 3.6,
+     "sharp_odds": 3.8
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.3436,
+     "p_rule": 0.3457,
+     "nt_min_odds": 2.95,
+     "avg_odds": 2.75,
+     "sharp_odds": 2.84
+    }
+   },
+   "over25": {
+    "p_model": 0.6292,
+    "p_market": 0.6029,
+    "avg_over": 1.55,
+    "avg_under": 2.33
+   },
+   "btts": {
+    "p_model": 0.5269
+   },
+   "own_model": {
+    "p_h": 0.3855,
+    "p_d": 0.2812,
+    "p_a": 0.3333,
+    "xg_home": 1.2981,
+    "xg_away": 1.1887
+   }
+  }
+ ]
 }
