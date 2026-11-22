@@ -10,5 +10,6 @@
   "kelly_fraction": 0.25,
   "max_stake": 0.05,
   "max_day": 0.1,
-  "nt_odds_factor": 0.99
+  "nt_odds_factor": 0.99,
+  "nt_bands": false
 }

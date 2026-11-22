@@ -34,7 +34,14 @@ Hver søndag trenes alt på nytt med alle nye kamper, parametere tunes, og to va
 
 ## Viktige forbehold
 
-- NT-odds finnes ikke historisk. Bet365 brukes som proxy (lå likt med NT mot skarp pris i november 2026), med 1 % trekk.
+- NT-odds finnes ikke historisk. Bet365 brukes som proxy, med 1 % trekk (`nt_odds_factor` 0,99).
+- NT-kalibrering (`out/nt_calibration.json`, skrives av `live_learn.py` fra kamper logget live): når en liga har minst 40
+  målinger av NT mot Pinnacle, bruker backtesten ligaens ekte nivå: faktor = (NT/Pinnacle live) / (Bet365/Pinnacle historisk).
+  Bet365/Pinnacle regnes bare på rader der den skarpe prisen faktisk er Pinnacle (`sharp_src == "PS"` i `data/matches.csv`),
+  fra nyeste sesong med minst 100 slike kamper. Betfair Exchange (skarp pris i 2026/27) har et annet nivå og blandes ikke inn.
+- NT etter oddsnivå: live er NT 1–2 % under Pinnacle på korte odds og 5–6 % på lange, mer enn Bet365. Koden kan bruke en faktor
+  per oddsbånd (`NT_BANDS` i learn.py), men den er av (`"nt_bands": false` i config.json) til SJ har sett effekten.
+  `nt_bands_shadow` i metrics.json og et funn i dashboardet viser hver søndag hva spillregelen ville gitt med båndene på.
 - Skarp pris i `fixtures.csv` er et øyeblikksbilde (oppdateres tirsdag og fredag), så live kan prisen ha flyttet seg.
 
 ## Ærlig testing
@@ -54,3 +61,16 @@ GitHub sine planlagte jobber er upålitelige (forsinket i timevis eller hoppet o
 bygger derfor modellfila selv med `bash scripts/build_daily.sh` (3–5 min) og legger den i databasen som
 `model/predictions`, som kjøringene før avspark leser. GitHub-jobben prøver hvert 20. minutt fra ca. 01:00 til 11:40
 og er reserve for dagsfila og hovedvei for den ukentlige læringen (søndag, eller første dag etter hvis søndagen ble hoppet over).
+
+## Reservekilde for kamplista
+
+football-data.co.uk oppdaterer `fixtures.csv` bare et par ganger i uka. Kamper morgenkjøringen finner selv (NT, FotMob,
+Pinnacle), men som mangler i `predictions.json`, skrives til `data/extra_fixtures.json` med skarp pris, og
+`bash scripts/add_extra.sh` gir dem sannsynligheter fra modellen. Lagnavn matches automatisk mot navnene i football-data
+(`src/fixtures_extra.py`); det som ikke matcher, står i `extra_issues` i predictions.json.
+
+## NT-treghet med gradient boosting (live_learn.py)
+
+Når 150 kamper er logget, konkurrerer logistisk regresjon, beslutningstre og LightGBM om å spå når NT henger etter
+(klassifisering, AUC) og hvor god NT-prisen blir (regresjon på NT-odds × skarp sannsynlighet − 1, R², kamper holdt samlet i
+kryssvalideringen). Beste modell vises i dashboardet.

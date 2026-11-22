@@ -1,5 +1,77 @@
 {
- "status": "venter",
- "leagues": {},
- "need_per_league": 40
+ "status": "klar",
+ "leagues": {
+  "2. Bundesliga": {
+   "nt_vs_sharp": 0.9471,
+   "n": 27
+  },
+  "Bundesliga": {
+   "nt_vs_sharp": 0.9609,
+   "n": 27
+  },
+  "Championship": {
+   "nt_vs_sharp": 0.9813,
+   "n": 36
+  },
+  "La Liga": {
+   "nt_vs_sharp": 0.9668,
+   "n": 27
+  },
+  "League One": {
+   "nt_vs_sharp": 0.9627,
+   "n": 51
+  },
+  "Ligue 1": {
+   "nt_vs_sharp": 0.9626,
+   "n": 27
+  },
+  "Premier League": {
+   "nt_vs_sharp": 0.9639,
+   "n": 27
+  },
+  "Serie A": {
+   "nt_vs_sharp": 0.9636,
+   "n": 27
+  },
+  "Serie B": {
+   "nt_vs_sharp": 0.9592,
+   "n": 30
+  }
+ },
+ "ready": [
+  "League One"
+ ],
+ "bands": [
+  {
+   "lo": 1.0,
+   "hi": 2.0,
+   "n": 57,
+   "ready": true,
+   "nt_vs_sharp": 0.9843
+  },
+  {
+   "lo": 2.0,
+   "hi": 3.0,
+   "n": 54,
+   "ready": true,
+   "nt_vs_sharp": 0.968
+  },
+  {
+   "lo": 3.0,
+   "hi": 4.5,
+   "n": 100,
+   "ready": true,
+   "nt_vs_sharp": 0.9533
+  },
+  {
+   "lo": 4.5,
+   "hi": 1000.0,
+   "n": 68,
+   "ready": true,
+   "nt_vs_sharp": 0.9451
+  }
+ ],
+ "need_per_league": 40,
+ "need_per_band": 40,
+ "all": 0.9647
 }

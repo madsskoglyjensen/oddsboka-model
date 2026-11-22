@@ -1,15 +1,15 @@
 {
- "generated": "2026-11-22T07:07:14+01:00",
+ "generated": "2026-11-22T12:34:55+01:00",
  "time_zone": "Europe/Oslo",
  "model_version": "2.1",
  "prob_model": "stack_lr",
  "bet_rule": {
   "model": "mkt_sharp",
   "edge_min": 0.02,
-  "clv": 0.021346425500764477,
-  "n": 1136,
-  "roi": 0.0835794014084507,
-  "value": 24.249539368868447
+  "clv": 0.02097302192698042,
+  "n": 1091,
+  "roi": 0.08631734385816109,
+  "value": 22.88156692233564
  },
  "staking": "kelly_33",
  "staking_label": "⅓ Kelly",
@@ -42,6 +42,7 @@
    "kickoff": "2026-11-22T12:30:00+01:00",
    "home": "Juventus",
    "away": "Venezia",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
@@ -53,7 +54,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.1803,
+     "p": 0.1799,
      "p_rule": 0.1804,
      "nt_min_odds": 5.65,
      "avg_odds": 5.08,
@@ -61,7 +62,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.1003,
+     "p": 0.1006,
      "p_rule": 0.1056,
      "nt_min_odds": 9.66,
      "avg_odds": 8.08,
@@ -93,10 +94,11 @@
    "kickoff": "2026-11-22T13:00:00+01:00",
    "home": "Burnley",
    "away": "Blackburn",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.5146,
+     "p": 0.5148,
      "p_rule": 0.4904,
      "nt_min_odds": 2.08,
      "avg_odds": 1.88,
@@ -104,7 +106,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2507,
+     "p": 0.2502,
      "p_rule": 0.2548,
      "nt_min_odds": 4.0,
      "avg_odds": 3.7,
@@ -112,7 +114,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.2347,
+     "p": 0.2349,
      "p_rule": 0.2548,
      "nt_min_odds": 4.0,
      "avg_odds": 3.74,
@@ -144,10 +146,11 @@
    "kickoff": "2026-11-22T13:30:00+01:00",
    "home": "Cottbus",
    "away": "Hertha",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.1868,
+     "p": 0.1856,
      "p_rule": 0.1992,
      "nt_min_odds": 5.12,
      "avg_odds": 4.44,
@@ -163,7 +166,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.6228,
+     "p": 0.624,
      "p_rule": 0.5975,
      "nt_min_odds": 1.71,
      "avg_odds": 1.58,
@@ -195,10 +198,11 @@
    "kickoff": "2026-11-22T13:30:00+01:00",
    "home": "Kaiserslautern",
    "away": "Dresden",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.4116,
+     "p": 0.4114,
      "p_rule": 0.44,
      "nt_min_odds": 2.32,
      "avg_odds": 2.15,
@@ -214,7 +218,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3108,
+     "p": 0.3111,
      "p_rule": 0.296,
      "nt_min_odds": 3.45,
      "avg_odds": 2.97,
@@ -246,10 +250,11 @@
    "kickoff": "2026-11-22T13:30:00+01:00",
    "home": "Karlsruhe",
    "away": "Osnabruck",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.4062,
+     "p": 0.406,
      "p_rule": 0.4114,
      "nt_min_odds": 2.48,
      "avg_odds": 2.23,
@@ -257,7 +262,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2736,
+     "p": 0.2732,
      "p_rule": 0.2567,
      "nt_min_odds": 3.97,
      "avg_odds": 3.5,
@@ -265,7 +270,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3201,
+     "p": 0.3207,
      "p_rule": 0.3319,
      "nt_min_odds": 3.07,
      "avg_odds": 2.8,
@@ -297,10 +302,11 @@
    "kickoff": "2026-11-22T14:00:00+01:00",
    "home": "Barcelona",
    "away": "Villarreal",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.8127,
+     "p": 0.813,
      "p_rule": 0.8134,
      "nt_min_odds": 1.25,
      "avg_odds": 1.2,
@@ -308,7 +314,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.1141,
+     "p": 0.1134,
      "p_rule": 0.1181,
      "nt_min_odds": 8.63,
      "avg_odds": 7.34,
@@ -316,7 +322,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.0732,
+     "p": 0.0736,
      "p_rule": 0.0684,
      "nt_min_odds": 14.9,
      "avg_odds": 10.31,
@@ -348,10 +354,11 @@
    "kickoff": "2026-11-22T15:00:00+01:00",
    "home": "Hull",
    "away": "Brighton",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.1201,
+     "p": 0.1192,
      "p_rule": 0.1415,
      "nt_min_odds": 7.21,
      "avg_odds": 6.22,
@@ -359,7 +366,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.1832,
+     "p": 0.1841,
      "p_rule": 0.2153,
      "nt_min_odds": 4.74,
      "avg_odds": 4.41,
@@ -399,10 +406,11 @@
    "kickoff": "2026-11-22T15:00:00+01:00",
    "home": "Paris FC",
    "away": "Angers",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.7412,
+     "p": 0.7411,
      "p_rule": 0.7304,
      "nt_min_odds": 1.4,
      "avg_odds": 1.31,
@@ -410,7 +418,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.1687,
+     "p": 0.1686,
      "p_rule": 0.1717,
      "nt_min_odds": 5.94,
      "avg_odds": 5.22,
@@ -418,7 +426,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.0901,
+     "p": 0.0903,
      "p_rule": 0.0979,
      "nt_min_odds": 10.42,
      "avg_odds": 8.7,
@@ -450,10 +458,11 @@
    "kickoff": "2026-11-22T15:00:00+01:00",
    "home": "Bologna",
    "away": "Udinese",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.5468,
+     "p": 0.5471,
      "p_rule": 0.5557,
      "nt_min_odds": 1.84,
      "avg_odds": 1.71,
@@ -461,7 +470,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2621,
+     "p": 0.2618,
      "p_rule": 0.2504,
      "nt_min_odds": 4.07,
      "avg_odds": 3.73,
@@ -469,7 +478,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.191,
+     "p": 0.1911,
      "p_rule": 0.1939,
      "nt_min_odds": 5.26,
      "avg_odds": 4.7,
@@ -501,10 +510,11 @@
    "kickoff": "2026-11-22T15:00:00+01:00",
    "home": "Sassuolo",
    "away": "Genoa",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.3323,
+     "p": 0.3322,
      "p_rule": 0.3346,
      "nt_min_odds": 3.05,
      "avg_odds": 2.75,
@@ -512,7 +522,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2831,
+     "p": 0.2829,
      "p_rule": 0.2849,
      "nt_min_odds": 3.58,
      "avg_odds": 3.36,
@@ -520,7 +530,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3846,
+     "p": 0.3848,
      "p_rule": 0.3806,
      "nt_min_odds": 2.68,
      "avg_odds": 2.47,
@@ -552,10 +562,11 @@
    "kickoff": "2026-11-22T15:00:00+01:00",
    "home": "Avellino",
    "away": "Mantova",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.4031,
+     "p": 0.403,
      "p_rule": 0.4118,
      "nt_min_odds": 2.48,
      "avg_odds": 2.28,
@@ -563,7 +574,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2902,
+     "p": 0.2906,
      "p_rule": 0.2803,
      "nt_min_odds": 3.64,
      "avg_odds": 3.21,
@@ -571,7 +582,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.3066,
+     "p": 0.3064,
      "p_rule": 0.3079,
      "nt_min_odds": 3.31,
      "avg_odds": 2.92,
@@ -603,10 +614,11 @@
    "kickoff": "2026-11-22T15:30:00+01:00",
    "home": "Augsburg",
    "away": "Mainz",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.3336,
+     "p": 0.3332,
      "p_rule": 0.3519,
      "nt_min_odds": 2.9,
      "avg_odds": 2.64,
@@ -614,7 +626,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2464,
+     "p": 0.2458,
      "p_rule": 0.2481,
      "nt_min_odds": 4.11,
      "avg_odds": 3.78,
@@ -622,7 +634,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.42,
+     "p": 0.421,
      "p_rule": 0.4001,
      "nt_min_odds": 2.55,
      "avg_odds": 2.34,
@@ -654,10 +666,11 @@
    "kickoff": "2026-11-22T16:15:00+01:00",
    "home": "Santander",
    "away": "Sociedad",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.2934,
+     "p": 0.2928,
      "p_rule": 0.2919,
      "nt_min_odds": 3.49,
      "avg_odds": 3.17,
@@ -665,7 +678,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2278,
+     "p": 0.2272,
      "p_rule": 0.2308,
      "nt_min_odds": 4.42,
      "avg_odds": 4.03,
@@ -673,7 +686,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.4788,
+     "p": 0.48,
      "p_rule": 0.4772,
      "nt_min_odds": 2.14,
      "avg_odds": 1.99,
@@ -705,10 +718,11 @@
    "kickoff": "2026-11-22T17:15:00+01:00",
    "home": "Lorient",
    "away": "Rennes",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.3193,
+     "p": 0.3189,
      "p_rule": 0.3311,
      "nt_min_odds": 3.08,
      "avg_odds": 2.81,
@@ -716,7 +730,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2788,
+     "p": 0.2789,
      "p_rule": 0.28,
      "nt_min_odds": 3.64,
      "avg_odds": 3.4,
@@ -724,7 +738,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.4019,
+     "p": 0.4022,
      "p_rule": 0.3889,
      "nt_min_odds": 2.62,
      "avg_odds": 2.39,
@@ -756,10 +770,11 @@
    "kickoff": "2026-11-22T17:15:00+01:00",
    "home": "Arezzo",
    "away": "Padova",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.4251,
+     "p": 0.4252,
      "p_rule": 0.4123,
      "nt_min_odds": 2.47,
      "avg_odds": 2.29,
@@ -767,7 +782,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2879,
+     "p": 0.2882,
      "p_rule": 0.2893,
      "nt_min_odds": 3.53,
      "avg_odds": 3.18,
@@ -775,7 +790,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.287,
+     "p": 0.2866,
      "p_rule": 0.2984,
      "nt_min_odds": 3.42,
      "avg_odds": 2.92,
@@ -807,10 +822,11 @@
    "kickoff": "2026-11-22T17:30:00+01:00",
    "home": "Werder Bremen",
    "away": "Hamburg",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.5817,
+     "p": 0.582,
      "p_rule": 0.5774,
      "nt_min_odds": 1.77,
      "avg_odds": 1.67,
@@ -818,7 +834,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2258,
+     "p": 0.225,
      "p_rule": 0.2181,
      "nt_min_odds": 4.68,
      "avg_odds": 4.14,
@@ -826,7 +842,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.1925,
+     "p": 0.193,
      "p_rule": 0.2045,
      "nt_min_odds": 4.99,
      "avg_odds": 4.42,
@@ -858,10 +874,11 @@
    "kickoff": "2026-11-22T17:30:00+01:00",
    "home": "Liverpool",
    "away": "Man United",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.5517,
+     "p": 0.552,
      "p_rule": 0.5486,
      "nt_min_odds": 1.86,
      "avg_odds": 1.74,
@@ -869,7 +886,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2303,
+     "p": 0.2294,
      "p_rule": 0.2257,
      "nt_min_odds": 4.52,
      "avg_odds": 4.14,
@@ -877,7 +894,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.2181,
+     "p": 0.2185,
      "p_rule": 0.2257,
      "nt_min_odds": 4.52,
      "avg_odds": 4.08,
@@ -909,10 +926,11 @@
    "kickoff": "2026-11-22T18:00:00+01:00",
    "home": "Milan",
    "away": "Frosinone",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.637,
+     "p": 0.6377,
      "p_rule": 0.6303,
      "nt_min_odds": 1.62,
      "avg_odds": 1.52,
@@ -920,7 +938,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2058,
+     "p": 0.2046,
      "p_rule": 0.202,
      "nt_min_odds": 5.05,
      "avg_odds": 4.63,
@@ -928,7 +946,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.1572,
+     "p": 0.1576,
      "p_rule": 0.1677,
      "nt_min_odds": 6.08,
      "avg_odds": 5.21,
@@ -960,10 +978,11 @@
    "kickoff": "2026-11-22T18:30:00+01:00",
    "home": "Osasuna",
    "away": "Malaga",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.5379,
+     "p": 0.5377,
      "p_rule": 0.5241,
      "nt_min_odds": 1.95,
      "avg_odds": 1.8,
@@ -979,7 +998,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.19,
+     "p": 0.1902,
      "p_rule": 0.2096,
      "nt_min_odds": 4.87,
      "avg_odds": 4.38,
@@ -1011,6 +1030,7 @@
    "kickoff": "2026-11-22T20:45:00+01:00",
    "home": "Marseille",
    "away": "Le Mans",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
@@ -1022,7 +1042,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2067,
+     "p": 0.2062,
      "p_rule": 0.1941,
      "nt_min_odds": 5.25,
      "avg_odds": 4.66,
@@ -1030,7 +1050,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.1325,
+     "p": 0.1329,
      "p_rule": 0.1414,
      "nt_min_odds": 7.21,
      "avg_odds": 6.06,
@@ -1062,10 +1082,11 @@
    "kickoff": "2026-11-22T20:45:00+01:00",
    "home": "Atalanta",
    "away": "Inter",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.1801,
+     "p": 0.1797,
      "p_rule": 0.1805,
      "nt_min_odds": 5.65,
      "avg_odds": 4.79,
@@ -1073,7 +1094,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.1965,
+     "p": 0.1958,
      "p_rule": 0.2068,
      "nt_min_odds": 4.93,
      "avg_odds": 4.44,
@@ -1081,7 +1102,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.6234,
+     "p": 0.6245,
      "p_rule": 0.6127,
      "nt_min_odds": 1.66,
      "avg_odds": 1.59,
@@ -1113,10 +1134,11 @@
    "kickoff": "2026-11-22T21:00:00+01:00",
    "home": "Getafe",
    "away": "Ath Madrid",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.1344,
+     "p": 0.1339,
      "p_rule": 0.1453,
      "nt_min_odds": 7.02,
      "avg_odds": 5.87,
@@ -1124,7 +1146,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2131,
+     "p": 0.2139,
      "p_rule": 0.241,
      "nt_min_odds": 4.23,
      "avg_odds": 3.86,
@@ -1132,7 +1154,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.6526,
+     "p": 0.6522,
      "p_rule": 0.6137,
      "nt_min_odds": 1.66,
      "avg_odds": 1.56,
@@ -1164,10 +1186,11 @@
    "kickoff": "2026-11-23T20:45:00+01:00",
    "home": "Monza",
    "away": "Fiorentina",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.2473,
+     "p": 0.2469,
      "p_rule": 0.2583,
      "nt_min_odds": 3.95,
      "avg_odds": 3.56,
@@ -1175,7 +1198,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2422,
+     "p": 0.2416,
      "p_rule": 0.2485,
      "nt_min_odds": 4.1,
      "avg_odds": 3.79,
@@ -1183,7 +1206,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.5105,
+     "p": 0.5114,
      "p_rule": 0.4932,
      "nt_min_odds": 2.07,
      "avg_odds": 1.92,
@@ -1215,10 +1238,11 @@
    "kickoff": "2026-11-23T21:00:00+01:00",
    "home": "Brentford",
    "away": "Everton",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.4433,
+     "p": 0.4435,
      "p_rule": 0.442,
      "nt_min_odds": 2.31,
      "avg_odds": 2.12,
@@ -1226,7 +1250,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2732,
+     "p": 0.2731,
      "p_rule": 0.275,
      "nt_min_odds": 3.71,
      "avg_odds": 3.51,
@@ -1234,7 +1258,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.2834,
+     "p": 0.2835,
      "p_rule": 0.2829,
      "nt_min_odds": 3.61,
      "avg_odds": 3.26,
@@ -1266,10 +1290,11 @@
    "kickoff": "2026-11-23T21:00:00+01:00",
    "home": "Levante",
    "away": "Elche",
+   "fixture_source": "football-data",
    "outcomes": {
     "h": {
      "label": "hjemmeseier",
-     "p": 0.4362,
+     "p": 0.436,
      "p_rule": 0.4376,
      "nt_min_odds": 2.33,
      "avg_odds": 2.15,
@@ -1277,7 +1302,7 @@
     },
     "d": {
      "label": "uavgjort",
-     "p": 0.2718,
+     "p": 0.2716,
      "p_rule": 0.2673,
      "nt_min_odds": 3.82,
      "avg_odds": 3.54,
@@ -1285,7 +1310,7 @@
     },
     "a": {
      "label": "borteseier",
-     "p": 0.2921,
+     "p": 0.2924,
      "p_rule": 0.2952,
      "nt_min_odds": 3.46,
      "avg_odds": 3.11,
@@ -1309,5 +1334,6 @@
     "xg_away": 1.2442
    }
   }
- ]
+ ],
+ "extra_issues": []
 }

@@ -103,6 +103,18 @@ def findings(m: dict, ch: dict, ra: dict, doc: dict) -> list[str]:
         if bt and br:
             txt += f" BTTS-modellen slår bare basisraten marginalt (log loss {nd(bt['logloss'], 4)} mot {nd(br['logloss'], 4)})."
         out.append(txt)
+    cal = m.get("nt_calibration_used") or {}
+    for name, v in (cal.get("leagues") or {}).items():
+        if v.get("factor"):
+            out.append(f"NT-kalibrering: {name} bruker ekte NT-nivå målt live ({v['n_live']} målinger, NT/Pinnacle {nd(v['nt_vs_ps'], 3)}). "
+                       f"Faktoren mot Bet365 er {nd(v['factor'], 3)} i stedet for fast {nd(cal.get('default', 0.99), 2)}, "
+                       f"regnet mot ekte Pinnacle-rader fra {fs(v['season'])}.")
+    sh = m.get("nt_bands_shadow")
+    if sh:
+        a, b = sh["off"], sh["on"]
+        out.append(f"NT etter oddsnivå (ikke slått på ennå): live er NT {nd(100 * (1 - sh['bands'][0]['nt_vs_ps']), 1)} % under Pinnacle på korte odds "
+                   f"og {nd(100 * (1 - sh['bands'][-1]['nt_vs_ps']), 1)} % på lange. Med det i backtesten ville regelen gitt {b['n']} bets "
+                   f"(CLV {pc(b['clv'] or 0)}, ROI {pc(b['roi'] or 0)}) i stedet for {a['n']} (CLV {pc(a['clv'] or 0)}, ROI {pc(a['roi'] or 0)}).")
     return out
 
 
@@ -152,6 +164,7 @@ def main():
                   for k in ("mkt_sharp", "stack_sharp_lr", "stack_lr", "stack_rf", "stack_mlp", "pxg", "ou:mkt_sharp") if k in m["models"]},
         "tuning": {"params": tu.get("params"), "gain": r4(tu.get("gain")), "changed": tu.get("changed")},
         "nt_proxy": {"book": "Bet365", "factor": m["config"].get("nt_odds_factor"), "nt_vs_sharp": 0.955, "b365_vs_sharp": 0.956, "n_checked": 22},
+        "nt_calibration": m.get("nt_calibration_used"), "nt_bands_shadow": m.get("nt_bands_shadow"),
     }
     ho = m.get("holdout") or {}
     doc["holdout"] = ho

@@ -1,7 +1,7 @@
 {
- "generated": "2026-11-09T00:01:26+01:00",
- "n_logged": 0,
- "n_done": 0,
+ "generated": "2026-11-22T12:36:32+01:00",
+ "n_logged": 93,
+ "n_done": 71,
  "race": [
   {
    "id": "r_k25",
@@ -185,50 +185,6 @@
    "n_clv": 0
   },
   {
-   "id": "m_model",
-   "name": "Sannsynlighetsmodellen ≥ 4 % · ¼ Kelly",
-   "src": "model",
-   "edge_min": 0.04,
-   "st": {
-    "kelly": [
-     [
-      0,
-      0.25
-     ]
-    ]
-   },
-   "fun": false,
-   "max_dd": 0.0,
-   "bank": 100.0,
-   "n": 0,
-   "open": 0,
-   "roi": null,
-   "clv": null,
-   "n_clv": 0
-  },
-  {
-   "id": "m_own",
-   "name": "Egen modell (xG) ≥ 4 % · ¼ Kelly",
-   "src": "own",
-   "edge_min": 0.04,
-   "st": {
-    "kelly": [
-     [
-      0,
-      0.25
-     ]
-    ]
-   },
-   "fun": false,
-   "max_dd": 0.0,
-   "bank": 100.0,
-   "n": 0,
-   "open": 0,
-   "roi": null,
-   "clv": null,
-   "n_clv": 0
-  },
-  {
    "id": "ou",
    "name": "Over/under 2,5 mot skarp pris ≥ 2 %",
    "src": "ou",
@@ -266,6 +222,50 @@
    "roi": null,
    "clv": null,
    "n_clv": 0
+  },
+  {
+   "id": "m_model",
+   "name": "Sannsynlighetsmodellen ≥ 4 % · ¼ Kelly",
+   "src": "model",
+   "edge_min": 0.04,
+   "st": {
+    "kelly": [
+     [
+      0,
+      0.25
+     ]
+    ]
+   },
+   "fun": false,
+   "max_dd": 0.0184,
+   "bank": 98.16,
+   "n": 1,
+   "open": 0,
+   "roi": -1.0,
+   "clv": -0.0653,
+   "n_clv": 1
+  },
+  {
+   "id": "m_own",
+   "name": "Egen modell (xG) ≥ 4 % · ¼ Kelly",
+   "src": "own",
+   "edge_min": 0.04,
+   "st": {
+    "kelly": [
+     [
+      0,
+      0.25
+     ]
+    ]
+   },
+   "fun": false,
+   "max_dd": 0.035,
+   "bank": 96.5,
+   "n": 5,
+   "open": 16,
+   "roi": -1.0,
+   "clv": -0.1498,
+   "n_clv": 5
   }
  ],
  "selection": {
@@ -277,18 +277,177 @@
   "reason": "Regel 2 % · ⅓ Kelly har 0 av 150 oppgjorte live-bets. Til da styrer backtesten alene."
  },
  "nt_lag": {
-  "status": "venter",
-  "n_matches": 0,
-  "need": 150
+  "status": "beskrivende",
+  "n_matches": 93,
+  "need": 150,
+  "mean_value": -0.07955880897756516,
+  "share_over_2pct": 0.0,
+  "by_league": [
+   {
+    "league": "2. Bundesliga",
+    "mean_value": -0.0886,
+    "n": 27,
+    "share_over_2pct": 0.0
+   },
+   {
+    "league": "Bundesliga",
+    "mean_value": -0.0889,
+    "n": 27,
+    "share_over_2pct": 0.0
+   },
+   {
+    "league": "Championship",
+    "mean_value": -0.0642,
+    "n": 36,
+    "share_over_2pct": 0.0
+   },
+   {
+    "league": "La Liga",
+    "mean_value": -0.0713,
+    "n": 27,
+    "share_over_2pct": 0.0
+   },
+   {
+    "league": "League One",
+    "mean_value": -0.0872,
+    "n": 51,
+    "share_over_2pct": 0.0
+   },
+   {
+    "league": "Ligue 1",
+    "mean_value": -0.0744,
+    "n": 27,
+    "share_over_2pct": 0.0
+   },
+   {
+    "league": "Premier League",
+    "mean_value": -0.0703,
+    "n": 27,
+    "share_over_2pct": 0.0
+   },
+   {
+    "league": "Serie A",
+    "mean_value": -0.0779,
+    "n": 27,
+    "share_over_2pct": 0.0
+   },
+   {
+    "league": "Serie B",
+    "mean_value": -0.0903,
+    "n": 30,
+    "share_over_2pct": 0.0
+   }
+  ],
+  "by_odds": [
+   {
+    "band": "<1,6",
+    "mean_value": -0.0548,
+    "n": 30
+   },
+   {
+    "band": "1,6–2,2",
+    "mean_value": -0.0573,
+    "n": 35
+   },
+   {
+    "band": "2,2–3,2",
+    "mean_value": -0.073,
+    "n": 55
+   },
+   {
+    "band": "3,2–5",
+    "mean_value": -0.0861,
+    "n": 111
+   },
+   {
+    "band": ">5",
+    "mean_value": -0.1037,
+    "n": 48
+   }
+  ]
  },
  "closing_line": {
-  "status": "venter",
-  "n_matches": 0,
-  "need": 150
+  "status": "beskrivende",
+  "n_matches": 12,
+  "need": 150,
+  "corr_model_vs_move": 0.003,
+  "mean_abs_move": 0.0148
  },
  "nt_calibration": {
-  "status": "venter",
-  "leagues": {},
-  "need_per_league": 40
+  "status": "klar",
+  "leagues": {
+   "2. Bundesliga": {
+    "nt_vs_sharp": 0.9471,
+    "n": 27
+   },
+   "Bundesliga": {
+    "nt_vs_sharp": 0.9609,
+    "n": 27
+   },
+   "Championship": {
+    "nt_vs_sharp": 0.9813,
+    "n": 36
+   },
+   "La Liga": {
+    "nt_vs_sharp": 0.9668,
+    "n": 27
+   },
+   "League One": {
+    "nt_vs_sharp": 0.9627,
+    "n": 51
+   },
+   "Ligue 1": {
+    "nt_vs_sharp": 0.9626,
+    "n": 27
+   },
+   "Premier League": {
+    "nt_vs_sharp": 0.9639,
+    "n": 27
+   },
+   "Serie A": {
+    "nt_vs_sharp": 0.9636,
+    "n": 27
+   },
+   "Serie B": {
+    "nt_vs_sharp": 0.9592,
+    "n": 30
+   }
+  },
+  "ready": [
+   "League One"
+  ],
+  "bands": [
+   {
+    "lo": 1.0,
+    "hi": 2.0,
+    "n": 57,
+    "ready": true,
+    "nt_vs_sharp": 0.9843
+   },
+   {
+    "lo": 2.0,
+    "hi": 3.0,
+    "n": 54,
+    "ready": true,
+    "nt_vs_sharp": 0.968
+   },
+   {
+    "lo": 3.0,
+    "hi": 4.5,
+    "n": 100,
+    "ready": true,
+    "nt_vs_sharp": 0.9533
+   },
+   {
+    "lo": 4.5,
+    "hi": 1000.0,
+    "n": 68,
+    "ready": true,
+    "nt_vs_sharp": 0.9451
+   }
+  ],
+  "need_per_league": 40,
+  "need_per_band": 40,
+  "all": 0.9647
  }
 }

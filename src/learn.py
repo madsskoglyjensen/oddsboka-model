@@ -192,31 +192,114 @@ LEAGUE_NAME = {"E0": "Premier League", "SP1": "La Liga", "I1": "Serie A", "D1": 
                "E1": "Championship", "E2": "League One", "D2": "2. Bundesliga", "I2": "Serie B"}
 
 
+NT_INFO: dict = {}  # hva nt_factors() faktisk brukte, skrives til metrics.json
+NT_REF: dict = {}  # historisk grunnlag (hele datasettet), satt én gang i main() så delutvalg får samme tall
+NT_BANDS = [1.0, 2.0, 3.0, 4.5, 1000.0]  # oddsbånd (skarp odds) for NT-kalibreringen
+MIN_PS_LEAGUE, MIN_PS_POOL = 100, 1000  # Pinnacle-rader som kreves for historisk Bet365/Pinnacle
+
+
+def _b365_vs_ps(df: pd.DataFrame, min_rows: int) -> tuple[pd.DataFrame | None, str | None]:
+    """Bet365/Pinnacle per utfall fra nyeste sesong med minst min_rows Pinnacle-kamper.
+    Bare rader der den skarpe prisen faktisk er Pinnacle (sharp_src == "PS"): Betfair Exchange har et annet nivå."""
+    if "sharp_src" not in df:
+        return None, None
+    ps = df[df["sharp_src"] == "PS"]
+    for season in sorted(ps["season"].unique(), reverse=True):
+        g = ps[ps["season"] == season]
+        if len(g) >= min_rows:
+            r = pd.concat([pd.DataFrame({"ps": g[f"sharp_{k}"], "r": g[f"b365_{k}"] / g[f"sharp_{k}"]}) for k in OUT3])
+            r = r[np.isfinite(r["r"]) & (r["r"] > 0.7) & (r["r"] < 1.3)]
+            return r, str(season)
+    return None, None
+
+
+def attach_sharp_src(df: pd.DataFrame) -> None:
+    """base_preds.csv laget før sharp_src fantes: hent kolonnen fra data/matches.csv."""
+    if "sharp_src" in df and df["sharp_src"].notna().any():
+        return
+    f = ROOT / "data" / "matches.csv"
+    m = pd.read_csv(f, parse_dates=["date"], low_memory=False) if f.exists() else pd.DataFrame()
+    if "sharp_src" not in m:
+        return
+    key = ["league", "date", "home", "away"]
+    df["sharp_src"] = df[key].merge(m[key + ["sharp_src"]].drop_duplicates(key), on=key, how="left")["sharp_src"].to_numpy()
+
+
+def _band(odds: np.ndarray) -> np.ndarray:
+    return np.clip(np.searchsorted(NT_BANDS, odds, side="right") - 1, 0, len(NT_BANDS) - 2)
+
+
 def nt_factors(df: pd.DataFrame, default: float) -> np.ndarray:
-    """Faktor som gjør Bet365-odds om til NT-nivå, per kamp.
-    Uten live-data: fast faktor (config). Med out/nt_calibration.json (ekte NT mot skarp pris, logget live):
-    faktor = (NT/skarp live) / (Bet365/skarp i siste sesong) for ligaer med nok målinger."""
-    f = np.full(len(df), default)
+    """Faktor per kamp og utfall (n × 3) som gjør Bet365-odds om til NT-nivå.
+
+    Uten live-data: fast faktor (config). Med out/nt_calibration.json (ekte NT mot Pinnacle, logget live):
+    - oddsbånd: faktor = (NT/Pinnacle live i båndet) / (Bet365/Pinnacle historisk i båndet). NT er dårligere jo
+      lengre oddsen er, mer enn Bet365, og det skal backtesten se.
+    - liga: ligaer med nok målinger får sitt eget nivå, (NT/Pinnacle) / (Bet365/Pinnacle), som justerer båndene.
+    Historisk Bet365/Pinnacle regnes bare på ekte Pinnacle-rader. Mangler grunnlaget, brukes fast faktor."""
+    F = np.full((len(df), 3), default)
+    NT_INFO.clear()
+    NT_INFO.update({"default": default, "bands": [], "leagues": {}})
     cal_f = ROOT / "out" / "nt_calibration.json"
     if not cal_f.exists():
-        return f
+        NT_INFO["source"] = "fast faktor"
+        return F
     cal = json.loads(cal_f.read_text())
+    ref = NT_REF.get("df", df)
+    pool, pool_season = _b365_vs_ps(ref, MIN_PS_POOL)
+    key = np.column_stack([df[f"sharp_{k}"].fillna(df[f"b365_{k}"]) for k in OUT3]).astype(float)
+    key = np.where(np.isfinite(key), key, 2.5)
+    # 1) oddsbånd, felles for alle ligaer
+    band_f = {}
+    if pool is not None:
+        pb = _band(pool["ps"].to_numpy(float))
+        for b in cal.get("bands") or []:
+            if not b.get("ready"):
+                continue
+            i = int(_band(np.array([b["lo"] + 1e-9]))[0])
+            hist = float(np.median(pool["r"].to_numpy()[pb == i])) if (pb == i).any() else np.nan
+            if np.isfinite(hist) and hist > 0:
+                band_f[i] = b["nt_vs_sharp"] / hist
+                NT_INFO["bands"].append({"lo": b["lo"], "hi": b["hi"], "nt_vs_ps": b["nt_vs_sharp"], "n_live": b["n"],
+                                         "b365_vs_ps": round(hist, 4), "factor": round(band_f[i], 4)})
+    use_bands = bool(CFG.get("nt_bands", False))  # SJ slår på oddsbånd i config.json når han har sett tallene
+    NT_INFO["bands_active"] = use_bands
+    if not use_bands:
+        band_f = {}
+    if band_f:
+        bi = _band(key)
+        for i, f in band_f.items():
+            F[bi == i] = f
+    pooled_f = None
+    if pool is not None and cal.get("all"):
+        pooled_f = cal["all"] / float(pool["r"].median())
+    # 2) ligaer med nok målinger
     for code, name in LEAGUE_NAME.items():
         if name not in (cal.get("ready") or []):
             continue
         sel = (df["league"] == code).to_numpy()
-        last = df.loc[sel & (df["season"] == df["season"].max()).to_numpy()]
-        r = pd.concat([last[f"b365_{k}"] / last[f"sharp_{k}"] for k in "hda"]).median()
-        if np.isfinite(r) and r > 0:
-            f[sel] = cal["leagues"][name]["nt_vs_sharp"] / r
-    return f
+        hist, season = _b365_vs_ps(ref[ref["league"] == code], MIN_PS_LEAGUE)
+        if hist is None:
+            NT_INFO["leagues"][name] = {"factor": None, "note": f"under {MIN_PS_LEAGUE} Pinnacle-rader i alle sesonger, fast faktor"}
+            continue
+        lf = cal["leagues"][name]["nt_vs_sharp"] / float(hist["r"].median())
+        if band_f and pooled_f:
+            F[sel] = F[sel] * (lf / pooled_f)  # båndene gir formen, ligaen gir nivået
+        else:
+            F[sel] = lf
+        NT_INFO["leagues"][name] = {"factor": round(lf, 4), "season": season, "ps_rows": int(len(hist) // 3),
+                                    "nt_vs_ps": cal["leagues"][name]["nt_vs_sharp"], "n_live": cal["leagues"][name]["n"],
+                                    "relative": round(lf / pooled_f, 4) if band_f and pooled_f else None}
+    NT_INFO.update({"source": "kalibrert" if (band_f or NT_INFO["leagues"]) else "fast faktor",
+                    "pool_season": pool_season, "pooled_factor": round(pooled_f, 4) if pooled_f else None})
+    return F
 
 
 def simulate(df: pd.DataFrame, P: np.ndarray, kind: str, edge_min: float, nt: float, ret_rows: bool = False) -> dict:
     """Flat 1 enhet per bet der edge > edge_min, mot NT-proxy-odds (snittodds * nt). CLV mot skarp sluttodds."""
     if kind == "1x2":
         # NT-proxy: Bet365 (lå likt med NT mot skarp pris i nov 2026), ellers snittodds
-        odds = np.column_stack([df[f"b365_{k}"].fillna(df[f"avg_{k}"]) for k in OUT3]) * nt_factors(df, nt)[:, None]
+        odds = np.column_stack([df[f"b365_{k}"].fillna(df[f"avg_{k}"]) for k in OUT3]) * nt_factors(df, nt)
         fair_close = np.column_stack([df[f"mkt_sharpc_{k}"] for k in OUT3])
         y = y_1x2(df)
         win = np.eye(3)[y]
@@ -523,6 +606,28 @@ def choose_champion(met: dict) -> dict:
             "leagues": leagues, "leagues_dropped": dropped}
 
 
+def nt_bands_shadow(df: pd.DataFrame, met: dict) -> dict | None:
+    """Hva spillregelen ville gitt med NT-faktor etter oddsbånd, mens båndene er slått av (config nt_bands).
+    Vises i dashboardet hver søndag, så SJ ser effekten før han eventuelt slår dem på."""
+    rule = (met.get("champion") or {}).get("bet_rule")
+    if not rule or CFG.get("nt_bands"):
+        return None
+    ev = df[(df["season"] >= met["first_test"])].dropna(subset=["stack_lr_h", "mkt_avg_h", "goals_p_h", "pxg_p_h"])
+    P = probs(ev, rule["model"])
+    ok = np.isfinite(P).all(1)
+    keep = lambda r: {k: r.get(k) for k in ("n", "clv", "roi", "avg_odds", "kelly_final", "max_dd")}
+    CFG["nt_bands"] = True
+    try:
+        on = simulate(ev[ok], P[ok], "1x2", rule["edge_min"], CFG["nt_odds_factor"])
+        bands = [dict(b) for b in NT_INFO.get("bands", [])]
+    finally:
+        CFG["nt_bands"] = False
+    if not bands:
+        return None
+    off = simulate(ev[ok], P[ok], "1x2", rule["edge_min"], CFG["nt_odds_factor"])
+    return {"rule": f"{rule['model']} ≥ {rule['edge_min']:.0%}", "off": keep(off), "on": keep(on), "bands": bands}
+
+
 def log_experiment(met: dict) -> None:
     """Én rad per læringsrunde i out/experiments.json, så utviklingen over tid kan følges."""
     f = ROOT / "out" / "experiments.json"
@@ -548,6 +653,8 @@ def main():
     df = pd.read_csv(ROOT / "out" / "base_preds.csv", parse_dates=["date"])
     df["season"] = df["season"].astype(str).str.zfill(4)
     df = walk_forward(df)
+    attach_sharp_src(df)
+    NT_REF["df"] = df
     df.to_csv(ROOT / "out" / "oos_preds.csv", index=False)
     met = evaluate(df)
     met["champion"] = choose_champion(met)
@@ -557,6 +664,9 @@ def main():
     (ROOT / "out" / "champion.json").write_text(json.dumps(met["champion"], indent=1))
     log_experiment(met)
     met["config"] = CFG
+    nt_factors(df, CFG["nt_odds_factor"])
+    met["nt_calibration_used"] = dict(NT_INFO)
+    met["nt_bands_shadow"] = nt_bands_shadow(df, met)
     met["generated"] = pd.Timestamp.now(tz="Europe/Oslo").isoformat(timespec="seconds")
     (ROOT / "out" / "metrics.json").write_text(json.dumps(met, indent=1, default=float))
     # kort oppsummering

@@ -216,7 +216,7 @@ def outcome_rows(ms: list[dict]) -> pd.DataFrame:
             o = nt.get(k)
             if not isinstance(o, (int, float)) or o <= 1:
                 continue
-            rows.append({"league": m.get("league"), "k": k, "hours": hrs, "weekday": ko.weekday() if ko is not None else None,
+            rows.append({"match": f"{m.get('date')}|{m.get('home')}|{m.get('away')}", "league": m.get("league"), "k": k, "hours": hrs, "weekday": ko.weekday() if ko is not None else None,
                          "p_sharp": ps[k], "sharp_odds": m["sharp"][k], "nt_odds": o, "value": o * ps[k] - 1,
                          "p_model": (m.get("p_model") or {}).get(k), "p_close": pc[k] if pc else None})
     return pd.DataFrame(rows)
@@ -253,7 +253,55 @@ def model_a(df: pd.DataFrame, n_matches: int) -> dict:
             res["tree_rules"] = rules
             res.update({"auc_cv": round(float(auc), 3), "top_features": [[c, round(float(v), 3)] for c, v in coefs],
                         "verdict": "Modellen finner mønster i når NT er treg." if auc > 0.6 else "Ingen tydelig mønster ennå: NT-treghet ser tilfeldig ut."})
+            # LightGBM (gradient boosting) som tredje klassifikator: fanger samspill (liga × odds × timer × ukedag)
+            if lgbm is not None:
+                gb = lgbm.LGBMClassifier(**GB_PARAMS)
+                res["auc_cv_lgbm"] = round(float(cross_val_score(gb, X, y, cv=5, scoring="roc_auc").mean()), 3)
+                res["auc_cv_tree"] = round(float(cross_val_score(tree, Xt, y, cv=5, scoring="roc_auc").mean()), 3)
+                cand = {"Logistisk regresjon": res["auc_cv"], "Beslutningstre": res["auc_cv_tree"], "LightGBM": res["auc_cv_lgbm"]}
+                res["best_model"] = max(cand, key=cand.get)
+        res["regression"] = nt_lag_regression(df, X)
     return res
+
+
+GB_PARAMS = dict(n_estimators=200, learning_rate=0.03, num_leaves=7, min_child_samples=20, subsample=0.8,
+                 subsample_freq=1, colsample_bytree=0.8, reg_lambda=1.0, random_state=7, verbose=-1)
+try:
+    import lightgbm as lgbm
+except Exception:  # noqa: BLE001
+    lgbm = None
+
+
+def nt_lag_regression(df: pd.DataFrame, X: pd.DataFrame) -> dict:
+    """Hvor god NT-prisen er mot skarp pris (value = NT-odds × p_skarp − 1), som kontinuerlig tall.
+    Virker også når ingen utfall er over 2 % (da har klassifikatoren bare én klasse).
+    Tre modeller konkurrerer på kryssvalidert R², med kamper holdt samlet (de tre utfallene i en kamp i samme fold)."""
+    from sklearn.linear_model import Ridge
+    from sklearn.model_selection import GroupKFold, cross_val_predict
+    from sklearn.tree import DecisionTreeRegressor
+    y = df["value"].to_numpy(float)
+    groups = df["match"].to_numpy()
+    cv = GroupKFold(n_splits=5)
+    models = {"Lineær (ridge)": Ridge(alpha=1.0),
+              "Beslutningstre": DecisionTreeRegressor(max_depth=3, min_samples_leaf=max(15, len(y) // 30), random_state=7)}
+    if lgbm is not None:
+        models["LightGBM"] = lgbm.LGBMRegressor(**GB_PARAMS)
+    base = np.mean((y - y.mean()) ** 2)
+    out = {"target": "NT-odds × skarp sannsynlighet − 1", "n": int(len(y)), "models": {}}
+    for name, mdl in models.items():
+        pred = cross_val_predict(mdl, X, y, cv=cv, groups=groups)
+        r2 = 1 - np.mean((y - pred) ** 2) / base
+        out["models"][name] = {"r2_cv": round(float(r2), 3), "mae_cv": round(float(np.mean(np.abs(y - pred))), 4)}
+    best = max(out["models"], key=lambda k: out["models"][k]["r2_cv"])
+    out["best_model"] = best
+    if lgbm is not None:
+        gb = lgbm.LGBMRegressor(**GB_PARAMS).fit(X, y)
+        imp = sorted(zip(X.columns, gb.booster_.feature_importance("gain")), key=lambda t: -t[1])[:6]
+        tot = sum(v for _, v in imp) or 1
+        out["lgbm_importance"] = [[c, round(float(v / tot), 3)] for c, v in imp]
+    out["verdict"] = (f"{best} forklarer {out['models'][best]['r2_cv']:.0%} av variasjonen i NT-prisen (kryssvalidert)."
+                      if out["models"][best]["r2_cv"] > 0.05 else "Ingen modell spår NT-prisen bedre enn snittet ennå.")
+    return out
 
 
 def _feat_text(name: str, thr: float, left: bool) -> str:
@@ -337,16 +385,26 @@ def model_b(df: pd.DataFrame) -> dict:
 MIN_CAL = 40  # utfall per liga før NT-kalibreringen brukes i backtesten
 
 
+NT_BANDS = [1.0, 2.0, 3.0, 4.5, 1000.0]  # samme oddsbånd som learn.NT_BANDS
+
+
 def nt_calibration(df: pd.DataFrame) -> dict:
-    """Ekte NT-nivå per liga: median av NT-odds / skarp odds på samme tidspunkt."""
+    """Ekte NT-nivå: median av NT-odds / skarp odds (Pinnacle) på samme tidspunkt, per liga og per oddsbånd.
+    NT er dårligere jo lengre oddsen er, så backtesten bruker båndene når de har nok målinger."""
     if df.empty:
-        return {"status": "venter", "leagues": {}, "need_per_league": MIN_CAL}
+        return {"status": "venter", "leagues": {}, "bands": [], "need_per_league": MIN_CAL}
     d = df.assign(ratio=df["nt_odds"] / df["sharp_odds"])
     d = d[(d["ratio"] > 0.7) & (d["ratio"] < 1.3)]
     lg = {k: {"nt_vs_sharp": round(float(g["ratio"].median()), 4), "n": int(len(g))} for k, g in d.groupby("league")}
     ready = {k: v for k, v in lg.items() if v["n"] >= MIN_CAL}
-    return {"status": "klar" if ready else "samler", "leagues": lg, "ready": sorted(ready), "need_per_league": MIN_CAL,
-            "all": round(float(d["ratio"].median()), 4) if len(d) else None}
+    bands = []
+    for lo, hi in zip(NT_BANDS[:-1], NT_BANDS[1:]):
+        g = d[(d["sharp_odds"] >= lo) & (d["sharp_odds"] < hi)]
+        bands.append({"lo": lo, "hi": hi, "n": int(len(g)), "ready": bool(len(g) >= MIN_CAL),
+                      "nt_vs_sharp": round(float(g["ratio"].median()), 4) if len(g) else None})
+    any_ready = bool(ready) or any(b["ready"] for b in bands)
+    return {"status": "klar" if any_ready else "samler", "leagues": lg, "ready": sorted(ready), "bands": bands,
+            "need_per_league": MIN_CAL, "need_per_band": MIN_CAL, "all": round(float(d["ratio"].median()), 4) if len(d) else None}
 
 
 def main(path: str):

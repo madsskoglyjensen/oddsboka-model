@@ -89,6 +89,11 @@ def _normalise(d: pd.DataFrame, league: str, season: str | None) -> pd.DataFrame
         # Sluttodds
         o[f"avgc_{k}"] = _first(d, [f"AvgC{s}"])
         o[f"sharpc_{k}"] = _first(d, [f"PSC{s}", f"BFEC{s}"])
+    # Hvor den skarpe prisen kom fra: "PS" (Pinnacle) eller "BFE" (Betfair Exchange). Betfair har ingen margin
+    # på samme måte som Pinnacle, så de to skal ikke blandes når NT-nivået kalibreres.
+    has = lambda pre: pd.concat([pd.to_numeric(d[f"{pre}{s}"], errors="coerce") for s in "HDA" if f"{pre}{s}" in d.columns]
+                                or [pd.Series(np.nan, index=d.index)], axis=1).notna().all(axis=1)
+    o["sharp_src"] = np.where(has("PS"), "PS", np.where(has("BFE"), "BFE", None))
     for k, s in [("o", ">2.5"), ("u", "<2.5")]:
         o[f"avg_{k}25"] = _first(d, [f"Avg{s}", f"BbAv{s}"])
         o[f"max_{k}25"] = _first(d, [f"Max{s}", f"BbMx{s}"])

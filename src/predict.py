@@ -36,12 +36,22 @@ def main():
     fx, _ = clean(data.load_fixtures())
     today = pd.Timestamp.now(tz="Europe/Oslo").tz_localize(None).normalize()
     fx = fx[fx["date"] >= today].reset_index(drop=True)
+    # Reservekilde: kamper morgenkjøringen fant selv når fixtures.csv ikke er oppdatert (--extra fil.json)
+    extra_issues = []
+    if "--extra" in sys.argv:
+        from fixtures_extra import load_extra
+        ex, extra_issues = load_extra(Path(sys.argv[sys.argv.index("--extra") + 1]), m, fx)
+        if len(ex):
+            fx = pd.concat([fx.assign(fixture_source="football-data"), ex], ignore_index=True)
+        print(f"Reservekamper: {len(ex)} lagt til, {len(extra_issues)} med problemer")
+    if "fixture_source" not in fx:
+        fx["fixture_source"] = "football-data"
     champ = json.loads((ROOT / "out" / "champion.json").read_text())
     with open(ROOT / "out" / "models.pkl", "rb") as fh:
         fitted = pickle.load(fh)
     head = header(champ)
     if fx.empty:
-        out = {**head, "fixtures": [],
+        out = {**head, "fixtures": [], "extra_issues": extra_issues,
                "note": "Ingen kommende kamper i ligaene i fixtures.csv (f.eks. landslagspause). Spillregel og innsats gjelder som vanlig."}
         (ROOT / "out" / "predictions.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
         print(out["note"])
@@ -108,7 +118,8 @@ def main():
                            "avg_odds": r4(r[f"avg_{k}"]), "sharp_odds": r4(r[f"sharp_{k}"])}
         rows.append({
             "league": data.LEAGUES[r["league"]], "league_in_rule": bool(allowed), **oslo_time(r),
-            "home": r["home"], "away": r["away"],
+            "home": r["home"], "away": r["away"], "fixture_source": r.get("fixture_source", "football-data"),
+            **({"name_in": r["name_in"], "avg_from": r["avg_from"]} if r.get("fixture_source") == "morgenkjøringen" else {}),
             "outcomes": outcomes,
             "over25": {"p_model": r4(r.get("ou_stack_lr_p")), "p_market": r4(r.get("mkt_sharp_o25")),
                        "avg_over": r4(r["avg_o25"]), "avg_under": r4(r["avg_u25"])},
@@ -117,7 +128,7 @@ def main():
                           "xg_home": r4(r.get("pxg_lh")), "xg_away": r4(r.get("pxg_la"))},
         })
     out = {**head, "note": "p = beste kalibrerte modell. Spill et utfall bare hvis NT-odds >= nt_min_odds. time og kickoff er norsk tid.",
-           "fixtures": rows}
+           "fixtures": rows, "extra_issues": extra_issues}
     (ROOT / "out" / "predictions.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
     write_viz_fixtures(df, specs, fitted)
     print(f"{len(rows)} kommende kamper skrevet. Spillregel: {rule_model} med edge >= {edge:.0%}")
