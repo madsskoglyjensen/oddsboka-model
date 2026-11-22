@@ -11,5 +11,6 @@
   "max_stake": 0.05,
   "max_day": 0.1,
   "nt_odds_factor": 0.99,
-  "nt_bands": false
+  "nt_bands": true,
+  "max_kelly_mult": 0.33
 }

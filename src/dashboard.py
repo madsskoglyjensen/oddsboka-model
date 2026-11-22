@@ -112,9 +112,11 @@ def findings(m: dict, ch: dict, ra: dict, doc: dict) -> list[str]:
     sh = m.get("nt_bands_shadow")
     if sh:
         a, b = sh["off"], sh["on"]
-        out.append(f"NT etter oddsnivå (ikke slått på ennå): live er NT {nd(100 * (1 - sh['bands'][0]['nt_vs_ps']), 1)} % under Pinnacle på korte odds "
-                   f"og {nd(100 * (1 - sh['bands'][-1]['nt_vs_ps']), 1)} % på lange. Med det i backtesten ville regelen gitt {b['n']} bets "
-                   f"(CLV {pc(b['clv'] or 0)}, ROI {pc(b['roi'] or 0)}) i stedet for {a['n']} (CLV {pc(a['clv'] or 0)}, ROI {pc(a['roi'] or 0)}).")
+        status = "slått på 22. nov" if sh.get("active") else "ikke slått på ennå"
+        out.append(f"NT etter oddsnivå ({status}): live er NT {nd(100 * (1 - sh['bands'][0]['nt_vs_ps']), 1)} % under Pinnacle på korte odds "
+                   f"og {nd(100 * (1 - sh['bands'][-1]['nt_vs_ps']), 1)} % på lange. Med det i backtesten gir regelen {b['n']} bets "
+                   f"(CLV {pc(b['clv'] or 0)}, ROI {pc(b['roi'] or 0)}) mot {a['n']} (CLV {pc(a['clv'] or 0)}, ROI {pc(a['roi'] or 0)}) med fast faktor. "
+                   "Innsatsen er låst til maks ⅓ Kelly (SJ 22. nov), så en svakere edge aldri gir større innsats.")
     return out
 
 

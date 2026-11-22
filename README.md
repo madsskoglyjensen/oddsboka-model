@@ -29,7 +29,7 @@ Morgenkjøringen i Claude leser `out/predictions.json`, henter NT-odds og låser
 Hver søndag trenes alt på nytt med alle nye kamper, parametere tunes, og to valg tas på data:
 1. Sannsynlighetsmester = lavest log loss siste tre sesonger.
 2. Spillregel = modell + edge-terskel med størst samlet CLV mot skarp sluttodds (krav: CLV > 0, minst 150 bets).
-3. Innsatsregel = den av flat, trapp, proporsjonal, ¼ Kelly og ½ Kelly som vokser raskest med maks drawdown under 25 %.
+3. Innsatsregel = den som vokser raskest med maks drawdown under 25 %, blant reglene som gir maks ⅓ Kelly.
 4. Ligafilter = ligaer der regelen har positiv CLV (eller for få bets til å dømme).
 
 ## Viktige forbehold
@@ -40,8 +40,10 @@ Hver søndag trenes alt på nytt med alle nye kamper, parametere tunes, og to va
   Bet365/Pinnacle regnes bare på rader der den skarpe prisen faktisk er Pinnacle (`sharp_src == "PS"` i `data/matches.csv`),
   fra nyeste sesong med minst 100 slike kamper. Betfair Exchange (skarp pris i 2026/27) har et annet nivå og blandes ikke inn.
 - NT etter oddsnivå: live er NT 1–2 % under Pinnacle på korte odds og 5–6 % på lange, mer enn Bet365. Koden kan bruke en faktor
-  per oddsbånd (`NT_BANDS` i learn.py), men den er av (`"nt_bands": false` i config.json) til SJ har sett effekten.
-  `nt_bands_shadow` i metrics.json og et funn i dashboardet viser hver søndag hva spillregelen ville gitt med båndene på.
+  per oddsbånd (`NT_BANDS` i learn.py). Slått på 22. nov (`"nt_bands": true` i config.json). `nt_bands_shadow` i
+  metrics.json og et funn i dashboardet viser hver søndag regelen med og uten båndene.
+- Innsatsen er låst til maks ⅓ Kelly (`"max_kelly_mult": 0.33`, SJ 22. nov): søndagsvalget kan aldri velge en regel som kan gi
+  mer enn ⅓ av full Kelly, selv om backtesten vokser raskere med det. Svakere edge skal ikke gi større innsats.
 - Skarp pris i `fixtures.csv` er et øyeblikksbilde (oppdateres tirsdag og fredag), så live kan prisen ha flyttet seg.
 
 ## Ærlig testing

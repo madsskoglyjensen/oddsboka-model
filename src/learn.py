@@ -377,6 +377,16 @@ STAKING_SPEC = {
 }
 
 
+def max_kelly_mult(scheme: str) -> float:
+    """Største andel av full Kelly en innsatsregel kan gi. Faste andeler (flat, trapp, proporsjonal) regnes som 0."""
+    sp = STAKING_SPEC.get(scheme, {})
+    if "kelly_mult" in sp:
+        return max(a for _, a in sp["kelly_mult"])
+    if "kelly_mult_max" in sp:
+        return sp["kelly_mult_max"]
+    return 0.0
+
+
 def stake_frac(scheme: str, p: float, o: float, edge: float) -> float:
     """Andel av bankrollen. k = full Kelly = edge / (odds − 1)."""
     k = max((p * o - 1) / (o - 1), 0.0)
@@ -595,7 +605,8 @@ def choose_champion(met: dict) -> dict:
     ra = met.get("rule", {}).get(best["model"]) if best else None
     if ra:
         # Innsatsregel: høyest vekst per dag (log) med maks drawdown under 25 %
-        ok = {k: v for k, v in ra["staking"].items() if v["max_dd"] < 0.25 and k not in FUN}
+        cap = CFG.get("max_kelly_mult", 1.0)  # SJ 22. nov: aldri mer enn ⅓ Kelly, selv om backtesten vil
+        ok = {k: v for k, v in ra["staking"].items() if v["max_dd"] < 0.25 and k not in FUN and max_kelly_mult(k) <= cap + 1e-9}
         if ok:
             staking = max(ok, key=lambda k: ok[k]["growth_per_day"])
         # Ligafilter: behold ligaer med positiv CLV, eller for få bets til å dømme (< 30)
@@ -607,25 +618,28 @@ def choose_champion(met: dict) -> dict:
 
 
 def nt_bands_shadow(df: pd.DataFrame, met: dict) -> dict | None:
-    """Hva spillregelen ville gitt med NT-faktor etter oddsbånd, mens båndene er slått av (config nt_bands).
-    Vises i dashboardet hver søndag, så SJ ser effekten før han eventuelt slår dem på."""
+    """Spillregelen med og uten NT-faktor etter oddsbånd (config nt_bands), så effekten av båndene vises hver søndag."""
     rule = (met.get("champion") or {}).get("bet_rule")
-    if not rule or CFG.get("nt_bands"):
+    if not rule:
         return None
     ev = df[(df["season"] >= met["first_test"])].dropna(subset=["stack_lr_h", "mkt_avg_h", "goals_p_h", "pxg_p_h"])
     P = probs(ev, rule["model"])
     ok = np.isfinite(P).all(1)
     keep = lambda r: {k: r.get(k) for k in ("n", "clv", "roi", "avg_odds", "kelly_final", "max_dd")}
-    CFG["nt_bands"] = True
+    was = CFG.get("nt_bands", False)
+    res = {}
     try:
-        on = simulate(ev[ok], P[ok], "1x2", rule["edge_min"], CFG["nt_odds_factor"])
-        bands = [dict(b) for b in NT_INFO.get("bands", [])]
+        for flag in (False, True):
+            CFG["nt_bands"] = flag
+            res["on" if flag else "off"] = keep(simulate(ev[ok], P[ok], "1x2", rule["edge_min"], CFG["nt_odds_factor"]))
+            if flag:
+                bands = [dict(b) for b in NT_INFO.get("bands", [])]
     finally:
-        CFG["nt_bands"] = False
+        CFG["nt_bands"] = was
+        nt_factors(df, CFG["nt_odds_factor"])
     if not bands:
         return None
-    off = simulate(ev[ok], P[ok], "1x2", rule["edge_min"], CFG["nt_odds_factor"])
-    return {"rule": f"{rule['model']} ≥ {rule['edge_min']:.0%}", "off": keep(off), "on": keep(on), "bands": bands}
+    return {"rule": f"{rule['model']} ≥ {rule['edge_min']:.0%}", "active": bool(was), **res, "bands": bands}
 
 
 def log_experiment(met: dict) -> None:
