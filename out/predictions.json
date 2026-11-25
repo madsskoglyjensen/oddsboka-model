@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-24T10:10:18+01:00",
+ "generated": "2026-11-25T08:45:55+01:00",
  "time_zone": "Europe/Oslo",
  "model_version": "2.1",
  "prob_model": "stack_lr",
@@ -32,7 +32,476 @@
   "Serie B",
   "La Liga"
  ],
- "fixtures": [],
- "extra_issues": [],
- "note": "Ingen kommende kamper i ligaene i fixtures.csv (f.eks. landslagspause). Spillregel og innsats gjelder som vanlig."
+ "note": "p = beste kalibrerte modell. Spill et utfall bare hvis NT-odds >= nt_min_odds. time og kickoff er norsk tid.",
+ "fixtures": [
+  {
+   "league": "Serie B",
+   "league_in_rule": true,
+   "date": "2026-11-25",
+   "time": "19:00",
+   "kickoff": "2026-11-25T19:00:00+01:00",
+   "home": "Cremonese",
+   "away": "Avellino",
+   "fixture_source": "football-data",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.4845,
+     "p_rule": 0.4702,
+     "nt_min_odds": 2.17,
+     "avg_odds": 1.95,
+     "sharp_odds": 2.06
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2949,
+     "p_rule": 0.2935,
+     "nt_min_odds": 3.47,
+     "avg_odds": 3.17,
+     "sharp_odds": 3.3
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.2206,
+     "p_rule": 0.2363,
+     "nt_min_odds": 4.32,
+     "avg_odds": 3.84,
+     "sharp_odds": 4.1
+    }
+   },
+   "over25": {
+    "p_model": 0.4539,
+    "p_market": 0.4541,
+    "avg_over": 2.04,
+    "avg_under": 1.7
+   },
+   "btts": {
+    "p_model": 0.5243
+   },
+   "own_model": {
+    "p_h": 0.4533,
+    "p_d": 0.2867,
+    "p_a": 0.26,
+    "xg_home": 1.4531,
+    "xg_away": 1.0447
+   }
+  },
+  {
+   "league": "Serie B",
+   "league_in_rule": true,
+   "date": "2026-11-25",
+   "time": "20:00",
+   "kickoff": "2026-11-25T20:00:00+01:00",
+   "home": "Mantova",
+   "away": "Arezzo",
+   "fixture_source": "football-data",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.5707,
+     "p_rule": 0.5673,
+     "nt_min_odds": 1.8,
+     "avg_odds": 1.65,
+     "sharp_odds": 1.71
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2521,
+     "p_rule": 0.2425,
+     "nt_min_odds": 4.21,
+     "avg_odds": 3.73,
+     "sharp_odds": 4.0
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.1772,
+     "p_rule": 0.1902,
+     "nt_min_odds": 5.36,
+     "avg_odds": 4.63,
+     "sharp_odds": 5.1
+    }
+   },
+   "over25": {
+    "p_model": 0.5317,
+    "p_market": 0.5306,
+    "avg_over": 1.76,
+    "avg_under": 1.96
+   },
+   "btts": {
+    "p_model": 0.5324
+   },
+   "own_model": {
+    "p_h": 0.5659,
+    "p_d": 0.2503,
+    "p_a": 0.1838,
+    "xg_home": 1.7978,
+    "xg_away": 0.9381
+   }
+  },
+  {
+   "league": "Serie B",
+   "league_in_rule": true,
+   "date": "2026-11-25",
+   "time": "20:00",
+   "kickoff": "2026-11-25T20:00:00+01:00",
+   "home": "Padova",
+   "away": "Sampdoria",
+   "fixture_source": "football-data",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.3111,
+     "p_rule": 0.3219,
+     "nt_min_odds": 3.17,
+     "avg_odds": 2.79,
+     "sharp_odds": 3.0
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.3042,
+     "p_rule": 0.3066,
+     "nt_min_odds": 3.33,
+     "avg_odds": 3.08,
+     "sharp_odds": 3.15
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.3848,
+     "p_rule": 0.3715,
+     "nt_min_odds": 2.75,
+     "avg_odds": 2.47,
+     "sharp_odds": 2.6
+    }
+   },
+   "over25": {
+    "p_model": 0.4564,
+    "p_market": 0.449,
+    "avg_over": 2.06,
+    "avg_under": 1.69
+   },
+   "btts": {
+    "p_model": 0.4968
+   },
+   "own_model": {
+    "p_h": 0.3896,
+    "p_d": 0.3129,
+    "p_a": 0.2975,
+    "xg_home": 1.2024,
+    "xg_away": 1.0183
+   }
+  },
+  {
+   "league": "Serie B",
+   "league_in_rule": true,
+   "date": "2026-11-25",
+   "time": "20:00",
+   "kickoff": "2026-11-25T20:00:00+01:00",
+   "home": "Pisa",
+   "away": "Modena",
+   "fixture_source": "football-data",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.4018,
+     "p_rule": 0.398,
+     "nt_min_odds": 2.56,
+     "avg_odds": 2.29,
+     "sharp_odds": 2.42
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2877,
+     "p_rule": 0.2963,
+     "nt_min_odds": 3.44,
+     "avg_odds": 3.22,
+     "sharp_odds": 3.25
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.3105,
+     "p_rule": 0.3057,
+     "nt_min_odds": 3.34,
+     "avg_odds": 2.92,
+     "sharp_odds": 3.15
+    }
+   },
+   "over25": {
+    "p_model": 0.5368,
+    "p_market": 0.5217,
+    "avg_over": 1.75,
+    "avg_under": 1.98
+   },
+   "btts": {
+    "p_model": 0.5575
+   },
+   "own_model": {
+    "p_h": 0.4167,
+    "p_d": 0.2794,
+    "p_a": 0.304,
+    "xg_home": 1.4663,
+    "xg_away": 1.2217
+   }
+  },
+  {
+   "league": "Championship",
+   "league_in_rule": true,
+   "date": "2026-11-25",
+   "time": "20:45",
+   "kickoff": "2026-11-25T20:45:00+01:00",
+   "home": "Bolton",
+   "away": "West Brom",
+   "fixture_source": "football-data",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.2566,
+     "p_rule": 0.2564,
+     "nt_min_odds": 3.98,
+     "avg_odds": 3.5,
+     "sharp_odds": 3.85
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.25,
+     "p_rule": 0.2598,
+     "nt_min_odds": 3.93,
+     "avg_odds": 3.63,
+     "sharp_odds": 3.8
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.4934,
+     "p_rule": 0.4839,
+     "nt_min_odds": 2.11,
+     "avg_odds": 1.97,
+     "sharp_odds": 2.04
+    }
+   },
+   "over25": {
+    "p_model": 0.5707,
+    "p_market": 0.5578,
+    "avg_over": 1.68,
+    "avg_under": 2.11
+   },
+   "btts": {
+    "p_model": 0.5497
+   },
+   "own_model": {
+    "p_h": 0.3286,
+    "p_d": 0.261,
+    "p_a": 0.4104,
+    "xg_home": 1.2752,
+    "xg_away": 1.4539
+   }
+  },
+  {
+   "league": "Championship",
+   "league_in_rule": true,
+   "date": "2026-11-25",
+   "time": "20:45",
+   "kickoff": "2026-11-25T20:45:00+01:00",
+   "home": "Burnley",
+   "away": "Birmingham",
+   "fixture_source": "football-data",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.3597,
+     "p_rule": 0.3517,
+     "nt_min_odds": 2.9,
+     "avg_odds": 2.63,
+     "sharp_odds": 2.82
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2657,
+     "p_rule": 0.261,
+     "nt_min_odds": 3.91,
+     "avg_odds": 3.54,
+     "sharp_odds": 3.8
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.3746,
+     "p_rule": 0.3874,
+     "nt_min_odds": 2.63,
+     "avg_odds": 2.47,
+     "sharp_odds": 2.56
+    }
+   },
+   "over25": {
+    "p_model": 0.5591,
+    "p_market": 0.5455,
+    "avg_over": 1.7,
+    "avg_under": 2.08
+   },
+   "btts": {
+    "p_model": 0.5625
+   },
+   "own_model": {
+    "p_h": 0.3523,
+    "p_d": 0.258,
+    "p_a": 0.3896,
+    "xg_home": 1.3594,
+    "xg_away": 1.4417
+   }
+  },
+  {
+   "league": "Championship",
+   "league_in_rule": true,
+   "date": "2026-11-25",
+   "time": "20:45",
+   "kickoff": "2026-11-25T20:45:00+01:00",
+   "home": "Watford",
+   "away": "Blackburn",
+   "fixture_source": "football-data",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.3804,
+     "p_rule": 0.3801,
+     "nt_min_odds": 2.68,
+     "avg_odds": 2.49,
+     "sharp_odds": 2.62
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2685,
+     "p_rule": 0.2692,
+     "nt_min_odds": 3.79,
+     "avg_odds": 3.42,
+     "sharp_odds": 3.7
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.3511,
+     "p_rule": 0.3507,
+     "nt_min_odds": 2.91,
+     "avg_odds": 2.65,
+     "sharp_odds": 2.84
+    }
+   },
+   "over25": {
+    "p_model": 0.529,
+    "p_market": 0.514,
+    "avg_over": 1.82,
+    "avg_under": 1.92
+   },
+   "btts": {
+    "p_model": 0.5086
+   },
+   "own_model": {
+    "p_h": 0.3657,
+    "p_d": 0.2885,
+    "p_a": 0.3458,
+    "xg_home": 1.1787,
+    "xg_away": 1.1382
+   }
+  },
+  {
+   "league": "Championship",
+   "league_in_rule": true,
+   "date": "2026-11-25",
+   "time": "21:00",
+   "kickoff": "2026-11-25T21:00:00+01:00",
+   "home": "Stoke",
+   "away": "Millwall",
+   "fixture_source": "football-data",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.4149,
+     "p_rule": 0.4381,
+     "nt_min_odds": 2.33,
+     "avg_odds": 2.2,
+     "sharp_odds": 2.26
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2897,
+     "p_rule": 0.2789,
+     "nt_min_odds": 3.66,
+     "avg_odds": 3.34,
+     "sharp_odds": 3.55
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.2954,
+     "p_rule": 0.2829,
+     "nt_min_odds": 3.61,
+     "avg_odds": 3.18,
+     "sharp_odds": 3.5
+    }
+   },
+   "over25": {
+    "p_model": 0.488,
+    "p_market": 0.4847,
+    "avg_over": 1.93,
+    "avg_under": 1.81
+   },
+   "btts": {
+    "p_model": 0.5224
+   },
+   "own_model": {
+    "p_h": 0.4022,
+    "p_d": 0.2809,
+    "p_a": 0.317,
+    "xg_home": 1.2913,
+    "xg_away": 1.1152
+   }
+  },
+  {
+   "league": "League One",
+   "league_in_rule": true,
+   "date": "2026-11-26",
+   "time": "21:00",
+   "kickoff": "2026-11-26T21:00:00+01:00",
+   "home": "Doncaster",
+   "away": "Huddersfield",
+   "fixture_source": "football-data",
+   "outcomes": {
+    "h": {
+     "label": "hjemmeseier",
+     "p": 0.2102,
+     "p_rule": 0.2269,
+     "nt_min_odds": 4.49,
+     "avg_odds": 4.08,
+     "sharp_odds": 4.3
+    },
+    "d": {
+     "label": "uavgjort",
+     "p": 0.2195,
+     "p_rule": 0.2218,
+     "nt_min_odds": 4.6,
+     "avg_odds": 4.01,
+     "sharp_odds": 4.4
+    },
+    "a": {
+     "label": "borteseier",
+     "p": 0.5703,
+     "p_rule": 0.5513,
+     "nt_min_odds": 1.85,
+     "avg_odds": 1.72,
+     "sharp_odds": 1.77
+    }
+   },
+   "over25": {
+    "p_model": 0.6249,
+    "p_market": 0.6127,
+    "avg_over": 1.54,
+    "avg_under": 2.36
+   },
+   "btts": {
+    "p_model": 0.5557
+   },
+   "own_model": {
+    "p_h": 0.2678,
+    "p_d": 0.2495,
+    "p_a": 0.4827,
+    "xg_home": 1.1623,
+    "xg_away": 1.6407
+   }
+  }
+ ],
+ "extra_issues": []
 }
