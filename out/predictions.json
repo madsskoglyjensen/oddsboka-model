@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-26T08:37:22+01:00",
+ "generated": "2026-11-27T08:33:09+01:00",
  "time_zone": "Europe/Oslo",
  "model_version": "2.1",
  "prob_model": "stack_lr",
@@ -32,60 +32,7 @@
   "Serie B",
   "La Liga"
  ],
- "note": "p = beste kalibrerte modell. Spill et utfall bare hvis NT-odds >= nt_min_odds. time og kickoff er norsk tid.",
- "fixtures": [
-  {
-   "league": "League One",
-   "league_in_rule": true,
-   "date": "2026-11-26",
-   "time": "21:00",
-   "kickoff": "2026-11-26T21:00:00+01:00",
-   "home": "Doncaster",
-   "away": "Huddersfield",
-   "fixture_source": "football-data",
-   "outcomes": {
-    "h": {
-     "label": "hjemmeseier",
-     "p": 0.2102,
-     "p_rule": 0.2269,
-     "nt_min_odds": 4.49,
-     "avg_odds": 4.08,
-     "sharp_odds": 4.3
-    },
-    "d": {
-     "label": "uavgjort",
-     "p": 0.2195,
-     "p_rule": 0.2218,
-     "nt_min_odds": 4.6,
-     "avg_odds": 4.01,
-     "sharp_odds": 4.4
-    },
-    "a": {
-     "label": "borteseier",
-     "p": 0.5703,
-     "p_rule": 0.5513,
-     "nt_min_odds": 1.85,
-     "avg_odds": 1.72,
-     "sharp_odds": 1.77
-    }
-   },
-   "over25": {
-    "p_model": 0.6249,
-    "p_market": 0.6127,
-    "avg_over": 1.54,
-    "avg_under": 2.36
-   },
-   "btts": {
-    "p_model": 0.5557
-   },
-   "own_model": {
-    "p_h": 0.2679,
-    "p_d": 0.2495,
-    "p_a": 0.4827,
-    "xg_home": 1.1626,
-    "xg_away": 1.6409
-   }
-  }
- ],
- "extra_issues": []
+ "fixtures": [],
+ "extra_issues": [],
+ "note": "Ingen kommende kamper i ligaene i fixtures.csv (f.eks. landslagspause). Spillregel og innsats gjelder som vanlig."
 }
